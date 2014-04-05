@@ -1,0 +1,23 @@
+.row {
+    border-bottom: 1px solid #fafafa;
+}
+
+.row:hover {
+    background: #f5f5f5;
+}
+
+.rowSelected {
+    background: #d5e1fa !important;
+}
+
+.rowSelected:hover {
+    background: #d5e1fa !important;
+}
+
+.handle {
+}
+
+.rowDragOver {
+    background: royalblue !important;
+    color: white !important;
+}

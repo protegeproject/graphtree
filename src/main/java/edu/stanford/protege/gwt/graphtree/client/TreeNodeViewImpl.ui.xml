@@ -1,0 +1,96 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <ui:with field="res" type="edu.stanford.protege.gwt.graphtree.client.TreeNodeViewResources"/>
+    <ui:style>
+        .main {
+            /*margin-left: 40px;*/
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            overflow: hidden;
+        }
+
+        .rendering {
+            height: 100%;
+            box-sizing: border-box;
+            display: inline-block;
+            /*vertical-align: middle;*/
+            -webkit-touch-callout: text;
+            -webkit-user-select: text;
+            -khtml-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+            /*vertical-align: middle;*/
+        }
+
+
+        .childContainer {
+            overflow: hidden;
+            width: inherit;
+            height: auto;
+            position: relative;
+            top: 0;
+            left: 0;
+        }
+
+        .childContainerHolder {
+            overflow: hidden;
+            width: inherit;
+            height: 0;
+        }
+
+        .handle {
+            display: inline-block;
+            /*vertical-align: middle;*/
+            cursor: pointer;
+            height: 100%;
+            width: 18px;
+            margin-top: auto;
+            margin-bottom: auto;
+            box-sizing: border-box;
+            position: relative;
+            top: -2px;
+        }
+
+        .handle img {
+            background-position: center center !important;
+            vertical-align: middle;
+            height: 100% !important;
+            line-height: 100% !important;
+            box-sizing: border-box;
+        }
+
+        .row {
+            height: 1.4em;
+            white-space: nowrap;
+        }
+
+        .row:hover {
+            background: #f6f6f6;
+        }
+
+        .centering {
+            height: inherit;
+            margin-top: auto;
+            margin-bottom: auto;
+            top: 0;
+            bottom: 0;
+        }
+
+    </ui:style>
+    <g:HTMLPanel addStyleNames="{style.main}">
+        <g:FlowPanel ui:field="content" addStyleNames="{res.style.row} {style.row}">
+                <g:HTMLPanel addStyleNames="{res.style.handle} {style.handle}" ui:field="handle">
+                    <g:Image ui:field="handleImage"/>
+                </g:HTMLPanel>
+                <g:HTML ui:field="rendering" addStyleNames="{style.rendering}"/>
+        </g:FlowPanel>
+        <g:LazyPanel ui:field="childContainerHolder" addStyleNames="{style.childContainerHolder}">
+            <g:FlowPanel ui:field="childContainer" addStyleNames="{style.childContainer}"/>
+        </g:LazyPanel>
+    </g:HTMLPanel>
+</ui:UiBinder>
