@@ -1,6 +1,6 @@
 package edu.stanford.protege.gwt.graphtree.shared.tree;
 
-import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 
 import java.io.Serializable;
 
