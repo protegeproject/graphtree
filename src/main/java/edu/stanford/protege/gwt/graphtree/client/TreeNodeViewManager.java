@@ -30,25 +30,21 @@ public class TreeNodeViewManager<U extends Serializable> implements TreeNodeView
 
     private Map<Element, TreeNodeView<U>> element2TreeNodeMap = Maps.newHashMap();
 
-//    private Multimap<Object, TreeNodeView<U>> key2ViewMap = HashMultimap.create();
+    private TreeNodeRenderer<U> renderer;
 
     @Inject
-    public TreeNodeViewManager() {
+    public TreeNodeViewManager(TreeNodeRenderer<U> renderer) {
+        this.renderer = renderer;
     }
 
     public void purge() {
         node2viewMap.clear();
         element2TreeNodeMap.clear();
-//        key2ViewMap.clear();
     }
 
     public Optional<TreeNodeView<U>> getViewIfPresent(TreeNodeId node) {
         return Optional.fromNullable(node2viewMap.get(node));
     }
-
-//    public Collection<TreeNodeView<U>> getViewsForKey(Object key) {
-//        return key2ViewMap.get(key);
-//    }
 
     public Optional<TreeNodeView<U>> getTreeNodeView(Element element) {
         return Optional.fromNullable(element2TreeNodeMap.get(element));
@@ -63,15 +59,12 @@ public class TreeNodeViewManager<U extends Serializable> implements TreeNodeView
         view = createView(treeNode);
         node2viewMap.put(treeNode.getId(), view);
         element2TreeNodeMap.put(view.asWidget().getElement(), view);
-        Object userObject = treeNode.getUserObject();
-//        key2ViewMap.put(userObject, view);
         return view;
     }
 
     private TreeNodeView<U> createView(TreeNodeData<U> treeNode) {
         final TreeNodeView<U> view = new TreeNodeViewImpl<U>(treeNode.getTreeNode());
-//        view.setNode(treeNode);
-        view.setRendering(treeNode.getHtmlRendering());
+        view.setRendering(renderer.getHtmlRendering(treeNode));
         view.setLeaf(treeNode.isLeaf());
         view.asWidget().addStyleName(TREE_NODE_VIEW_STYLE_NAME);
         return view;
@@ -83,6 +76,5 @@ public class TreeNodeViewManager<U extends Serializable> implements TreeNodeView
             return;
         }
         element2TreeNodeMap.remove(view.asWidget().getElement());
-//        key2ViewMap.remove(node.getUserObject(), view);
     }
 }

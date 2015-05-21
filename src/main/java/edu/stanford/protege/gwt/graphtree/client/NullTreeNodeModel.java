@@ -3,6 +3,7 @@ package edu.stanford.protege.gwt.graphtree.client;
 import com.google.common.base.Optional;
 import com.google.common.collect.HashMultimap;
 import com.google.gwt.event.shared.HandlerRegistration;
+import edu.stanford.protege.gwt.graphtree.shared.Path;
 import edu.stanford.protege.gwt.graphtree.shared.tree.*;
 
 import java.io.Serializable;
@@ -40,5 +41,10 @@ public class NullTreeNodeModel<U extends Serializable> implements TreeNodeModel<
     @Override
     public void getTreeNodesForUserObject(U userObject, GetTreeNodesCallback<U> callback) {
         callback.handleNodes(Collections.<TreeNodeData<U>>emptyList());
+    }
+
+    @Override
+    public Path<TreeNodeData<U>> getPathToRoot(TreeNodeId treeNodeId) {
+        return Path.emptyPath();
     }
 }

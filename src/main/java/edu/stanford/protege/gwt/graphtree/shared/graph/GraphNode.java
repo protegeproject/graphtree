@@ -23,8 +23,6 @@ public class GraphNode<U extends Serializable> implements Serializable, IsSerial
 
     private U userObject;
 
-    private String htmlRendering;
-
     private String shortForm;
 
     private boolean sink;
@@ -37,7 +35,7 @@ public class GraphNode<U extends Serializable> implements Serializable, IsSerial
     }
 
     public GraphNode(U userObject, boolean sink) {
-        this(userObject, generateEscaptedHTMLRenderingFromToString(userObject), userObject.toString(), sink);
+        this(userObject, userObject.toString(), sink);
     }
 
     public static <U extends Serializable> GraphNode<U> get(U userObject) {
@@ -48,13 +46,8 @@ public class GraphNode<U extends Serializable> implements Serializable, IsSerial
         return new GraphNode<U>(userObject, sink);
     }
 
-    private static String generateEscaptedHTMLRenderingFromToString(Serializable userObject) {
-        return new SafeHtmlBuilder().appendEscaped(userObject.toString()).toSafeHtml().asString();
-    }
-
-    public GraphNode(U userObject, String htmlRendering, String shortForm, boolean sink) {
+    public GraphNode(U userObject, String shortForm, boolean sink) {
         this.userObject = checkNotNull(userObject);
-        this.htmlRendering = checkNotNull(htmlRendering);
         this.shortForm = checkNotNull(shortForm);
         this.sink = sink;
     }
@@ -65,10 +58,6 @@ public class GraphNode<U extends Serializable> implements Serializable, IsSerial
 
     public U getUserObject() {
         return userObject;
-    }
-
-    public String getHtmlRendering() {
-        return htmlRendering;
     }
 
     public boolean isSink() {

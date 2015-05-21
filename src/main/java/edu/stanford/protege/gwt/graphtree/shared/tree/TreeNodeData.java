@@ -15,7 +15,7 @@ public class TreeNodeData<U extends Serializable> implements Serializable, IsSer
 
     private TreeNode<U> treeNode;
 
-    private String htmlRendering;
+//    private String htmlRendering;
 
     private String shortForm;
 
@@ -24,9 +24,8 @@ public class TreeNodeData<U extends Serializable> implements Serializable, IsSer
     private TreeNodeData() {
     }
 
-    public TreeNodeData(TreeNode<U> treeNode, String htmlRendering, String shortForm, boolean leaf) {
+    public TreeNodeData(TreeNode<U> treeNode, String shortForm, boolean leaf) {
         this.treeNode = treeNode;
-        this.htmlRendering = htmlRendering;
         this.shortForm = shortForm;
         this.leaf = leaf;
     }
@@ -43,9 +42,9 @@ public class TreeNodeData<U extends Serializable> implements Serializable, IsSer
         return treeNode.getUserObject();
     }
 
-    public String getHtmlRendering() {
-        return htmlRendering;
-    }
+//    public String getHtmlRendering() {
+//        return htmlRendering;
+//    }
 
     public String getShortForm() {
         return shortForm;
@@ -77,7 +76,7 @@ public class TreeNodeData<U extends Serializable> implements Serializable, IsSer
         return Objects.toStringHelper("TreeNodeData")
                 .addValue(treeNode)
                 .add("shortForm", shortForm)
-                .add("rendering", htmlRendering)
+//                .add("rendering", htmlRendering)
                 .add("leaf", leaf)
                 .toString();
     }

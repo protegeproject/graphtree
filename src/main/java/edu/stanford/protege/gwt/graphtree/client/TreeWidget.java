@@ -5,6 +5,7 @@ import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import edu.stanford.protege.gwt.graphtree.shared.Path;
+import edu.stanford.protege.gwt.graphtree.shared.tree.RevealMode;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNode;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeId;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeModel;
@@ -23,15 +24,19 @@ public class TreeWidget<U extends Serializable> extends Composite {
 
     private TreePresenter<U> treePresenter;
 
-    public TreeWidget(TreeView treeView, TreeNodeModel<U> model) {
+    public TreeWidget(TreeView treeView, TreeNodeModel<U> model, TreeNodeRenderer<U> renderer) {
         SingleSelectionModel<TreeNode<U>> selectionModel = new SingleSelectionModel<TreeNode<U>>();
-        treePresenter = new TreePresenter<U>(treeView, selectionModel);
+        treePresenter = new TreePresenter<U>(treeView, selectionModel, renderer);
         treePresenter.setModel(model);
         initWidget(treeView.asWidget());
     }
 
     public TreeWidget(TreeNodeModel<U> model) {
-        this(new TreeViewImpl(), model);
+        this(model, new TreeNodeRendererImpl<U>());
+    }
+
+    public TreeWidget(TreeNodeModel<U> model, TreeNodeRenderer<U> renderer) {
+        this(new TreeViewImpl(), model, renderer);
     }
 
     public void setModel(TreeNodeModel<U> model) {
@@ -86,7 +91,8 @@ public class TreeWidget<U extends Serializable> extends Composite {
         treePresenter.pruneToNodes(treeNodes);
     }
 
-    public void showTreeNodesForUserObject(U userObject) {
-        treePresenter.showTreeNodesForUserObject(userObject);
+    public void revealTreeNodesForUserObject(U userObject, RevealMode revealMode) {
+        treePresenter.revealTreeNodesForUserObject(userObject, revealMode);
     }
+
 }

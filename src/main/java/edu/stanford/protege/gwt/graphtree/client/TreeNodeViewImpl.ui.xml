@@ -48,12 +48,12 @@
             /*vertical-align: middle;*/
             cursor: pointer;
             height: 100%;
-            width: 18px;
+            /*width: 18px;*/
             margin-top: auto;
             margin-bottom: auto;
             box-sizing: border-box;
             position: relative;
-            top: -2px;
+            /*top: -2px;*/
         }
 
         .handle img {
@@ -65,7 +65,6 @@
         }
 
         .row {
-            height: 1.4em;
             white-space: nowrap;
         }
 

@@ -89,6 +89,19 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
     }
 
     @Override
+    public Path<TreeNodeData<U>> getPathToRoot(TreeNodeId treeNodeId) {
+        List<TreeNodeData<U>> result = new ArrayList<TreeNodeData<U>>();
+        result.add(treeModelIndex.getTreeNodeData(treeNodeId));
+        Optional<TreeNodeId> parentNode = treeModelIndex.getParent(treeNodeId);
+        while(parentNode.isPresent()) {
+            TreeNodeId theParentNodeId = parentNode.get();
+            result.add(0, treeModelIndex.getTreeNodeData(theParentNodeId));
+            parentNode = treeModelIndex.getParent(theParentNodeId);
+        }
+        return new Path<TreeNodeData<U>>(result);
+    }
+
+    @Override
     public void getTreeNodesForUserObject(final U userObject, final GetTreeNodesCallback<U> callback) {
         // We need to make sure that the nodes in the graph that have the specified user object as their user object
         // have corresponding tree nodes.
@@ -142,7 +155,7 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
     private void handleAddKeyNode(AddKeyNode<U> addKeyNode, List<TreeNodeModelChange> resultingChanges) {
         GraphNode<U> keyNode = addKeyNode.getNode();
         TreeNodeData<U> rootNode = new TreeNodeData<U>(new TreeNode<U>(idGenerator.getNextId(),
-                keyNode.getUserObject()), keyNode.getHtmlRendering(), keyNode.getShortForm(), keyNode.isSink());
+                keyNode.getUserObject()), keyNode.getShortForm(), keyNode.isSink());
         treeModelIndex.addRoot(rootNode);
         resultingChanges.add(new RootNodeAdded<U>(rootNode));
     }
@@ -166,7 +179,6 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
             if (!treeModelIndex.containsChildWithUserObject(parentNode.getId(), successorUserObject)) {
                 TreeNodeData<U> childNode = new TreeNodeData<U>(new TreeNode<U>(idGenerator.getNextId(),
                         successorNode.getUserObject()),
-                        successorNode.getHtmlRendering(),
                         successorNode.getShortForm(),
                         successorNode.isSink());
                 boolean added = treeModelIndex.addChild(parentNode.getId(), childNode);
@@ -231,7 +243,6 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
                 for (GraphNode<U> keyNode : keyNodes) {
                     TreeNodeData<U> treeNode = new TreeNodeData<U>(new TreeNode<U>(idGenerator.getNextId(),
                             keyNode.getUserObject()),
-                            keyNode.getHtmlRendering(),
                             keyNode.getShortForm(),
                             keyNode.isSink());
                     treeModelIndex.addRoot(treeNode);
@@ -259,7 +270,6 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
                     if (!treeModelIndex.containsChildWithUserObject(parentNode, successor.getUserObject())) {
                         TreeNodeData<U> childNode = new TreeNodeData<U>(new TreeNode<U>(idGenerator.getNextId(),
                                 successor.getUserObject()),
-                                successor.getHtmlRendering(),
                                 successor.getShortForm(),
                                 successor.isSink());
                         treeModelIndex.addChild(parentNode, childNode);

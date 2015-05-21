@@ -1,8 +1,10 @@
 package edu.stanford.protege.gwt.graphtree.shared.tree;
 
 import com.google.web.bindery.event.shared.HandlerRegistration;
+import edu.stanford.protege.gwt.graphtree.shared.Path;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 /**
  * Author: Matthew Horridge<br>
@@ -19,4 +21,5 @@ public interface TreeNodeModel<U extends Serializable> extends HasGetNodes<U>, H
 
     HandlerRegistration addTreeNodeModelEventHandler(TreeNodeModelEventHandler handler);
 
+    Path<TreeNodeData<U>> getPathToRoot(TreeNodeId treeNodeId);
 }

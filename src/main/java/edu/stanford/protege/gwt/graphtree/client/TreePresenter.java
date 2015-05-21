@@ -2,7 +2,9 @@ package edu.stanford.protege.gwt.graphtree.client;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SetSelectionModel;
@@ -51,10 +53,10 @@ public class TreePresenter<U extends Serializable> implements HasTreeNodeDropHan
     private HandlerRegistration modelHandlerRegistration;
 
     @Inject
-    public TreePresenter(TreeView treeView, SetSelectionModel<TreeNode<U>> selectionModel) {
+    public TreePresenter(TreeView treeView, SetSelectionModel<TreeNode<U>> selectionModel, TreeNodeRenderer<U> treeNodeRenderer) {
         this.treeView = treeView;
         this.selectionModel = selectionModel;
-        this.viewManager = new TreeNodeViewManager<U>();
+        this.viewManager = new TreeNodeViewManager<U>(treeNodeRenderer);
         this.pendingChangeManager = new PendingChangesManager<U>(this, selectionModel);
         treeNodeViewSelectionProvider = new TreeNodeViewSelectionProvider<U>(selectionModel, viewManager);
         KeyboardEventMapper keyboardEventMapper = new KeyboardEventMapper<U>(treeNodeViewSelectionProvider,
@@ -105,7 +107,9 @@ public class TreePresenter<U extends Serializable> implements HasTreeNodeDropHan
     }
 
     public void setRootNodesExpanded() {
-
+        for(TreeNodeView<U> treeView : getRootViews()) {
+            treeView.setExpanded();
+        }
     }
 
     /**
@@ -222,12 +226,37 @@ public class TreePresenter<U extends Serializable> implements HasTreeNodeDropHan
         }
     }
 
-    public void showTreeNodesForUserObject(U userObject) {
+    public void revealTreeNodesForUserObject(final U userObject, final RevealMode revealMode) {
+//        model.getBranchesContainingUserObject(userObject, new HasGetBranches.GetBranchesCallback<U>() {
+//            @Override
+//            public void handleBranches(Multimap<TreeNodeData<U>, TreeNodeData<U>> parent2ChildMap) {
+//
+//            }
+//        });
         model.getTreeNodesForUserObject(userObject, new GetTreeNodesCallback<U>() {
             @Override
             public void handleNodes(List<TreeNodeData<U>> nodes) {
+                for(TreeNodeData<U> tn : nodes) {
+                    Path<TreeNodeData<U>> pathToRoot = model.getPathToRoot(tn.getId());
+                    for(int i = 0; i < pathToRoot.size(); i++) {
+                        TreeNodeData<U> treeNodeData = pathToRoot.get(i);
+                        if (i < pathToRoot.size() - 1) {
+                            viewManager.getView(treeNodeData);
+                            setTreeNodeExpanded(treeNodeData.getId());
+                        }
+                        else {
+                            setSelected(tn.getTreeNode(), true);
+                        }
+                    }
+                    if(revealMode == RevealMode.FIRST) {
+                        break;
+                    }
+                }
             }
         });
+//        for(TreeNodeData<U> tn : parent2ChildMap.keySet()) {
+//            setTreeNodeExpanded(tn.getId());
+//        }
     }
 
     @Override
