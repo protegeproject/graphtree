@@ -1,23 +1,25 @@
-.row {
+@external tree-row;
+
+.tree-row {
     border-bottom: 1px solid #fafafa;
 }
 
-.row:hover {
+.tree-row:hover {
     background: #f5f5f5;
 }
 
-.rowSelected {
+.tree-row--selected {
     background: #d5e1fa !important;
 }
 
-.rowSelected:hover {
+.tree-row--selected:hover {
     background: #d5e1fa !important;
 }
 
-.handle {
+.tree-row__handle {
 }
 
-.rowDragOver {
+.tree-row--drag-over {
     background: royalblue !important;
     color: white !important;
 }

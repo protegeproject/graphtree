@@ -23,7 +23,7 @@ public class DragAndDropEventMapper<U extends Serializable> implements HasTreeNo
         this.dragAndDropHandler = dragAndDropHandler;
     }
 
-    @Override
+
     public void setDropHandler(TreeNodeDropHandler<U> dropHandler) {
         dragAndDropHandler.setDropHandler(dropHandler);
     }
