@@ -19,7 +19,7 @@ public class TreeNodeViewPreviousSiblingFinder<U extends Serializable> {
     }
 
     public Optional<TreeNodeView<U>> getPreviousSibling() {
-        Optional<TreeNodeView<U>> parent = view.getParentView();
+        java.util.Optional<TreeNodeView<U>> parent = view.getParentView();
         if (!parent.isPresent()) {
             return Optional.absent();
         }

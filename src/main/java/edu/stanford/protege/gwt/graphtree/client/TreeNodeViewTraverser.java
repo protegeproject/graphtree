@@ -1,12 +1,14 @@
 package edu.stanford.protege.gwt.graphtree.client;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import edu.stanford.protege.gwt.graphtree.shared.Path;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeId;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+import java.util.Queue;
 
 /**
  * Author: Matthew Horridge<br>
@@ -30,7 +32,7 @@ public class TreeNodeViewTraverser<U extends Serializable> {
     public Optional<TreeNodeView<U>> getPrevious(TreeNodeView<U> treeNodeView) {
         Optional<TreeNodeView<U>> ancestor = getFirstVisibleAncestor(treeNodeView);
         if(!ancestor.isPresent()) {
-            return Optional.absent();
+            return Optional.empty();
         }
         final Optional<TreeNodeView<U>> parentView = treeNodeView.getParentView();
         if (ancestor.equals(parentView)) {
@@ -49,7 +51,7 @@ public class TreeNodeViewTraverser<U extends Serializable> {
     public Optional<TreeNodeView<U>> getFirstVisibleAncestor(final TreeNodeView<U> fromView) {
         Path<TreeNodeView<U>> pathToRoot = getPathToRoot(fromView);
         if(pathToRoot.size() < 2) {
-            return Optional.absent();
+            return Optional.empty();
         }
         for(int i = 0; i < pathToRoot.size() - 2; i++) {
             TreeNodeView<U> view = pathToRoot.get(i);
@@ -105,7 +107,7 @@ public class TreeNodeViewTraverser<U extends Serializable> {
             }
             ancestor = ancestor.get().getParentView();
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     private TreeNodeView<U> getDeepestLastChild(TreeNodeView<U> fromView) {

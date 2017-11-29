@@ -1,20 +1,15 @@
 package edu.stanford.protege.gwt.graphtree.client;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.HashBiMap;
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
 import com.google.gwt.dom.client.Element;
 import com.google.inject.Inject;
-import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNode;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeData;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeId;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Author: Matthew Horridge<br>
@@ -43,11 +38,11 @@ public class TreeNodeViewManager<U extends Serializable> implements TreeNodeView
     }
 
     public Optional<TreeNodeView<U>> getViewIfPresent(TreeNodeId node) {
-        return Optional.fromNullable(node2viewMap.get(node));
+        return Optional.ofNullable(node2viewMap.get(node));
     }
 
     public Optional<TreeNodeView<U>> getTreeNodeView(Element element) {
-        return Optional.fromNullable(element2TreeNodeMap.get(element));
+        return Optional.ofNullable(element2TreeNodeMap.get(element));
     }
 
 

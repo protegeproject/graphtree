@@ -1,9 +1,9 @@
 package edu.stanford.protege.gwt.graphtree.shared;
 
 import com.google.common.base.Objects;
-import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
+import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.*;
 
@@ -42,6 +42,7 @@ public class Path<N> implements Iterable<N>, Serializable {
         this.path = new ArrayList<N>(path);
     }
 
+    @SafeVarargs
     public static <N> Path<N> asPath(N... elements) {
         return new Path<N>(Arrays.<N>asList(elements));
     }
@@ -80,27 +81,28 @@ public class Path<N> implements Iterable<N>, Serializable {
     }
 
     @Override
+    @Nonnull
     public Iterator<N> iterator() {
         return path.iterator();
     }
 
     public Optional<N> getFirst() {
         if(path.isEmpty()) {
-            return Optional.absent();
+            return Optional.empty();
         }
         return Optional.of(path.get(0));
     }
 
     public Optional<N> getLast() {
         if(path.isEmpty()) {
-            return Optional.absent();
+            return Optional.empty();
         }
         return Optional.of(path.get(path.size() - 1));
     }
 
     public Optional<N> getLastPredecessor() {
         if(path.size() < 2) {
-            return Optional.absent();
+            return Optional.empty();
         }
         return Optional.of(path.get(path.size() - 2));
     }

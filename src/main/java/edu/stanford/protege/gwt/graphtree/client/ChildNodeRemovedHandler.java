@@ -1,9 +1,9 @@
 package edu.stanford.protege.gwt.graphtree.client;
 
-import com.google.common.base.Optional;
 import edu.stanford.protege.gwt.graphtree.shared.tree.ChildNodeRemoved;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 /**
  * Author: Matthew Horridge<br>

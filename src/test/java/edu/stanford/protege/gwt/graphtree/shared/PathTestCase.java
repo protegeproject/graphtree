@@ -1,6 +1,6 @@
 package edu.stanford.protege.gwt.graphtree.shared;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -32,59 +32,59 @@ public class PathTestCase<U extends Serializable> {
     @Test
     public void getPathReturnsSuppliedList() {
         List<U> list = Arrays.asList(A, B, C);
-        Path<U> path = new Path<U>(list);
+        Path<U> path = new Path<>(list);
         assertThat(path.asList(), equalTo(Arrays.asList(A, B, C)));
     }
 
     @Test
     public void pathsWithSameElementsShouldBeEqual() {
         List<U> list = Arrays.asList(A, B, C);
-        Path<U> pathA = new Path<U>(list);
-        Path<U> pathB = new Path<U>(list);
+        Path<U> pathA = new Path<>(list);
+        Path<U> pathB = new Path<>(list);
         assertThat(pathA, equalTo(pathB));
     }
 
     @Test
     public void getLengthShouldReturnSuppliedLength() {
-        Path<U> pathA = new Path<U>(Arrays.asList(A, B, C));
+        Path<U> pathA = new Path<>(Arrays.asList(A, B, C));
         assertThat(pathA.getLength(), equalTo(3));
     }
 
     @Test
     public void getFirstShouldReturnOptionalAbsentForEmptyPath() {
-        Path<U> path = new Path<U>(Collections.<U>emptyList());
-        assertEquals(Optional.<U>absent(), path.getFirst());
+        Path<U> path = new Path<>(Collections.<U>emptyList());
+        assertEquals(Optional.<U>empty(), path.getFirst());
     }
 
     @Test
     public void getFirstShouldReturnFirstElement() {
-        Path<?> path = new Path<U>(Arrays.asList(A, B, C));
+        Path<?> path = new Path<>(Arrays.asList(A, B, C));
         assertEquals(Optional.of(A), path.getFirst());
     }
 
     @Test
     public void getLastShouldReturnOptionalAbsentForEmptyPath() {
-        Path<?> path = new Path<Object>(Collections.emptyList());
-        assertEquals(Optional.absent(), path.getLast());
+        Path<?> path = new Path<>(Collections.emptyList());
+        assertEquals(Optional.empty(), path.getLast());
     }
 
     @Test
     public void getLastShouldReturnLastElement() {
-        Path<?> path = new Path<U>(Arrays.asList(A, B, C));
+        Path<?> path = new Path<>(Arrays.asList(A, B, C));
         assertEquals(Optional.of(C), path.getLast());
     }
 
     @Test
     public void reverseReturnsReversedPath() {
-        Path<U> path = new Path<U>(Arrays.asList(A, B, C));
-        Path<U> reverse = new Path<U>(Arrays.asList(C, B, A));
+        Path<U> path = new Path<>(Arrays.asList(A, B, C));
+        Path<U> reverse = new Path<>(Arrays.asList(C, B, A));
         assertThat(path.reverse(), equalTo(reverse));
     }
 
     @Test
     public void getPathShouldReturnACopy() {
         List<U> list = Arrays.asList(A, B, C);
-        Path<?> path = new Path<U>(list);
+        Path<?> path = new Path<>(list);
         path.asList().remove(0);
         assertEquals(list, path.asList());
     }
@@ -92,7 +92,7 @@ public class PathTestCase<U extends Serializable> {
     @Test
     public void getLastPredecessorReturnsCorrectValue() {
         List<U> list = Arrays.asList(A, B, C);
-        Path<?> path = new Path<U>(list);
+        Path<?> path = new Path<>(list);
         assertEquals(Optional.of(B), path.getLastPredecessor());
     }
 
@@ -137,12 +137,7 @@ public class PathTestCase<U extends Serializable> {
     @Test
     public void transformShouldApplyTransformToPathElements() {
         Path<U> path = Path.asPath(A, B, C);
-        Path.Transform<U, U> t = new Path.Transform<U, U>() {
-            @Override
-            public U transform(U element) {
-                return element;
-            }
-        };
+        Path.Transform<U, U> t = element -> element;
         Path<U> expected = Path.asPath(A, B, C);
         assertThat(path.transform(t), equalTo(expected));
     }

@@ -1,12 +1,12 @@
 package edu.stanford.protege.gwt.graphtree.client;
 
-import com.google.common.base.Optional;
 import com.google.gwt.user.client.ui.IsWidget;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNode;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeId;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Author: Matthew Horridge<br>
@@ -14,16 +14,16 @@ import java.util.List;
  * Bio-Medical Informatics Research Group<br>
  * Date: 21/01/2014
  * <p>
- *     Represents a view of a {@link edu.stanford.protege.gwt.graphtree.shared.tree.TreeNode}.  A {@link TreeNodeView} contains
- *     the rendering of the associated tree node and also holds {@link edu.stanford.protege.gwt.graphtree.client.TreeNodeView}s
+ *     Represents a view of a {@link TreeNode}.  A {@link TreeNodeView} contains
+ *     the rendering of the associated tree node and also holds {@link TreeNodeView}s
  *     corresponding the views of the child nodes.
  * </p>
  */
 public interface TreeNodeView<U extends Serializable> extends IsWidget {
 
     /**
-     * Gets the {@link edu.stanford.protege.gwt.graphtree.shared.tree.TreeNode} that this view presents.
-     * @return The {@link edu.stanford.protege.gwt.graphtree.shared.tree.TreeNode} wrapped by this view.  Not {@code null}.
+     * Gets the {@link TreeNode} that this view presents.
+     * @return The {@link TreeNode} wrapped by this view.  Not {@code null}.
      */
     TreeNodeId getNodeId();
 
@@ -42,7 +42,7 @@ public interface TreeNodeView<U extends Serializable> extends IsWidget {
      * Gets this view's parent view if it is present.
      * @return The optional {@link TreeNodeView} that corresponds to this view's
      * parent view.  Not {@code null}.  If this view does not have a parent view then
-     * {@link com.google.common.base.Optional#absent()} will be returned.
+     * {@link Optional#empty()} will be returned.
      */
     Optional<TreeNodeView<U>> getParentView();
 

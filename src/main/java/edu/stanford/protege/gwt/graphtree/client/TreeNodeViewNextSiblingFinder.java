@@ -1,8 +1,8 @@
 package edu.stanford.protege.gwt.graphtree.client;
 
-import com.google.common.base.Optional;
-
+import java.io.Serializable;
 import java.util.Iterator;
+import java.util.Optional;
 
 /**
  * Author: Matthew Horridge<br>
@@ -10,20 +10,20 @@ import java.util.Iterator;
  * Bio-Medical Informatics Research Group<br>
  * Date: 26/01/2014
  */
-public class TreeNodeViewNextSiblingFinder {
+public class TreeNodeViewNextSiblingFinder<U extends Serializable> {
 
-    private TreeNodeView view;
+    private TreeNodeView<U> view;
 
-    public TreeNodeViewNextSiblingFinder(TreeNodeView view) {
+    public TreeNodeViewNextSiblingFinder(TreeNodeView<U> view) {
         this.view = view;
     }
 
     public Optional<TreeNodeView> getNextSibling() {
-        Optional<TreeNodeView> parent = view.getParentView();
+        Optional<TreeNodeView<U>> parent = view.getParentView();
         if(!parent.isPresent()) {
-            return Optional.absent();
+            return Optional.empty();
         }
-        Iterator<TreeNodeView> childIterator = parent.get().getChildViews().iterator();
+        Iterator<TreeNodeView<U>> childIterator = parent.get().getChildViews().iterator();
         while(childIterator.hasNext()) {
             TreeNodeView childView = childIterator.next();
             if(childView == view) {
@@ -31,10 +31,10 @@ public class TreeNodeViewNextSiblingFinder {
                     return Optional.of(childIterator.next());
                 }
                 else {
-                    return Optional.absent();
+                    return Optional.empty();
                 }
             }
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 }

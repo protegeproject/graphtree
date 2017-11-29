@@ -1,9 +1,10 @@
 package edu.stanford.protege.gwt.graphtree.shared.tree.impl;
 
 
-import com.google.common.base.Optional;
-import com.google.common.collect.*;
-import edu.stanford.protege.gwt.graphtree.shared.graph.GraphNode;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeData;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeId;
 
@@ -20,7 +21,7 @@ public class TreeModelIndex<U extends Serializable> {
 
     private Map<TreeNodeId, TreeNodeData<U>> roots = Maps.newLinkedHashMap();
 
-    private Map<TreeNodeId, TreeNodeData<U>> id2Data = new HashMap<TreeNodeId, TreeNodeData<U>>();
+    private Map<TreeNodeId, TreeNodeData<U>> id2Data = new HashMap<>();
 
     private Multimap<TreeNodeId, TreeNodeData<U>> parent2ChildMap = LinkedHashMultimap.create();
 
@@ -61,7 +62,7 @@ public class TreeModelIndex<U extends Serializable> {
     }
 
     public List<TreeNodeData<U>> getRoots() {
-        return new ArrayList<TreeNodeData<U>>(roots.values());
+        return new ArrayList<>(roots.values());
     }
 
     public boolean addChild(TreeNodeId parentId, TreeNodeData<U> childNodeData) {
@@ -95,14 +96,14 @@ public class TreeModelIndex<U extends Serializable> {
     }
 
     public Optional<TreeNodeId> getParent(TreeNodeId childNode) {
-        return Optional.fromNullable(child2ParentMap.get(childNode));
+        return Optional.ofNullable(child2ParentMap.get(childNode));
     }
 
     public List<TreeNodeData<U>> getChildren(TreeNodeId parentId) {
-        return new ArrayList<TreeNodeData<U>>(parent2ChildMap.get(parentId));
+        return new ArrayList<>(parent2ChildMap.get(parentId));
     }
 
     public List<TreeNodeData<U>> getTreeNodesForUserObject(U userObject) {
-        return new ArrayList<TreeNodeData<U>>(userObject2Data.get(userObject));
+        return new ArrayList<>(userObject2Data.get(userObject));
     }
 }

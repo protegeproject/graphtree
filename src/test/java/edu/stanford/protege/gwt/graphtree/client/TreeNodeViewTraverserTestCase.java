@@ -1,6 +1,5 @@
 package edu.stanford.protege.gwt.graphtree.client;
 
-import com.google.common.base.Optional;
 import edu.stanford.protege.gwt.graphtree.shared.Path;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,11 +9,10 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
 /**
@@ -34,23 +32,23 @@ public class TreeNodeViewTraverserTestCase<U extends Serializable> {
     @Test
     public void getNextShouldReturnSiblingOfCollapsedNode() {
         when(view.isExpanded()).thenReturn(false);
-        when(view.getNextSibling()).thenReturn(Optional.of(childSibling));
+        when(view.getNextSibling()).thenReturn(java.util.Optional.of(childSibling));
         when(view.getParentView()).thenReturn(getAbsent());
-        Optional<TreeNodeView<U>> next = traverser.getNext(view);
+        java.util.Optional<TreeNodeView<U>> next = traverser.getNext(view);
         assertTrue(next.isPresent());
         assertEquals(Optional.of(childSibling), next);
     }
 
-    private Optional<TreeNodeView<U>> getAbsent() {
-        return Optional.<TreeNodeView<U>>absent();
+    private java.util.Optional<TreeNodeView<U>> getAbsent() {
+        return java.util.Optional.<TreeNodeView<U>>empty();
     }
 
     @Test
     public void getNextShouldReturnChildOfExpandedNode() {
         when(view.isExpanded()).thenReturn(true);
         when(view.getParentView()).thenReturn(getAbsent());
-        when(view.getFirstChildView()).thenReturn(Optional.of(child));
-        Optional<TreeNodeView<U>> next = traverser.getNext(view);
+        when(view.getFirstChildView()).thenReturn(java.util.Optional.of(child));
+        java.util.Optional<TreeNodeView<U>> next = traverser.getNext(view);
         assertTrue(next.isPresent());
         assertEquals(Optional.of(child), next);
     }
@@ -58,12 +56,12 @@ public class TreeNodeViewTraverserTestCase<U extends Serializable> {
     @Test
     public void getNextShouldReturnSiblingOfParentNodeOfLastChild() {
         when(parent.isExpanded()).thenReturn(true);
-        when(parent.getFirstChildView()).thenReturn(Optional.of(child));
+        when(parent.getFirstChildView()).thenReturn(java.util.Optional.of(child));
         when(parent.getParentView()).thenReturn(getAbsent());
-        when(parent.getNextSibling()).thenReturn(Optional.of(parentSibling));
-        when(child.getParentView()).thenReturn(Optional.of(parent));
+        when(parent.getNextSibling()).thenReturn(java.util.Optional.of(parentSibling));
+        when(child.getParentView()).thenReturn(java.util.Optional.of(parent));
         when(child.getNextSibling()).thenReturn(getAbsent());
-        Optional<TreeNodeView<U>> next = traverser.getNext(child);
+        java.util.Optional<TreeNodeView<U>> next = traverser.getNext(child);
         assertTrue(next.isPresent());
         assertEquals(Optional.of(parentSibling), next);
     }
@@ -80,7 +78,7 @@ public class TreeNodeViewTraverserTestCase<U extends Serializable> {
     @Test
     public void getPathToRootShouldReturnPathWithParent() {
         when(parent.getParentView()).thenReturn(getAbsent());
-        when(view.getParentView()).thenReturn(Optional.of(parent));
+        when(view.getParentView()).thenReturn(java.util.Optional.of(parent));
         Path<TreeNodeView<U>> path = traverser.getPathToRoot(view);
         assertEquals(2, path.size());
         List<TreeNodeView<U>> expected = new ArrayList<TreeNodeView<U>>();
@@ -94,8 +92,8 @@ public class TreeNodeViewTraverserTestCase<U extends Serializable> {
     public void getFirstVisibleAncestorReturnsParentWhenParentIsVisibleAndCollapsed() {
         when(parent.isExpanded()).thenReturn(false);
         when(parent.getParentView()).thenReturn(getAbsent());
-        when(view.getParentView()).thenReturn(Optional.of(parent));
-        Optional<TreeNodeView<U>> ancestor = traverser.getFirstVisibleAncestor(view);
+        when(view.getParentView()).thenReturn(java.util.Optional.of(parent));
+        java.util.Optional<TreeNodeView<U>> ancestor = traverser.getFirstVisibleAncestor(view);
         assertEquals(Optional.of(parent), ancestor);
     }
 
@@ -103,8 +101,8 @@ public class TreeNodeViewTraverserTestCase<U extends Serializable> {
     public void getFirstVisibleAncestorReturnsParentWhenParentIsVisibleAndExpanded() {
         when(parent.isExpanded()).thenReturn(true);
         when(parent.getParentView()).thenReturn(getAbsent());
-        when(view.getParentView()).thenReturn(Optional.of(parent));
-        Optional<TreeNodeView<U>> ancestor = traverser.getFirstVisibleAncestor(view);
+        when(view.getParentView()).thenReturn(java.util.Optional.of(parent));
+        java.util.Optional<TreeNodeView<U>> ancestor = traverser.getFirstVisibleAncestor(view);
         assertEquals(Optional.of(parent), ancestor);
     }
 }

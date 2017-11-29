@@ -1,10 +1,8 @@
 package edu.stanford.protege.gwt.graphtree.client;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.gwt.view.client.SetSelectionModel;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNode;
-import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeId;
 
 import java.io.Serializable;
 import java.util.*;

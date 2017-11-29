@@ -1,20 +1,22 @@
 package edu.stanford.protege.gwt.graphtree.shared.tree;
 
+import java.io.Serializable;
+
 /**
  * Author: Matthew Horridge<br>
  * Stanford University<br>
  * Bio-Medical Informatics Research Group<br>
  * Date: 21/01/2014
  */
-public interface TreeNodeModelChangeVisitor {
+public interface TreeNodeModelChangeVisitor<U extends Serializable> {
 
-    void visit(RootNodeAdded rootNodeAdded);
+    void visit(RootNodeAdded<U> rootNodeAdded);
 
-    void visit(RootNodeRemoved rootNodeRemoved);
+    void visit(RootNodeRemoved<U> rootNodeRemoved);
 
-    void visit(ChildNodeAdded childNodeAdded);
+    void visit(ChildNodeAdded<U> childNodeAdded);
 
-    void visit(ChildNodeRemoved childNodeRemoved);
+    void visit(ChildNodeRemoved<U> childNodeRemoved);
 
-    void visit(NodeRenderingChanged nodeRenderingChanged);
+    void visit(NodeRenderingChanged<U> nodeRenderingChanged);
 }

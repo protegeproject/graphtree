@@ -1,6 +1,5 @@
 package edu.stanford.protege.gwt.graphtree.client;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.HashMultimap;
 import com.google.gwt.event.shared.HandlerRegistration;
 import edu.stanford.protege.gwt.graphtree.shared.Path;
@@ -8,6 +7,7 @@ import edu.stanford.protege.gwt.graphtree.shared.tree.*;
 
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.Optional;
 
 /**
  * Author: Matthew Horridge<br>
@@ -17,11 +17,7 @@ import java.util.Collections;
  */
 public class NullTreeNodeModel<U extends Serializable> implements TreeNodeModel<U> {
 
-    private static final HandlerRegistration NULL_HANDLER_REGISTRATION = new HandlerRegistration() {
-        @Override
-        public void removeHandler() {
-        }
-    };
+    private static final HandlerRegistration NULL_HANDLER_REGISTRATION = () -> {};
 
     @Override
     public HandlerRegistration addTreeNodeModelEventHandler(TreeNodeModelEventHandler handler) {

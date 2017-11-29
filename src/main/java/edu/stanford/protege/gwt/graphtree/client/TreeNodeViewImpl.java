@@ -1,15 +1,12 @@
 package edu.stanford.protege.gwt.graphtree.client;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.gwt.animation.client.Animation;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.cellview.client.CellTree;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.*;
@@ -17,9 +14,9 @@ import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNode;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeId;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -299,36 +296,36 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
             }
             parent = parent.getParent();
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     public Optional<TreeNodeView<U>> getPreviousSibling() {
-        return Optional.fromNullable(previousSibling);
+        return Optional.ofNullable(previousSibling);
 //        return new TreeNodeViewPreviousSiblingFinder(this).getPreviousSibling();
     }
 
     public Optional<TreeNodeView<U>> getNextSibling() {
-        return Optional.fromNullable(nextSibling);
+        return Optional.ofNullable(nextSibling);
 //        return new TreeNodeViewNextSiblingFinder(this).getNextSibling();
     }
 
     public Optional<TreeNodeView<U>> getFirstChildView() {
         if(childContainer == null) {
-            return Optional.absent();
+            return Optional.empty();
         }
         if (childContainer.getWidgetCount() == 0) {
-            return Optional.absent();
+            return Optional.empty();
         }
         return Optional.of((TreeNodeView<U>) childContainer.getWidget(0));
     }
 
     public Optional<TreeNodeView<U>> getLastChildView() {
         if(childContainer == null) {
-            return Optional.absent();
+            return Optional.empty();
         }
         int widgetCount = childContainer.getWidgetCount();
         if (widgetCount == 0) {
-            return Optional.absent();
+            return Optional.empty();
         }
         childContainer.getWidgetIndex(this);
         return Optional.of((TreeNodeView<U>) childContainer.getWidget(widgetCount - 1));

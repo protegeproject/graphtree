@@ -1,8 +1,7 @@
 package edu.stanford.protege.gwt.graphtree.shared.tree;
 
-import com.google.common.base.Optional;
-
 import java.io.Serializable;
+import java.util.Optional;
 
 /**
  * Author: Matthew Horridge<br>

@@ -1,14 +1,12 @@
 package edu.stanford.protege.gwt.graphtree.client;
 
-import com.google.common.base.Optional;
 import com.google.gwt.junit.client.GWTTestCase;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNode;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeId;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.mockito.Mockito.mock;
+import java.util.Optional;
 
 /**
  * Author: Matthew Horridge<br>
@@ -30,19 +28,19 @@ public class GwtTest_TreeNodeViewImpl extends GWTTestCase {
         delayTestFinish(10000);
     }
 
-    private static TreeNodeViewImpl getTreeNodeView() {
+    private static TreeNodeViewImpl<String> getTreeNodeView() {
         TreeNode<String> node = getTreeNode();
-        return new TreeNodeViewImpl<String>(node);
+        return new TreeNodeViewImpl<>(node);
     }
 
     private static TreeNode<String> getTreeNode() {
         counter++;
-        return new TreeNode<String>(new TreeNodeId(counter), "A");
+        return new TreeNode<>(new TreeNodeId(counter), "A");
     }
 
     public void test_getNodeId_ShouldReturnSuppliedNodeId() {
         TreeNode<String> node = getTreeNode();
-        TreeNodeViewImpl view = new TreeNodeViewImpl<String>(node);
+        TreeNodeViewImpl view = new TreeNodeViewImpl<>(node);
         assertEquals(node.getId(), view.getNodeId());
         finishTest();
     }
@@ -94,13 +92,13 @@ public class GwtTest_TreeNodeViewImpl extends GWTTestCase {
         finishTest();
     }
 
-    public void test_getParentView_ShouldReturn_OptionalAbsentByDefault() {
-        assertEquals(Optional.<TreeNodeView>absent(), getTreeNodeView().getParentView());
+    public void test_getParentView_ShouldReturn_OptionalemptyByDefault() {
+        assertEquals(Optional.<TreeNodeView>empty(), getTreeNodeView().getParentView());
         finishTest();
     }
 
-    public void test_getFirstChildView_ShouldReturn_OptionalAbsentByDefault() {
-        assertEquals(Optional.<TreeNodeView>absent(), getTreeNodeView().getFirstChildView());
+    public void test_getFirstChildView_ShouldReturn_OptionalemptyByDefault() {
+        assertEquals(Optional.<TreeNodeView>empty(), getTreeNodeView().getFirstChildView());
         finishTest();
     }
 
@@ -127,13 +125,13 @@ public class GwtTest_TreeNodeViewImpl extends GWTTestCase {
         finishTest();
     }
 
-    public void test_getLastChildView_ShouldReturn_OptionalAbsentByDefault() {
-        assertEquals(Optional.<TreeNodeView>absent(), getTreeNodeView().getLastChildView());
+    public void test_getLastChildView_ShouldReturn_OptionalemptyByDefault() {
+        assertEquals(Optional.<TreeNodeView>empty(), getTreeNodeView().getLastChildView());
         finishTest();
     }
 
-    public void test_getNextSiblingView_ShouldReturn_OptionalAbsentByDefault() {
-        assertEquals(Optional.<TreeNodeView>absent(), getTreeNodeView().getNextSibling());
+    public void test_getNextSiblingView_ShouldReturn_OptionalemptyByDefault() {
+        assertEquals(Optional.<TreeNodeView>empty(), getTreeNodeView().getNextSibling());
         finishTest();
     }
 
@@ -147,14 +145,14 @@ public class GwtTest_TreeNodeViewImpl extends GWTTestCase {
         finishTest();
     }
 
-    public void test_getNextSiblingView_ShouldReturnAbsentAfterRemove() {
+    public void test_getNextSiblingView_ShouldReturnemptyAfterRemove() {
         TreeNodeViewImpl parentView = getTreeNodeView();
         TreeNodeViewImpl firstChildView = getTreeNodeView();
         TreeNodeViewImpl secondChildView = getTreeNodeView();
         parentView.addChildView(firstChildView);
         parentView.addChildView(secondChildView);
         parentView.removeChildView(secondChildView);
-        assertEquals(Optional.<TreeNodeView>absent(), firstChildView.getNextSibling());
+        assertEquals(Optional.<TreeNodeView>empty(), firstChildView.getNextSibling());
         finishTest();
     }
 
@@ -168,20 +166,20 @@ public class GwtTest_TreeNodeViewImpl extends GWTTestCase {
         finishTest();
     }
 
-    public void test_getPreviousSiblingView_ShouldReturnAbsentAfterRemove() {
+    public void test_getPreviousSiblingView_ShouldReturnemptyAfterRemove() {
         TreeNodeViewImpl parentView = getTreeNodeView();
         TreeNodeViewImpl firstChildView = getTreeNodeView();
         TreeNodeViewImpl secondChildView = getTreeNodeView();
         parentView.addChildView(firstChildView);
         parentView.addChildView(secondChildView);
         parentView.removeChildView(firstChildView);
-        assertEquals(Optional.<TreeNodeView>absent(), secondChildView.getPreviousSibling());
+        assertEquals(Optional.<TreeNodeView>empty(), secondChildView.getPreviousSibling());
         finishTest();
     }
 
     public void test_getNextSiblingShouldReturnNextInSpecifiedList() {
-        TreeNodeView parentView = getTreeNodeView();
-        List<TreeNodeView> childViews = new ArrayList<TreeNodeView>();
+        TreeNodeView<String> parentView = getTreeNodeView();
+        List<TreeNodeView<String>> childViews = new ArrayList<>();
         for(int i = 0; i < 4; i++) {
             childViews.add(getTreeNodeView());
         }
@@ -189,26 +187,26 @@ public class GwtTest_TreeNodeViewImpl extends GWTTestCase {
         assertEquals(Optional.<TreeNodeView>of(childViews.get(1)), childViews.get(0).getNextSibling());
         assertEquals(Optional.<TreeNodeView>of(childViews.get(2)), childViews.get(1).getNextSibling());
         assertEquals(Optional.<TreeNodeView>of(childViews.get(3)), childViews.get(2).getNextSibling());
-        assertEquals(Optional.<TreeNodeView>absent(), childViews.get(3).getNextSibling());
+        assertEquals(Optional.<TreeNodeView>empty(), childViews.get(3).getNextSibling());
         finishTest();
     }
 
     public void test_getPreviousSiblingShouldReturnPreviousInSpecifiedList() {
-        TreeNodeView parentView = getTreeNodeView();
-        List<TreeNodeView> childViews = new ArrayList<TreeNodeView>();
+        TreeNodeView<String> parentView = getTreeNodeView();
+        List<TreeNodeView<String>> childViews = new ArrayList<>();
         for(int i = 0; i < 4; i++) {
             childViews.add(getTreeNodeView());
         }
         parentView.setChildViews(childViews);
-        assertEquals(Optional.<TreeNodeView>absent(), childViews.get(0).getPreviousSibling());
+        assertEquals(Optional.<TreeNodeView>empty(), childViews.get(0).getPreviousSibling());
         assertEquals(Optional.<TreeNodeView>of(childViews.get(0)), childViews.get(1).getPreviousSibling());
         assertEquals(Optional.<TreeNodeView>of(childViews.get(1)), childViews.get(2).getPreviousSibling());
         assertEquals(Optional.<TreeNodeView>of(childViews.get(2)), childViews.get(3).getPreviousSibling());
         finishTest();
     }
 
-    public void test_getPreviousSiblingView_ShouldReturn_OptionalAbsentByDefault() {
-        assertEquals(Optional.<TreeNodeView>absent(), getTreeNodeView().getPreviousSibling());
+    public void test_getPreviousSiblingView_ShouldReturn_OptionalemptyByDefault() {
+        assertEquals(Optional.<TreeNodeView>empty(), getTreeNodeView().getPreviousSibling());
         finishTest();
     }
 

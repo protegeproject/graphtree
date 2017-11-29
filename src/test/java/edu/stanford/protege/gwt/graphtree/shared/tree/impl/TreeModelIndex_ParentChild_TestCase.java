@@ -1,22 +1,18 @@
 package edu.stanford.protege.gwt.graphtree.shared.tree.impl;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeData;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeId;
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.io.OptionalDataException;
 import java.io.Serializable;
+import java.util.Optional;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
@@ -107,7 +103,7 @@ public class TreeModelIndex_ParentChild_TestCase<U extends Serializable> {
         index.addChild(parentId, child);
         assertThat(index.getTreeNodeData(childId), equalTo(child));
         index.removeChild(parentId, childId, removedBranches);
-        assertThat(index.getParent(childId), equalTo(Optional.<TreeNodeId>absent()));
+        assertThat(index.getParent(childId), equalTo(Optional.empty()));
     }
 
 }

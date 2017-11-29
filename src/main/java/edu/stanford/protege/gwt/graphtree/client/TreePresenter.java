@@ -1,9 +1,9 @@
 package edu.stanford.protege.gwt.graphtree.client;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SetSelectionModel;
 import com.google.inject.Inject;
@@ -15,6 +15,7 @@ import java.io.Serializable;
 import java.util.*;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static edu.stanford.protege.gwt.graphtree.client.TreeNodeViewState.EXPANDED;
 
 /**
  * Author: Matthew Horridge<br>
@@ -36,17 +37,17 @@ public class TreePresenter<U extends Serializable> implements HasTreeNodeDropHan
 
     private final TreeNodeViewSelectionProvider<U> treeNodeViewSelectionProvider;
 
-    private final RootNodeAddedHandler rootNodeAddedHandler;
+    private final RootNodeAddedHandler<U> rootNodeAddedHandler;
 
-    private final RootNodeRemovedHandler rootNodeRemovedHandler;
+    private final RootNodeRemovedHandler<U> rootNodeRemovedHandler;
 
-    private final ChildNodeAddedHandler childNodeAddedHandler;
+    private final ChildNodeAddedHandler<U> childNodeAddedHandler;
 
-    private final ChildNodeRemovedHandler childNodeRemovedHandler;
+    private final ChildNodeRemovedHandler<U> childNodeRemovedHandler;
 
-    private final NodeRenderingChangedHandler nodeRenderingChangedHandler;
+    private final NodeRenderingChangedHandler<U> nodeRenderingChangedHandler;
 
-    private TreeNodeModel<U> model = new NullTreeNodeModel<U>();
+    private TreeNodeModel<U> model = new NullTreeNodeModel<>();
 
     private HandlerRegistration modelHandlerRegistration;
 
@@ -54,29 +55,29 @@ public class TreePresenter<U extends Serializable> implements HasTreeNodeDropHan
     public TreePresenter(TreeView treeView, SetSelectionModel<TreeNode<U>> selectionModel, TreeNodeRenderer<U> treeNodeRenderer) {
         this.treeView = treeView;
         this.selectionModel = selectionModel;
-        this.viewManager = new TreeNodeViewManager<U>(treeNodeRenderer);
-        this.pendingChangeManager = new PendingChangesManager<U>(this, selectionModel);
-        treeNodeViewSelectionProvider = new TreeNodeViewSelectionProvider<U>(selectionModel, viewManager);
-        KeyboardEventMapper keyboardEventMapper = new KeyboardEventMapper<U>(treeNodeViewSelectionProvider,
-                new SetTreeNodeExpandedHandler<U>(this, selectionModel, viewManager),
-                new SetTreeNodeCollapsedHandler<U>(),
-                new SelectNextTreeNodesHandler<U>(selectionModel),
-                new SelectPreviousTreeNodesHandler<U>(selectionModel));
+        this.viewManager = new TreeNodeViewManager<>(treeNodeRenderer);
+        this.pendingChangeManager = new PendingChangesManager<>(this, selectionModel);
+        treeNodeViewSelectionProvider = new TreeNodeViewSelectionProvider<>(selectionModel, viewManager);
+        KeyboardEventMapper keyboardEventMapper = new KeyboardEventMapper<>(treeNodeViewSelectionProvider,
+                                                                            new SetTreeNodeExpandedHandler<>(this, selectionModel, viewManager),
+                                                                            new SetTreeNodeCollapsedHandler<>(),
+                                                                            new SelectNextTreeNodesHandler<>(selectionModel),
+                                                                            new SelectPreviousTreeNodesHandler<>(selectionModel));
         keyboardEventMapper.bind(treeView);
-        TreeViewEventTargetFinder<U> eventTargetFinder = new TreeViewEventTargetFinder<U>(viewManager);
-        MouseEventMapper mouseEventMapper = new MouseEventMapper<U>(new SetTreeNodeSelectedHandler<U>(selectionModel),
-                new ToggleExpansionStateHandler<U>(this, selectionModel, viewManager),
-                eventTargetFinder);
+        TreeViewEventTargetFinder<U> eventTargetFinder = new TreeViewEventTargetFinder<>(viewManager);
+        MouseEventMapper mouseEventMapper = new MouseEventMapper<>(new SetTreeNodeSelectedHandler<>(selectionModel),
+                                                                   new ToggleExpansionStateHandler<>(this, selectionModel, viewManager),
+                                                                   eventTargetFinder);
         mouseEventMapper.bind(treeView);
-        dragAndDropManager = new DragAndDropEventMapper<U>(eventTargetFinder, new TreeNodeViewDragAndDropHandler<U>(this));
+        dragAndDropManager = new DragAndDropEventMapper<>(eventTargetFinder, new TreeNodeViewDragAndDropHandler<>(this));
         dragAndDropManager.bind(treeView);
-        SelectionPainter<U> selectionPainter = new SelectionPainter<U>(viewManager);
+        SelectionPainter<U> selectionPainter = new SelectionPainter<>(viewManager);
         selectionPainter.bind(selectionModel);
-        rootNodeAddedHandler = new RootNodeAddedHandler<U>(viewManager, treeView);
-        rootNodeRemovedHandler = new RootNodeRemovedHandler<U>(viewManager, treeView);
-        childNodeAddedHandler = new ChildNodeAddedHandler<U>(viewManager);
-        childNodeRemovedHandler = new ChildNodeRemovedHandler<U>(viewManager);
-        nodeRenderingChangedHandler = new NodeRenderingChangedHandler<U>(viewManager);
+        rootNodeAddedHandler = new RootNodeAddedHandler<>(viewManager, treeView);
+        rootNodeRemovedHandler = new RootNodeRemovedHandler<>(viewManager, treeView);
+        childNodeAddedHandler = new ChildNodeAddedHandler<>(viewManager);
+        childNodeRemovedHandler = new ChildNodeRemovedHandler<>(viewManager);
+        nodeRenderingChangedHandler = new NodeRenderingChangedHandler<>(viewManager);
     }
 
     @Override
@@ -126,11 +127,7 @@ public class TreePresenter<U extends Serializable> implements HasTreeNodeDropHan
         }
         viewManager.purge();
         this.model = model;
-        modelHandlerRegistration = model.addTreeNodeModelEventHandler(new TreeNodeModelEventHandler() {
-            public void handleTreeNodeModelEvent(TreeNodeModelEvent event) {
-                TreePresenter.this.handleTreeNodeModelEvent(event);
-            }
-        });
+        modelHandlerRegistration = model.addTreeNodeModelEventHandler(TreePresenter.this::handleTreeNodeModelEvent);
         reload();
     }
 
@@ -143,7 +140,7 @@ public class TreePresenter<U extends Serializable> implements HasTreeNodeDropHan
     }
 
     public Path<TreeNodeId> getPathToRoot(TreeNodeId fromNode) {
-        Optional<TreeNodeView<U>> view = viewManager.getViewIfPresent(fromNode);
+        java.util.Optional<TreeNodeView<U>> view = viewManager.getViewIfPresent(fromNode);
         if (!view.isPresent()) {
             return Path.emptyPath();
         }
@@ -154,7 +151,7 @@ public class TreePresenter<U extends Serializable> implements HasTreeNodeDropHan
     @Override
     public void setTreeNodeExpanded(TreeNodeId node) {
         Optional<TreeNodeView<U>> view = viewManager.getViewIfPresent(node);
-        setTreeNodeHandleState(TreeViewInputEvent.<U>empty(), view.get(), TreeNodeViewState.EXPANDED);
+        view.ifPresent(v -> setTreeNodeHandleState(TreeViewInputEvent.empty(), v, EXPANDED));
     }
 
     public void clearSelection() {
@@ -256,7 +253,7 @@ public class TreePresenter<U extends Serializable> implements HasTreeNodeDropHan
 
     private void initialiseRootNodes() {
         treeView.clear();
-        model.getNodes(Optional.<TreeNodeId>absent(), nodes -> {
+        model.getNodes(Optional.empty(), nodes -> {
             for (TreeNodeData<U> node : nodes) {
                 TreeNodeView rootNodeView = viewManager.getView(node);
                 treeView.add(rootNodeView.asWidget());
@@ -283,25 +280,26 @@ public class TreePresenter<U extends Serializable> implements HasTreeNodeDropHan
         }
     }
 
-    private void handleTreeNodeModelChange(TreeNodeModelChange change) {
-        change.accept(new TreeNodeModelChangeVisitor() {
-            public void visit(RootNodeAdded rootNodeAdded) {
+    private void handleTreeNodeModelChange(TreeNodeModelChange<U> change) {
+
+        change.accept(new TreeNodeModelChangeVisitor<U>() {
+            public void visit(RootNodeAdded<U> rootNodeAdded) {
                 rootNodeAddedHandler.handleRootNodeAdded(rootNodeAdded);
             }
 
-            public void visit(RootNodeRemoved rootNodeRemoved) {
+            public void visit(RootNodeRemoved<U> rootNodeRemoved) {
                 rootNodeRemovedHandler.handleRootNodeRemoved(rootNodeRemoved);
             }
 
-            public void visit(final ChildNodeAdded childNodeAdded) {
+            public void visit(final ChildNodeAdded<U> childNodeAdded) {
                 childNodeAddedHandler.handleChildNodeAdded(childNodeAdded);
             }
 
-            public void visit(ChildNodeRemoved childNodeRemoved) {
+            public void visit(ChildNodeRemoved<U> childNodeRemoved) {
                 childNodeRemovedHandler.handleChildNodeRemoved(childNodeRemoved);
             }
 
-            public void visit(NodeRenderingChanged nodeRenderingChanged) {
+            public void visit(NodeRenderingChanged<U> nodeRenderingChanged) {
                 nodeRenderingChangedHandler.handleNodeRenderingChanged(nodeRenderingChanged);
             }
         });
@@ -314,8 +312,8 @@ public class TreePresenter<U extends Serializable> implements HasTreeNodeDropHan
             new SetTreeNodeCollapsedHandler<U>().invoke(event, Collections.singleton(treeNodeView));
         }
         else {
-            new SetTreeNodeExpandedHandler<U>(model, selectionModel, viewManager).invoke(event,
-                    Collections.singleton(treeNodeView));
+            new SetTreeNodeExpandedHandler<>(model, selectionModel, viewManager).invoke(event,
+                                                                                        Collections.singleton(treeNodeView));
         }
     }
 }

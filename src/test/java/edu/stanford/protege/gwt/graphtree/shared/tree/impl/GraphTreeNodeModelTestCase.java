@@ -1,13 +1,10 @@
 package edu.stanford.protege.gwt.graphtree.shared.tree.impl;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.Sets;
 import edu.stanford.protege.gwt.graphtree.shared.graph.impl.local.SimpleGraphModel;
 import edu.stanford.protege.gwt.graphtree.shared.tree.GetTreeNodesCallback;
-import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNode;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeData;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeId;
-import edu.stanford.protege.gwt.graphtree.shared.tree.impl.GraphTreeNodeModel;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -17,6 +14,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
@@ -46,7 +44,7 @@ public class GraphTreeNodeModelTestCase<U extends Serializable> {
     public void getNodes_Callback_isCalledForEmptyGraph() {
         SimpleGraphModel<U> graphModel = SimpleGraphModel.<U>builder().build();
         GraphTreeNodeModel<U> model = GraphTreeNodeModel.create(graphModel);
-        model.getNodes(Optional.<TreeNodeId>absent(), callback);
+        model.getNodes(Optional.empty(), callback);
         verify(callback, times(1)).handleNodes(captor.capture());
     }
 
@@ -54,7 +52,7 @@ public class GraphTreeNodeModelTestCase<U extends Serializable> {
     public void getNodes_with_OptionalAbsent_ShouldReturn_RootNodes() {
         SimpleGraphModel<U> graphModel = SimpleGraphModel.<U>builder().addKeyNode(A).build();
         GraphTreeNodeModel<U> model = GraphTreeNodeModel.create(graphModel);
-        model.getNodes(Optional.<TreeNodeId>absent(), callback);
+        model.getNodes(Optional.empty(), callback);
         verify(callback, times(1)).handleNodes(captor.capture());
         List<TreeNodeData<U>> value = captor.getValue();
         assertEquals(1, value.size());
@@ -72,12 +70,7 @@ public class GraphTreeNodeModelTestCase<U extends Serializable> {
                 .addEdge(A, D)
                 .build();
         final GraphTreeNodeModel<U> model = GraphTreeNodeModel.create(graphModel);
-        model.getTreeNodesForUserObject(A, new GetTreeNodesCallback<U>() {
-            @Override
-            public void handleNodes(List<TreeNodeData<U>> nodes) {
-                model.getNodes(Optional.<TreeNodeId>of(nodes.get(0).getId()), callback);
-            }
-        });
+        model.getTreeNodesForUserObject(A, nodes -> model.getNodes(Optional.<TreeNodeId>of(nodes.get(0).getId()), callback));
         verify(callback, times(1)).handleNodes(captor.capture());
         List<TreeNodeData<U>> value = captor.getValue();
         assertEquals(3, value.size());
