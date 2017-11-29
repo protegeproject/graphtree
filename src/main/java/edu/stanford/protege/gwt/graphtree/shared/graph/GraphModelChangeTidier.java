@@ -28,7 +28,7 @@ public class GraphModelChangeTidier<U extends Serializable> {
         final Set<GraphEdge<U>> removedEdges = Sets.newHashSet();
         final Set<GraphNode<U>> addedKeyNodes = Sets.newHashSet();
         final Set<GraphNode<U>> removedKeyNodes = Sets.newHashSet();
-        final Map<GraphNode<U>, SetRendering<U>> setRenderingChanges = Maps.newHashMap();
+        final Map<GraphNode<U>, UpdateUserObject<U>> setRenderingChanges = Maps.newHashMap();
         for(GraphModelChange<U> change : changes) {
             change.accept(new GraphModelChangeVisitor<U>() {
                 public void visit(AddKeyNode<U> addKeyNode) {
@@ -57,8 +57,8 @@ public class GraphModelChangeTidier<U extends Serializable> {
                     }
                 }
 
-                public void visit(SetRendering<U> setRendering) {
-                    setRenderingChanges.put(setRendering.getGraphNode(), setRendering);
+                public void visit(UpdateUserObject<U> updateUserObject) {
+                    setRenderingChanges.put(updateUserObject.getGraphNode(), updateUserObject);
                 }
             });
         }

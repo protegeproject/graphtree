@@ -134,8 +134,8 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
                     handleRemoveEdge(removeEdge, resultingChanges);
                 }
 
-                public void visit(SetRendering<U> setRendering) {
-                    handleSetRendering(setRendering, resultingChanges);
+                public void visit(UpdateUserObject<U> updateUserObject) {
+                    handleUpdateUserObject(updateUserObject, resultingChanges);
                 }
             });
         }
@@ -189,10 +189,10 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
         }
     }
 
-    private void handleSetRendering(SetRendering<U> setRendering, List<TreeNodeModelChange> resultingChanges) {
-        U userObject = setRendering.getGraphNode().getUserObject();
+    private void handleUpdateUserObject(UpdateUserObject<U> updateUserObject, List<TreeNodeModelChange> resultingChanges) {
+        U userObject = updateUserObject.getGraphNode().getUserObject();
         for (TreeNodeData<U> node : treeModelIndex.getTreeNodesForUserObject(userObject)) {
-            resultingChanges.add(new NodeRenderingChanged<U>(node.getId(), setRendering.getHtml()));
+            resultingChanges.add(new NodeRenderingChanged<>(node.getId(), node.getUserObject()));
         }
     }
 

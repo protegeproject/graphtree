@@ -1,5 +1,6 @@
 package edu.stanford.protege.gwt.graphtree.shared.graph;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 import java.io.Serializable;
@@ -10,31 +11,24 @@ import java.io.Serializable;
  * Bio-Medical Informatics Research Group<br>
  * Date: 21/01/2014
  */
-public class SetRendering<U extends Serializable> extends GraphModelChange<U> {
+public class UpdateUserObject<U extends Serializable> extends GraphModelChange<U> {
 
     private GraphNode<U> graphNode;
 
-    private String html;
-
-    private SetRendering() {
+    private UpdateUserObject() {
     }
 
-    public SetRendering(GraphNode<U> graphNode, String html) {
+    public UpdateUserObject(GraphNode<U> graphNode) {
         this.graphNode = graphNode;
-        this.html = html;
     }
 
     public GraphNode<U> getGraphNode() {
         return graphNode;
     }
 
-    public String getHtml() {
-        return html;
-    }
-
     @Override
     public GraphModelChange<U> getReverseChange() {
-        return new SetRendering<U>(graphNode, html);
+        return new UpdateUserObject<U>(graphNode);
     }
 
     @Override
@@ -44,7 +38,7 @@ public class SetRendering<U extends Serializable> extends GraphModelChange<U> {
 
     @Override
     public int hashCode() {
-        return "SetRendering".hashCode() + graphNode.hashCode();
+        return "UpdateUserObject".hashCode() + graphNode.hashCode();
     }
 
     @Override
@@ -52,15 +46,18 @@ public class SetRendering<U extends Serializable> extends GraphModelChange<U> {
         if(o == this) {
             return true;
         }
-        if(!(o instanceof SetRendering)) {
+        if(!(o instanceof UpdateUserObject)) {
             return false;
         }
-        SetRendering other = (SetRendering) o;
+        UpdateUserObject other = (UpdateUserObject) o;
         return this.graphNode.equals(other.graphNode);
     }
 
     @Override
     public String toString() {
-        return Objects.toStringHelper("SetRendering").addValue(graphNode).addValue(html).toString();
+        return MoreObjects
+                .toStringHelper("UpdateUserObject")
+                .addValue(graphNode)
+                .toString();
     }
 }

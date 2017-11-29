@@ -36,14 +36,21 @@ public class NodeRenderingChangedHandler_TestCase<U extends Serializable> {
     @Mock
     private NodeRenderingChanged<U> nodeRenderingChanged;
 
+    @Mock
+    private U userObject;
+
     private NodeRenderingChangedHandler<U> handler;
+
+    @Mock
+    private TreeNodeRenderer<U> renderer;
 
     @Before
     public void setUp() {
-        when(nodeRenderingChanged.getHtmlRendering()).thenReturn(NEW_RENDERING);
-        when(nodeRenderingChanged.getTreeNode()).thenReturn(node);
+        when(nodeRenderingChanged.getTreeNodeId()).thenReturn(node);
+        when(nodeRenderingChanged.getUserObject()).thenReturn(userObject);
         when(viewMapper.getViewIfPresent(node)).thenReturn(Optional.of(view));
-        handler = new NodeRenderingChangedHandler<U>(viewMapper);
+        when(renderer.getHtmlRendering(userObject)).thenReturn(NEW_RENDERING);
+        handler = new NodeRenderingChangedHandler<>(viewMapper, renderer);
     }
 
     @Test

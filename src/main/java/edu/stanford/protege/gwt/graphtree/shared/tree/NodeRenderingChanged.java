@@ -1,10 +1,13 @@
 package edu.stanford.protege.gwt.graphtree.shared.tree;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
+import javax.annotation.Nonnull;
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.Set;
+
+import static com.google.common.base.MoreObjects.toStringHelper;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Author: Matthew Horridge<br>
@@ -14,30 +17,28 @@ import java.util.Set;
  */
 public class NodeRenderingChanged<U extends Serializable> extends TreeNodeModelChange<U> {
 
-    private String htmlRendering;
-
     private TreeNodeId treeNode;
+
+    private U userObject;
 
     private NodeRenderingChanged() {
     }
 
-    public NodeRenderingChanged(TreeNodeId treeNode, String htmlRendering) {
-        this.treeNode = treeNode;
-        this.htmlRendering = htmlRendering;
+    public NodeRenderingChanged(@Nonnull TreeNodeId treeNode,
+                                @Nonnull U userObject) {
+        this.treeNode = checkNotNull(treeNode);
+        this.userObject = checkNotNull(userObject);
     }
 
-    public String getHtmlRendering() {
-        return htmlRendering;
-    }
-
-    public TreeNodeId getTreeNode() {
+    @Nonnull
+    public TreeNodeId getTreeNodeId() {
         return treeNode;
     }
 
-//    @Override
-//    public Set<TreeNode<U>> getTreeNodes() {
-//        return Collections.singleton(treeNode);
-//    }
+    @Nonnull
+    public U getUserObject() {
+        return userObject;
+    }
 
     @Override
     public void accept(TreeNodeModelChangeVisitor visitor) {
@@ -63,6 +64,6 @@ public class NodeRenderingChanged<U extends Serializable> extends TreeNodeModelC
 
     @Override
     public String toString() {
-        return Objects.toStringHelper("NodeRenderingChanged").addValue(treeNode).addValue(htmlRendering).toString();
+        return toStringHelper("NodeRenderingChanged").addValue(treeNode).toString();
     }
 }

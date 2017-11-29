@@ -18,5 +18,5 @@ public interface GraphModelChangeVisitor<U extends Serializable> {
 
     void visit(RemoveEdge<U> removeEdge);
 
-    void visit(SetRendering<U> setRendering);
+    void visit(UpdateUserObject<U> updateUserObject);
 }

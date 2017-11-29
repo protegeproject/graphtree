@@ -77,7 +77,7 @@ public class TreePresenter<U extends Serializable> implements HasTreeNodeDropHan
         rootNodeRemovedHandler = new RootNodeRemovedHandler<>(viewManager, treeView);
         childNodeAddedHandler = new ChildNodeAddedHandler<>(viewManager);
         childNodeRemovedHandler = new ChildNodeRemovedHandler<>(viewManager);
-        nodeRenderingChangedHandler = new NodeRenderingChangedHandler<>(viewManager);
+        nodeRenderingChangedHandler = new NodeRenderingChangedHandler<>(viewManager, treeNodeRenderer);
     }
 
     @Override

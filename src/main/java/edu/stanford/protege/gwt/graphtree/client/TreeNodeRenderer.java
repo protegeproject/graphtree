@@ -12,5 +12,5 @@ import java.io.Serializable;
  */
 public interface TreeNodeRenderer<U extends Serializable> {
 
-    String getHtmlRendering(TreeNodeData<U> treeNode);
+    String getHtmlRendering(U userObject);
 }

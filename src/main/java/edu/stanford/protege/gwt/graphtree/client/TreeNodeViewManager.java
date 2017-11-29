@@ -59,7 +59,7 @@ public class TreeNodeViewManager<U extends Serializable> implements TreeNodeView
 
     private TreeNodeView<U> createView(TreeNodeData<U> treeNode) {
         final TreeNodeView<U> view = new TreeNodeViewImpl<U>(treeNode.getTreeNode());
-        view.setRendering(renderer.getHtmlRendering(treeNode));
+        view.setRendering(renderer.getHtmlRendering(treeNode.getUserObject()));
         view.setLeaf(treeNode.isLeaf());
         view.asWidget().addStyleName(TREE_NODE_VIEW_STYLE_NAME);
         return view;
