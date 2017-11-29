@@ -7,7 +7,7 @@ package edu.stanford.protege.gwt.graphtree.shared.tree;
  */
 public enum RevealMode {
 
-    FIRST,
+    REVEAL_FIRST,
 
-    ALL
+    REVEAL_ALL
 }

@@ -1,7 +1,6 @@
 package edu.stanford.protege.gwt.graphtree.client;
 
 import com.google.gwt.event.dom.client.*;
-import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -21,6 +20,7 @@ public class TreeViewImpl extends Composite implements TreeView {
 
     public TreeViewImpl() {
         initWidget(delegate = new FocusPanel());
+        delegate.addStyleName(TreeNodeViewResources.RESOURCES.style().tree());
     }
 
     @Override

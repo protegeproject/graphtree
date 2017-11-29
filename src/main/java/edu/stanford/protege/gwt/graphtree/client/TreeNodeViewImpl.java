@@ -37,12 +37,12 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
 
     public static final int INDENT_EM = 2;
 
-    private static final CellTree.Resources RESOURCES = GWT.create(CellTree.Resources.class);
+    private static final TreeNodeViewResources RESOURCES = GWT.create(TreeNodeViewResources.class);
 
     private static TreeNodeViewImplUiBinder ourUiBinder = GWT.create(TreeNodeViewImplUiBinder.class);
 
-    @UiField
-    protected Widget handle;
+//    @UiField
+//    protected Widget handle;
 
     @UiField
     protected Image handleImage;
@@ -402,21 +402,21 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
     }
 
     private void updateHandleImage() {
-        final ImageResource handleImageResource;
+        final String handleImageResourceUri;
         if(loadingIndicatorDisplayed || dataState == DataState.LOADING) {
-            handleImageResource = RESOURCES.cellTreeLoading();
+            handleImageResourceUri = RESOURCES.loading().getSafeUri().asString();
         }
         else {
 
             if(viewState == TreeNodeViewState.COLLAPSED) {
-                handleImageResource = RESOURCES.cellTreeClosedItem();
+                handleImageResourceUri = RESOURCES.collapsed().getSafeUri().asString();
             }
             else {
-                handleImageResource = RESOURCES.cellTreeOpenItem();
+                handleImageResourceUri = RESOURCES.expanded().getSafeUri().asString();
             }
         }
-        handleImage.setResource(handleImageResource);
-        handle.getElement().getStyle().setVisibility(shouldShowHandle() ? Style.Visibility.VISIBLE : Style.Visibility.HIDDEN);
+        handleImage.setUrl(handleImageResourceUri);
+        handleImage.getElement().getStyle().setVisibility(shouldShowHandle() ? Style.Visibility.VISIBLE : Style.Visibility.HIDDEN);
     }
 
     private boolean shouldShowHandle() {

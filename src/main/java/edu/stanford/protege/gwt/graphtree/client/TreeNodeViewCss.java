@@ -10,15 +10,21 @@ import com.google.gwt.resources.client.CssResource;
  */
 public interface TreeNodeViewCss extends CssResource {
 
-    @ClassName("tree-row")
+    @ClassName("gt-tree")
+    String tree();
+
+    @ClassName("gt-tree__row")
     String row();
 
-    @ClassName("tree-row--selected")
+    @ClassName("gt-tree__row--selected")
     String rowSelected();
 
-    @ClassName("tree-row--drag-over")
+    @ClassName("gt-tree__row--drag-over")
     String rowDragOver();
 
-    @ClassName("tree-row__handle")
+    @ClassName("gt-tree__rendering")
+    String rendering();
+
+    @ClassName("gt-tree__handle")
     String handle();
 }

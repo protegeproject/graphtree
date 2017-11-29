@@ -9,7 +9,7 @@
     <version>1.0.0-SNAPSHOT</version>
 
     <properties>
-        <gwtVersion>2.5.1</gwtVersion>
+        <gwtVersion>2.8.0</gwtVersion>
         <gwt.test.mode>htmlunit</gwt.test.mode>
     </properties>
 
@@ -82,12 +82,19 @@
         <!--<outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>-->
 
         <plugins>
-
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.6.0</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
             <!-- GWT Maven Plugin -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>gwt-maven-plugin</artifactId>
-                <version>2.5.1</version>
+                <version>2.8.0</version>
                 <executions>
                     <execution>
                         <goals>

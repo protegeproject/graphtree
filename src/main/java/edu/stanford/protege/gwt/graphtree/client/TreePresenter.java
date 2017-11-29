@@ -2,9 +2,7 @@ package edu.stanford.protege.gwt.graphtree.client;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SetSelectionModel;
@@ -104,6 +102,10 @@ public class TreePresenter<U extends Serializable> implements HasTreeNodeDropHan
 
     public void reload() {
         initialiseRootNodes();
+    }
+
+    public void getTreeNodesForUserObject(U userObject, GetTreeNodesCallback<U> callback) {
+        model.getTreeNodesForUserObject(userObject, callback);
     }
 
     public void setRootNodesExpanded() {
@@ -227,36 +229,24 @@ public class TreePresenter<U extends Serializable> implements HasTreeNodeDropHan
     }
 
     public void revealTreeNodesForUserObject(final U userObject, final RevealMode revealMode) {
-//        model.getBranchesContainingUserObject(userObject, new HasGetBranches.GetBranchesCallback<U>() {
-//            @Override
-//            public void handleBranches(Multimap<TreeNodeData<U>, TreeNodeData<U>> parent2ChildMap) {
-//
-//            }
-//        });
-        model.getTreeNodesForUserObject(userObject, new GetTreeNodesCallback<U>() {
-            @Override
-            public void handleNodes(List<TreeNodeData<U>> nodes) {
-                for(TreeNodeData<U> tn : nodes) {
-                    Path<TreeNodeData<U>> pathToRoot = model.getPathToRoot(tn.getId());
-                    for(int i = 0; i < pathToRoot.size(); i++) {
-                        TreeNodeData<U> treeNodeData = pathToRoot.get(i);
-                        if (i < pathToRoot.size() - 1) {
-                            viewManager.getView(treeNodeData);
-                            setTreeNodeExpanded(treeNodeData.getId());
-                        }
-                        else {
-                            setSelected(tn.getTreeNode(), true);
-                        }
+        model.getTreeNodesForUserObject(userObject, nodes -> {
+            for(TreeNodeData<U> tn : nodes) {
+                Path<TreeNodeData<U>> pathToRoot = model.getPathToRoot(tn.getId());
+                for(int i = 0; i < pathToRoot.size(); i++) {
+                    TreeNodeData<U> treeNodeData = pathToRoot.get(i);
+                    if (i < pathToRoot.size() - 1) {
+                        viewManager.getView(treeNodeData);
+                        setTreeNodeExpanded(treeNodeData.getId());
                     }
-                    if(revealMode == RevealMode.FIRST) {
-                        break;
+                    else {
+                        setSelected(tn.getTreeNode(), true);
                     }
+                }
+                if(revealMode == RevealMode.REVEAL_FIRST) {
+                    break;
                 }
             }
         });
-//        for(TreeNodeData<U> tn : parent2ChildMap.keySet()) {
-//            setTreeNodeExpanded(tn.getId());
-//        }
     }
 
     @Override
@@ -266,13 +256,11 @@ public class TreePresenter<U extends Serializable> implements HasTreeNodeDropHan
 
     private void initialiseRootNodes() {
         treeView.clear();
-        model.getNodes(Optional.<TreeNodeId>absent(), new GetTreeNodesCallback<U>() {
-            public void handleNodes(List<TreeNodeData<U>> nodes) {
-                for (TreeNodeData<U> node : nodes) {
-                    TreeNodeView rootNodeView = viewManager.getView(node);
-                    treeView.add(rootNodeView.asWidget());
-                    setTreeNodeExpanded(node.getId());
-                }
+        model.getNodes(Optional.<TreeNodeId>absent(), nodes -> {
+            for (TreeNodeData<U> node : nodes) {
+                TreeNodeView rootNodeView = viewManager.getView(node);
+                treeView.add(rootNodeView.asWidget());
+                setTreeNodeExpanded(node.getId());
             }
         });
     }
