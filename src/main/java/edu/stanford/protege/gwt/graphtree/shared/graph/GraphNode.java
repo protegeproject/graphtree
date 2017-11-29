@@ -1,9 +1,10 @@
 package edu.stanford.protege.gwt.graphtree.shared.graph;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
+import javax.annotation.Nonnull;
 import java.io.Serializable;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -15,8 +16,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Date: 10/07/2013
  * <p>
  *     A {@link GraphNode} represents a node in a graph.  The user object of the graph node uniquely determines it - i.e.
- *     there is a one to one mapping asPath user objects to {@link GraphNode}s.  Each node can provide a rendering of
- *     its user object.
+ *     there is a one to one mapping asPath user objects to {@link GraphNode}s.
  * </p>
  */
 public class GraphNode<U extends Serializable> implements Serializable, IsSerializable {
@@ -28,27 +28,24 @@ public class GraphNode<U extends Serializable> implements Serializable, IsSerial
     private GraphNode() {
     }
 
-    public GraphNode(U userObject) {
+    public GraphNode(@Nonnull U userObject) {
         this(userObject, false);
     }
 
-    public GraphNode(U userObject, boolean sink) {
-        this(userObject, userObject.toString(), sink);
-    }
-
-    public static <U extends Serializable> GraphNode<U> get(U userObject) {
-        return new GraphNode<U>(userObject);
-    }
-
-    public static <U extends Serializable> GraphNode<U> get(U userObject, boolean sink) {
-        return new GraphNode<U>(userObject, sink);
-    }
-
-    public GraphNode(U userObject, String shortForm, boolean sink) {
+    public GraphNode(@Nonnull U userObject, boolean sink) {
         this.userObject = checkNotNull(userObject);
         this.sink = sink;
     }
 
+    public static <U extends Serializable> GraphNode<U> get(@Nonnull U userObject) {
+        return new GraphNode<>(userObject);
+    }
+
+    public static <U extends Serializable> GraphNode<U> get(@Nonnull U userObject, boolean sink) {
+        return new GraphNode<>(userObject, sink);
+    }
+
+    @Nonnull
     public U getUserObject() {
         return userObject;
     }
@@ -57,14 +54,9 @@ public class GraphNode<U extends Serializable> implements Serializable, IsSerial
         return sink;
     }
 
-//    @SuppressWarnings("unchecked")
-//    public int compareTo(GraphNode graphNode) {
-//        return shortForm.compareToIgnoreCase(graphNode.getShortForm());
-//    }
-
     @Override
     public int hashCode() {
-        return "DAGNode".hashCode() + userObject.hashCode();
+        return userObject.hashCode();
     }
 
     @Override
@@ -81,7 +73,7 @@ public class GraphNode<U extends Serializable> implements Serializable, IsSerial
 
     @Override
     public String toString() {
-        return Objects.toStringHelper("GraphNode").addValue(userObject).toString();
+        return MoreObjects.toStringHelper("GraphNode").addValue(userObject).toString();
     }
 }
 
