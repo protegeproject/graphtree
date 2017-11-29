@@ -1,10 +1,15 @@
 package edu.stanford.protege.gwt.graphtree.shared.tree;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.gwt.user.client.rpc.IsSerializable;
 import com.google.gwt.view.client.ProvidesKey;
 
+import javax.annotation.Nonnull;
 import java.io.Serializable;
+
+import static com.google.common.base.MoreObjects.toStringHelper;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Author: Matthew Horridge<br>
@@ -21,11 +26,12 @@ public class TreeNode<U extends Serializable> implements Serializable, IsSeriali
     private TreeNode() {
     }
 
-    public TreeNode(TreeNodeId id, U userObject) {
-        this.id = id.getId();
-        this.userObject = userObject;
+    public TreeNode(@Nonnull TreeNodeId id, @Nonnull U userObject) {
+        this.id = checkNotNull(id).getId();
+        this.userObject = checkNotNull(userObject);
     }
 
+    @Nonnull
     public TreeNodeId getId() {
         return new TreeNodeId(id);
     }
@@ -53,6 +59,9 @@ public class TreeNode<U extends Serializable> implements Serializable, IsSeriali
 
     @Override
     public String toString() {
-        return Objects.toStringHelper("TreeNode").add("id", id).addValue(userObject).toString();
+        return toStringHelper("TreeNode")
+                .add("id", id)
+                .addValue(userObject)
+                .toString();
     }
 }

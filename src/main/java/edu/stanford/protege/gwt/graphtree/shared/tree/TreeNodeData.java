@@ -1,9 +1,14 @@
 package edu.stanford.protege.gwt.graphtree.shared.tree;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
+import javax.annotation.Nonnull;
 import java.io.Serializable;
+
+import static com.google.common.base.MoreObjects.toStringHelper;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Author: Matthew Horridge<br>
@@ -15,39 +20,29 @@ public class TreeNodeData<U extends Serializable> implements Serializable, IsSer
 
     private TreeNode<U> treeNode;
 
-//    private String htmlRendering;
-
-    private String shortForm;
-
     private boolean leaf;
 
     private TreeNodeData() {
     }
 
-    public TreeNodeData(TreeNode<U> treeNode, String shortForm, boolean leaf) {
-        this.treeNode = treeNode;
-        this.shortForm = shortForm;
+    public TreeNodeData(@Nonnull TreeNode<U> treeNode, boolean leaf) {
+        this.treeNode = checkNotNull(treeNode);
         this.leaf = leaf;
     }
 
+    @Nonnull
     public TreeNodeId getId() {
         return treeNode.getId();
     }
 
+    @Nonnull
     public TreeNode<U> getTreeNode() {
         return treeNode;
     }
 
+    @Nonnull
     public U getUserObject() {
         return treeNode.getUserObject();
-    }
-
-//    public String getHtmlRendering() {
-//        return htmlRendering;
-//    }
-
-    public String getShortForm() {
-        return shortForm;
     }
 
     public boolean isLeaf() {
@@ -73,11 +68,9 @@ public class TreeNodeData<U extends Serializable> implements Serializable, IsSer
 
     @Override
     public String toString() {
-        return Objects.toStringHelper("TreeNodeData")
-                .addValue(treeNode)
-                .add("shortForm", shortForm)
-//                .add("rendering", htmlRendering)
-                .add("leaf", leaf)
-                .toString();
+        return toStringHelper("TreeNodeData")
+                          .addValue(treeNode)
+                          .add("leaf", leaf)
+                          .toString();
     }
 }

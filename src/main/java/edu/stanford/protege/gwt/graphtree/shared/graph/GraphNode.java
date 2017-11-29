@@ -19,11 +19,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *     its user object.
  * </p>
  */
-public class GraphNode<U extends Serializable> implements Serializable, IsSerializable, Comparable<GraphNode> {
+public class GraphNode<U extends Serializable> implements Serializable, IsSerializable {
 
     private U userObject;
-
-    private String shortForm;
 
     private boolean sink;
 
@@ -48,12 +46,7 @@ public class GraphNode<U extends Serializable> implements Serializable, IsSerial
 
     public GraphNode(U userObject, String shortForm, boolean sink) {
         this.userObject = checkNotNull(userObject);
-        this.shortForm = checkNotNull(shortForm);
         this.sink = sink;
-    }
-
-    public String getShortForm() {
-        return shortForm;
     }
 
     public U getUserObject() {
@@ -64,10 +57,10 @@ public class GraphNode<U extends Serializable> implements Serializable, IsSerial
         return sink;
     }
 
-    @SuppressWarnings("unchecked")
-    public int compareTo(GraphNode graphNode) {
-        return shortForm.compareToIgnoreCase(graphNode.getShortForm());
-    }
+//    @SuppressWarnings("unchecked")
+//    public int compareTo(GraphNode graphNode) {
+//        return shortForm.compareToIgnoreCase(graphNode.getShortForm());
+//    }
 
     @Override
     public int hashCode() {

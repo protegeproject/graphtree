@@ -12,6 +12,6 @@ import java.io.Serializable;
 public class TreeNodeRendererImpl<U extends Serializable> implements TreeNodeRenderer<U> {
     @Override
     public String getHtmlRendering(TreeNodeData<U> treeNode) {
-        return treeNode.getShortForm();
+        return treeNode.getUserObject().toString();
     }
 }

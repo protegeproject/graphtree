@@ -145,7 +145,7 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
     private void handleAddKeyNode(AddKeyNode<U> addKeyNode, List<TreeNodeModelChange> resultingChanges) {
         GraphNode<U> keyNode = addKeyNode.getNode();
         TreeNodeData<U> rootNode = new TreeNodeData<>(new TreeNode<>(idGenerator.getNextId(),
-                                                                     keyNode.getUserObject()), keyNode.getShortForm(), keyNode.isSink());
+                                                                     keyNode.getUserObject()), keyNode.isSink());
         treeModelIndex.addRoot(rootNode);
         resultingChanges.add(new RootNodeAdded<>(rootNode));
     }
@@ -169,7 +169,6 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
             if (!treeModelIndex.containsChildWithUserObject(parentNode.getId(), successorUserObject)) {
                 TreeNodeData<U> childNode = new TreeNodeData<>(new TreeNode<>(idGenerator.getNextId(),
                                                                               successorNode.getUserObject()),
-                                                               successorNode.getShortForm(),
                                                                successorNode.isSink());
                 boolean added = treeModelIndex.addChild(parentNode.getId(), childNode);
                 if (added) {
@@ -232,7 +231,6 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
             for (GraphNode<U> keyNode : keyNodes) {
                 TreeNodeData<U> treeNode = new TreeNodeData<>(new TreeNode<>(idGenerator.getNextId(),
                                                                              keyNode.getUserObject()),
-                                                              keyNode.getShortForm(),
                                                               keyNode.isSink());
                 treeModelIndex.addRoot(treeNode);
             }
@@ -257,7 +255,6 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
                 if (!treeModelIndex.containsChildWithUserObject(parentNode, successor.getUserObject())) {
                     TreeNodeData<U> childNode = new TreeNodeData<>(new TreeNode<>(idGenerator.getNextId(),
                                                                                   successor.getUserObject()),
-                                                                   successor.getShortForm(),
                                                                    successor.isSink());
                     treeModelIndex.addChild(parentNode, childNode);
                 }
@@ -265,22 +262,6 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
             callback.handleNodes(treeModelIndex.getChildren(parentNode));
         });
     }
-
-//    private void ensureAllPathNodesAreLoaded(final Collection<Path<GraphNode<U>>> paths,
-//                                             final LoadPathBranchesCallback<U> callback) {
-//        final Set<Path<U>> loadedPaths = new HashSet<Path<U>>();
-//        for (Path<GraphNode<U>> path : paths) {
-//            ensurePathNodesAreLoaded(path, new LoadPathCallback<U>() {
-//                @Override
-//                public void pathLoaded(Path<U> path) {
-//                    loadedPaths.add(path);
-//                    if (loadedPaths.size() == paths.size()) {
-//                        callback.pathsLoaded();
-//                    }
-//                }
-//            });
-//        }
-//    }
 
     /**
      * Loads the tree nodes in the specified paths.  If a path is [A, B, C] the the child nodes of A, B and C will be

@@ -3,10 +3,7 @@ package edu.stanford.protege.gwt.graphtree.shared.graph;
 import com.google.common.collect.*;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Author: Matthew Horridge<br>
@@ -58,10 +55,10 @@ public class SuccessorMap<U extends Serializable> implements Serializable {
             return new SuccessorMap<U>(ImmutableMultimap.copyOf(successorMap));
         }
 
-        public Builder<U> sort() {
-            for(GraphNode<U> predecessor : new ArrayList<GraphNode<U>>(successorMap.keySet())) {
+        public Builder<U> sort(Comparator<GraphNode<U>> comparator) {
+            for(GraphNode<U> predecessor : new ArrayList<>(successorMap.keySet())) {
                 List<GraphNode<U>> successors = new ArrayList<GraphNode<U>>(successorMap.get(predecessor));
-                Collections.sort(successors);
+                successors.sort(comparator);
                 successorMap.replaceValues(predecessor, successors);
             }
             return this;
