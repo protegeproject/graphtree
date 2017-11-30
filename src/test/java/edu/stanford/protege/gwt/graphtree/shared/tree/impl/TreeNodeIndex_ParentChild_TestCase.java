@@ -1,6 +1,7 @@
 package edu.stanford.protege.gwt.graphtree.shared.tree.impl;
 
 import com.google.common.collect.Multimap;
+import edu.stanford.protege.gwt.graphtree.shared.UserObjectKeyProvider;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeData;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeId;
 import org.junit.Before;
@@ -40,11 +41,14 @@ public class TreeNodeIndex_ParentChild_TestCase<U extends Serializable> {
     @Mock
     private Multimap<TreeNodeId, TreeNodeId> removedBranches;
 
+    @Mock
+    private UserObjectKeyProvider<U> keyProvider = userObject -> userObject;
+
     private TreeNodeIndex<U> index;
 
     @Before
     public void setUp() throws Exception {
-        index = new TreeNodeIndex<U>();
+        index = new TreeNodeIndex<U>(keyProvider);
         when(child.getId()).thenReturn(childId);
         when(child.getUserObject()).thenReturn(childObject);
     }

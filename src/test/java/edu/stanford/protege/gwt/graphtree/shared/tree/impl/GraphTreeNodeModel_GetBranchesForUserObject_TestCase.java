@@ -1,6 +1,7 @@
 package edu.stanford.protege.gwt.graphtree.shared.tree.impl;
 
 import com.google.common.collect.Multimap;
+import edu.stanford.protege.gwt.graphtree.shared.UserObjectKeyProvider;
 import edu.stanford.protege.gwt.graphtree.shared.graph.impl.local.SimpleGraphModel;
 import edu.stanford.protege.gwt.graphtree.shared.tree.HasGetBranches;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNode;
@@ -43,14 +44,16 @@ public class GraphTreeNodeModel_GetBranchesForUserObject_TestCase<U extends Seri
 
     @Mock
     U A, B, C, D;
-    
+
+    protected UserObjectKeyProvider<U> keyProvider = userObject -> userObject;
+
     @Test
     public void getBranchesShouldReturnCorrectBranches() {
         SimpleGraphModel<U> graphModel = SimpleGraphModel.<U>builder()
                 .addKeyNode(A)
                 .addEdge(A, B)
                 .build();
-        GraphTreeNodeModel<U> model = GraphTreeNodeModel.create(graphModel);
+        GraphTreeNodeModel<U> model = GraphTreeNodeModel.create(graphModel, keyProvider);
         model.getBranchesContainingUserObject(B, callback);
         verify(callback, times(1)).handleBranches(captor.capture());
         Multimap<TreeNodeData<U>, TreeNodeData<U>> value = captor.getValue();
@@ -68,7 +71,7 @@ public class GraphTreeNodeModel_GetBranchesForUserObject_TestCase<U extends Seri
                 .addEdge(C, D)
                 .addEdge(B, D)
                 .build();
-        GraphTreeNodeModel<U> model = GraphTreeNodeModel.create(graphModel);
+        GraphTreeNodeModel<U> model = GraphTreeNodeModel.create(graphModel, keyProvider);
         model.getBranchesContainingUserObject(D, callback);
         verify(callback, times(1)).handleBranches(captor.capture());
         Multimap<TreeNodeData<U>, TreeNodeData<U>> value = captor.getValue();

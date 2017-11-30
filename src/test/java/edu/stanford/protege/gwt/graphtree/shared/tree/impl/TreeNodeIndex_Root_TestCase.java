@@ -1,5 +1,6 @@
 package edu.stanford.protege.gwt.graphtree.shared.tree.impl;
 
+import edu.stanford.protege.gwt.graphtree.shared.UserObjectKeyProvider;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeData;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeId;
 import org.junit.Before;
@@ -37,11 +38,13 @@ public class TreeNodeIndex_Root_TestCase<U extends Serializable> {
     @Mock
     private TreeNodeId idA, parent, child;
 
+    private UserObjectKeyProvider<U> keyProvider = userObject -> userObject;
+
     private TreeNodeIndex<U> index;
 
     @Before
     public void setUp() throws Exception {
-        index = new TreeNodeIndex<U>();
+        index = new TreeNodeIndex<U>(keyProvider);
         when(A.getId()).thenReturn(idA);
         when(A.getUserObject()).thenReturn(userObjectA);
     }

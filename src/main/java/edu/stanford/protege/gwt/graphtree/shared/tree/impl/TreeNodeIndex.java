@@ -5,6 +5,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
+import edu.stanford.protege.gwt.graphtree.shared.UserObjectKeyProvider;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeData;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeId;
 
@@ -12,6 +13,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.Serializable;
 import java.util.*;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Author: Matthew Horridge<br>
@@ -24,17 +27,20 @@ import java.util.*;
  */
 public class TreeNodeIndex<U extends Serializable> {
 
+    private final UserObjectKeyProvider<U> keyProvider;
+
     private final Map<TreeNodeId, TreeNodeData<U>> roots = Maps.newLinkedHashMap();
 
     private final Map<TreeNodeId, TreeNodeData<U>> id2Data = new HashMap<>();
 
     private final Multimap<TreeNodeId, TreeNodeData<U>> parent2ChildMap = LinkedHashMultimap.create();
 
-    private final Multimap<U, TreeNodeData<U>> userObject2Data = HashMultimap.create();
+    private final Multimap<Object, TreeNodeData<U>> userObjectKey2Data = HashMultimap.create();
 
     private final Map<TreeNodeId, TreeNodeId> child2ParentMap = Maps.newHashMap();
 
-    public TreeNodeIndex() {
+    public TreeNodeIndex(@Nonnull UserObjectKeyProvider<U> keyProvider) {
+        this.keyProvider = checkNotNull(keyProvider);
     }
 
 
@@ -45,7 +51,7 @@ public class TreeNodeIndex<U extends Serializable> {
 
 
     public boolean containsChildWithUserObject(@Nonnull TreeNodeId parent, @Nonnull U userObject) {
-        for(TreeNodeData nodeWithUserObject : userObject2Data.get(userObject)) {
+        for(TreeNodeData nodeWithUserObject : userObjectKey2Data.get(keyProvider.getKey(userObject))) {
             if(parent2ChildMap.containsEntry(parent, nodeWithUserObject)) {
                 return true;
             }
@@ -59,14 +65,14 @@ public class TreeNodeIndex<U extends Serializable> {
         }
         roots.put(node.getId(), node);
         id2Data.put(node.getId(), node);
-        userObject2Data.put(node.getUserObject(), node);
+        userObjectKey2Data.put(keyProvider.getKey(node.getUserObject()), node);
     }
 
     public void removeRoot(@Nonnull TreeNodeId node) {
         TreeNodeData<U> removed = roots.remove(node);
         if(removed != null) {
             id2Data.remove(node);
-            userObject2Data.remove(removed.getUserObject(), removed);
+            userObjectKey2Data.remove(keyProvider.getKey(removed.getUserObject()), removed);
         }
     }
 
@@ -83,7 +89,7 @@ public class TreeNodeIndex<U extends Serializable> {
         if(added) {
             id2Data.put(childNodeData.getId(), childNodeData);
             child2ParentMap.put(childNodeData.getId(), parentId);
-            userObject2Data.put(childNodeData.getUserObject(), childNodeData);
+            userObjectKey2Data.put(keyProvider.getKey(childNodeData.getUserObject()), childNodeData);
         }
         return added;
     }
@@ -100,7 +106,7 @@ public class TreeNodeIndex<U extends Serializable> {
             child2ParentMap.remove(childNode);
             id2Data.remove(childNode);
             removedBranches.put(parentNode, childNode);
-            userObject2Data.remove(childData.getUserObject(), childData);
+            userObjectKey2Data.remove(keyProvider.getKey(childData.getUserObject()), childData);
             for(TreeNodeData<U> grandChildNode : getChildren(childNode)) {
                 removeChild(childNode, grandChildNode.getId(), removedBranches);
             }
@@ -119,6 +125,6 @@ public class TreeNodeIndex<U extends Serializable> {
 
     @Nonnull
     public List<TreeNodeData<U>> getTreeNodesForUserObject(@Nonnull U userObject) {
-        return new ArrayList<>(userObject2Data.get(userObject));
+        return new ArrayList<>(userObjectKey2Data.get(keyProvider.getKey(userObject)));
     }
 }

@@ -6,6 +6,7 @@ import com.google.common.collect.Multimap;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import edu.stanford.protege.gwt.graphtree.shared.Path;
+import edu.stanford.protege.gwt.graphtree.shared.UserObjectKeyProvider;
 import edu.stanford.protege.gwt.graphtree.shared.graph.*;
 import edu.stanford.protege.gwt.graphtree.shared.tree.*;
 
@@ -27,7 +28,7 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
 
     private final HandlerManager handlerManager;
 
-    private final TreeNodeIndex<U> treeNodeIndex = new TreeNodeIndex<>();
+    private final TreeNodeIndex<U> treeNodeIndex;
 
     private final Set<TreeNodeId> loadedNodes = new HashSet<>();
 
@@ -39,8 +40,10 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
      *
      * @param graphModel The graph that the model is based on.
      */
-    private GraphTreeNodeModel(@Nonnull GraphModel<U> graphModel) {
+    private GraphTreeNodeModel(@Nonnull GraphModel<U> graphModel,
+                               @Nonnull UserObjectKeyProvider<U> keyProvider) {
         this.graphModel = checkNotNull(graphModel);
+        this.treeNodeIndex = new TreeNodeIndex<>(keyProvider);
         this.handlerManager = new HandlerManager(this);
     }
 
@@ -51,8 +54,9 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
      * the listener that is attached.
      * @param graphModel The graph model.
      */
-    public static <U extends Serializable> GraphTreeNodeModel<U> create(@Nonnull GraphModel<U> graphModel) {
-        GraphTreeNodeModel<U> treeNodeModel = new GraphTreeNodeModel<>(graphModel);
+    public static <U extends Serializable> GraphTreeNodeModel<U> create(@Nonnull GraphModel<U> graphModel,
+                                                                        @Nonnull UserObjectKeyProvider<U> keyProvider) {
+        GraphTreeNodeModel<U> treeNodeModel = new GraphTreeNodeModel<>(graphModel, keyProvider);
         treeNodeModel.attachListeners();
         return treeNodeModel;
     }

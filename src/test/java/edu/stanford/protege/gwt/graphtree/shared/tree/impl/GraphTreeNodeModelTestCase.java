@@ -1,6 +1,7 @@
 package edu.stanford.protege.gwt.graphtree.shared.tree.impl;
 
 import com.google.common.collect.Sets;
+import edu.stanford.protege.gwt.graphtree.shared.UserObjectKeyProvider;
 import edu.stanford.protege.gwt.graphtree.shared.graph.impl.local.SimpleGraphModel;
 import edu.stanford.protege.gwt.graphtree.shared.tree.GetTreeNodesCallback;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeData;
@@ -39,11 +40,12 @@ public class GraphTreeNodeModelTestCase<U extends Serializable> {
     @Mock
     U A, B, C, D, E;
 
+    UserObjectKeyProvider<U> keyProvider = userObject -> userObject;
 
     @Test
     public void getNodes_Callback_isCalledForEmptyGraph() {
         SimpleGraphModel<U> graphModel = SimpleGraphModel.<U>builder().build();
-        GraphTreeNodeModel<U> model = GraphTreeNodeModel.create(graphModel);
+        GraphTreeNodeModel<U> model = GraphTreeNodeModel.create(graphModel, keyProvider);
         model.getNodes(Optional.empty(), callback);
         verify(callback, times(1)).handleNodes(captor.capture());
     }
@@ -51,7 +53,7 @@ public class GraphTreeNodeModelTestCase<U extends Serializable> {
     @Test
     public void getNodes_with_OptionalAbsent_ShouldReturn_RootNodes() {
         SimpleGraphModel<U> graphModel = SimpleGraphModel.<U>builder().addKeyNode(A).build();
-        GraphTreeNodeModel<U> model = GraphTreeNodeModel.create(graphModel);
+        GraphTreeNodeModel<U> model = GraphTreeNodeModel.create(graphModel, keyProvider);
         model.getNodes(Optional.empty(), callback);
         verify(callback, times(1)).handleNodes(captor.capture());
         List<TreeNodeData<U>> value = captor.getValue();
@@ -69,7 +71,7 @@ public class GraphTreeNodeModelTestCase<U extends Serializable> {
                 .addEdge(A, C)
                 .addEdge(A, D)
                 .build();
-        final GraphTreeNodeModel<U> model = GraphTreeNodeModel.create(graphModel);
+        final GraphTreeNodeModel<U> model = GraphTreeNodeModel.create(graphModel, keyProvider);
         model.getTreeNodesForUserObject(A, nodes -> model.getNodes(Optional.<TreeNodeId>of(nodes.get(0).getId()), callback));
         verify(callback, times(1)).handleNodes(captor.capture());
         List<TreeNodeData<U>> value = captor.getValue();
@@ -92,7 +94,7 @@ public class GraphTreeNodeModelTestCase<U extends Serializable> {
                 .addEdge(C, D)
                 .addEdge(D, E)
                 .build();
-        GraphTreeNodeModel<U> model = GraphTreeNodeModel.create(graphModel);
+        GraphTreeNodeModel<U> model = GraphTreeNodeModel.create(graphModel, keyProvider);
         model.getTreeNodesForUserObject(C, callback);
         verify(callback, times(1)).handleNodes(captor.capture());
         List<TreeNodeData<U>> nodes = captor.getValue();
@@ -109,7 +111,7 @@ public class GraphTreeNodeModelTestCase<U extends Serializable> {
                 .addEdge(C, D)
                 .addEdge(B, D)
                 .build();
-        GraphTreeNodeModel<U> model = GraphTreeNodeModel.create(graphModel);
+        GraphTreeNodeModel<U> model = GraphTreeNodeModel.create(graphModel, keyProvider);
         model.getTreeNodesForUserObject(D, callback);
         verify(callback, times(1)).handleNodes(captor.capture());
         List<TreeNodeData<U>> nodes = captor.getValue();
@@ -126,7 +128,7 @@ public class GraphTreeNodeModelTestCase<U extends Serializable> {
                 .addEdge(A, C)
                 .addEdge(A, D)
                 .build();
-        GraphTreeNodeModel<U> model = GraphTreeNodeModel.create(graphModel);
+        GraphTreeNodeModel<U> model = GraphTreeNodeModel.create(graphModel, keyProvider);
         model.getTreeNodesForUserObject(D, callback);
         verify(callback, times(1)).handleNodes(captor.capture());
         List<TreeNodeData<U>> nodes = captor.getValue();
