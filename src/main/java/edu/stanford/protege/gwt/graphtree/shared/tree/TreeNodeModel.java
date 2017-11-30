@@ -3,6 +3,7 @@ package edu.stanford.protege.gwt.graphtree.shared.tree;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import edu.stanford.protege.gwt.graphtree.shared.Path;
 
+import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.Collection;
 
@@ -19,7 +20,9 @@ import java.util.Collection;
  */
 public interface TreeNodeModel<U extends Serializable> extends HasGetNodes<U>, HasGetBranches<U>, HasGetTreeNodesForUserObject<U> {
 
-    HandlerRegistration addTreeNodeModelEventHandler(TreeNodeModelEventHandler handler);
+    @Nonnull
+    HandlerRegistration addTreeNodeModelEventHandler(@Nonnull TreeNodeModelEventHandler handler);
 
-    Path<TreeNodeData<U>> getPathToRoot(TreeNodeId treeNodeId);
+    @Nonnull
+    Path<TreeNodeData<U>> getPathToRoot(@Nonnull TreeNodeId treeNodeId);
 }

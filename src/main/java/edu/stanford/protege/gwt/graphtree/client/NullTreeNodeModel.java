@@ -20,8 +20,9 @@ public class NullTreeNodeModel<U extends Serializable> implements TreeNodeModel<
 
     private static final HandlerRegistration NULL_HANDLER_REGISTRATION = () -> {};
 
+    @Nonnull
     @Override
-    public HandlerRegistration addTreeNodeModelEventHandler(TreeNodeModelEventHandler handler) {
+    public HandlerRegistration addTreeNodeModelEventHandler(@Nonnull TreeNodeModelEventHandler handler) {
         return NULL_HANDLER_REGISTRATION;
     }
 
@@ -40,8 +41,9 @@ public class NullTreeNodeModel<U extends Serializable> implements TreeNodeModel<
         callback.handleNodes(Collections.<TreeNodeData<U>>emptyList());
     }
 
+    @Nonnull
     @Override
-    public Path<TreeNodeData<U>> getPathToRoot(TreeNodeId treeNodeId) {
+    public Path<TreeNodeData<U>> getPathToRoot(@Nonnull TreeNodeId treeNodeId) {
         return Path.emptyPath();
     }
 }

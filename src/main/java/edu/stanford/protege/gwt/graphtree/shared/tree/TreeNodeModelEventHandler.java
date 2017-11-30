@@ -2,6 +2,8 @@ package edu.stanford.protege.gwt.graphtree.shared.tree;
 
 import com.google.gwt.event.shared.EventHandler;
 
+import javax.annotation.Nonnull;
+
 /**
  * Author: Matthew Horridge<br>
  * Stanford University<br>
@@ -10,5 +12,5 @@ import com.google.gwt.event.shared.EventHandler;
  */
 public interface TreeNodeModelEventHandler extends EventHandler {
 
-    void handleTreeNodeModelEvent(TreeNodeModelEvent event);
+    void handleTreeNodeModelEvent(@Nonnull TreeNodeModelEvent event);
 }

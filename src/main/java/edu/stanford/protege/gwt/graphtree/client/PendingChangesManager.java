@@ -3,6 +3,7 @@ package edu.stanford.protege.gwt.graphtree.client;
 import com.google.gwt.view.client.SetSelectionModel;
 import edu.stanford.protege.gwt.graphtree.shared.tree.*;
 
+import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -29,7 +30,7 @@ public class PendingChangesManager<U extends Serializable> implements TreeNodeMo
     }
 
     @Override
-    public void handleTreeNodeModelEvent(TreeNodeModelEvent event) {
+    public void handleTreeNodeModelEvent(@Nonnull TreeNodeModelEvent event) {
         for(TreeNodeModelChange change : event.getChanges()) {
             for(Iterator<PendingChangeHandler> it = pending.iterator(); it.hasNext();) {
                 PendingChangeHandler changeHandler = it.next();

@@ -56,7 +56,8 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
         return Optional.empty();
     }
 
-    public HandlerRegistration addTreeNodeModelEventHandler(TreeNodeModelEventHandler handler) {
+    @Nonnull
+    public HandlerRegistration addTreeNodeModelEventHandler(@Nonnull TreeNodeModelEventHandler handler) {
         return handlerManager.addHandler(TreeNodeModelEvent.getType(), handler);
     }
 
@@ -85,8 +86,9 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
         });
     }
 
+    @Nonnull
     @Override
-    public Path<TreeNodeData<U>> getPathToRoot(TreeNodeId treeNodeId) {
+    public Path<TreeNodeData<U>> getPathToRoot(@Nonnull TreeNodeId treeNodeId) {
         List<TreeNodeData<U>> result = new ArrayList<>();
         result.add(treeModelIndex.getTreeNodeData(treeNodeId));
         Optional<TreeNodeId> parentNode = treeModelIndex.getParent(treeNodeId);
