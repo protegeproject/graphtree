@@ -5,6 +5,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import edu.stanford.protege.gwt.graphtree.shared.Path;
 import edu.stanford.protege.gwt.graphtree.shared.tree.*;
 
+import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Optional;
@@ -35,7 +36,7 @@ public class NullTreeNodeModel<U extends Serializable> implements TreeNodeModel<
     }
 
     @Override
-    public void getTreeNodesForUserObject(U userObject, GetTreeNodesCallback<U> callback) {
+    public void getTreeNodesForUserObject(@Nonnull U userObject, @Nonnull GetTreeNodesCallback<U> callback) {
         callback.handleNodes(Collections.<TreeNodeData<U>>emptyList());
     }
 

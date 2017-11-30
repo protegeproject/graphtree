@@ -10,6 +10,7 @@ import edu.stanford.protege.gwt.graphtree.shared.Path;
 import edu.stanford.protege.gwt.graphtree.shared.graph.*;
 import edu.stanford.protege.gwt.graphtree.shared.tree.*;
 
+import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.*;
 
@@ -98,7 +99,7 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
     }
 
     @Override
-    public void getTreeNodesForUserObject(final U userObject, final GetTreeNodesCallback<U> callback) {
+    public void getTreeNodesForUserObject(@Nonnull final U userObject, @Nonnull final GetTreeNodesCallback<U> callback) {
         // We need to make sure that the nodes in the graph that have the specified user object as their user object
         // have corresponding tree nodes.
         // We load nodes by loading their parent node.  Search for paths from the key nodes to graph nodes containing

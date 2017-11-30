@@ -119,7 +119,7 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
     public void setNode(TreeNode<U> node) {
         this.node = checkNotNull(node);
     }
-    
+
     public int getDepth() {
         return depth;
     }
