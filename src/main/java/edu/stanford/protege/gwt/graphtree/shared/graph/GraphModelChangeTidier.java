@@ -19,7 +19,7 @@ public class GraphModelChangeTidier<U extends Serializable> {
     private List<GraphModelChange<U>> changes;
 
     public GraphModelChangeTidier(List<GraphModelChange<U>> changes) {
-        this.changes = new ArrayList<GraphModelChange<U>>(changes);
+        this.changes = new ArrayList<>(changes);
     }
 
     public List<GraphModelChange<U>> getTidiedChanges() {
@@ -27,7 +27,7 @@ public class GraphModelChangeTidier<U extends Serializable> {
         final Set<GraphEdge<U>> removedEdges = Sets.newHashSet();
         final Set<GraphNode<U>> addedKeyNodes = Sets.newHashSet();
         final Set<GraphNode<U>> removedKeyNodes = Sets.newHashSet();
-        final Map<GraphNode<U>, UpdateUserObject<U>> setRenderingChanges = Maps.newHashMap();
+        final Set<UpdateUserObject<U>> setRenderingChanges = Sets.newHashSet();
         for(GraphModelChange<U> change : changes) {
             change.accept(new GraphModelChangeVisitor<U>() {
                 public void visit(AddRootNode<U> addRootNode) {
@@ -57,24 +57,24 @@ public class GraphModelChangeTidier<U extends Serializable> {
                 }
 
                 public void visit(UpdateUserObject<U> updateUserObject) {
-                    setRenderingChanges.put(updateUserObject.getGraphNode(), updateUserObject);
+                    setRenderingChanges.add(updateUserObject);
                 }
             });
         }
-        List<GraphModelChange<U>> result = new ArrayList<GraphModelChange<U>>();
+        List<GraphModelChange<U>> result = new ArrayList<>();
         for(GraphNode<U> node : addedKeyNodes) {
-            result.add(new AddRootNode<U>(node));
+            result.add(new AddRootNode<>(node));
         }
         for(GraphNode<U> node : removedKeyNodes) {
-            result.add(new RemoveRootNode<U>(node));
+            result.add(new RemoveRootNode<>(node));
         }
         for(GraphEdge<U> edge : getTopologicallyOrderedEdges(addedEdges, TopologicalSorter.Direction.FORWARD)) {
-            result.add(new AddEdge<U>(edge));
+            result.add(new AddEdge<>(edge));
         }
         for(GraphEdge<U> edge : getTopologicallyOrderedEdges(removedEdges, TopologicalSorter.Direction.REVERSE)) {
-            result.add(new RemoveEdge<U>(edge));
+            result.add(new RemoveEdge<>(edge));
         }
-        result.addAll(setRenderingChanges.values());
+        result.addAll(setRenderingChanges);
         return result;
     }
 
@@ -84,16 +84,16 @@ public class GraphModelChangeTidier<U extends Serializable> {
         for(GraphEdge<U> edge : edges) {
             predecessor2SuccessorMap.put(edge.getPredecessor(), edge.getSuccessor());
         }
-        TopologicalSorter<U> sorter = new TopologicalSorter<U>(predecessor2SuccessorMap);
+        TopologicalSorter<U> sorter = new TopologicalSorter<>(predecessor2SuccessorMap);
         final Optional<List<GraphNode<U>>> sortedNodes = sorter.getTopologicalOrdering(direction);
         if(!sortedNodes.isPresent()) {
             return edges;
         }
         else {
-            List<GraphEdge<U>> topologicallySortedEdges = new ArrayList<GraphEdge<U>>();
+            List<GraphEdge<U>> topologicallySortedEdges = new ArrayList<>();
             for(GraphNode<U> predecessorNode : sortedNodes.get()) {
                 for(GraphNode<U> successorNode : predecessor2SuccessorMap.get(predecessorNode)){
-                    topologicallySortedEdges.add(new GraphEdge<U>(predecessorNode, successorNode));
+                    topologicallySortedEdges.add(new GraphEdge<>(predecessorNode, successorNode));
                 }
             }
             return topologicallySortedEdges;

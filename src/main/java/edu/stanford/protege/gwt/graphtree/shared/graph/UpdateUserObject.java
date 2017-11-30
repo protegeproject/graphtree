@@ -3,7 +3,10 @@ package edu.stanford.protege.gwt.graphtree.shared.graph;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
+import javax.annotation.Nonnull;
 import java.io.Serializable;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Author: Matthew Horridge<br>
@@ -13,22 +16,23 @@ import java.io.Serializable;
  */
 public class UpdateUserObject<U extends Serializable> extends GraphModelChange<U> {
 
-    private GraphNode<U> graphNode;
+    private U userObject;
 
     private UpdateUserObject() {
     }
 
-    public UpdateUserObject(GraphNode<U> graphNode) {
-        this.graphNode = graphNode;
+    public UpdateUserObject(@Nonnull U userObject) {
+        this.userObject = checkNotNull(userObject);
     }
 
-    public GraphNode<U> getGraphNode() {
-        return graphNode;
+    @Nonnull
+    public U getUserObject() {
+        return userObject;
     }
 
     @Override
     public GraphModelChange<U> getReverseChange() {
-        return new UpdateUserObject<U>(graphNode);
+        return this;
     }
 
     @Override
@@ -38,7 +42,7 @@ public class UpdateUserObject<U extends Serializable> extends GraphModelChange<U
 
     @Override
     public int hashCode() {
-        return "UpdateUserObject".hashCode() + graphNode.hashCode();
+        return "UpdateUserObject".hashCode() + userObject.hashCode();
     }
 
     @Override
@@ -50,14 +54,14 @@ public class UpdateUserObject<U extends Serializable> extends GraphModelChange<U
             return false;
         }
         UpdateUserObject other = (UpdateUserObject) o;
-        return this.graphNode.equals(other.graphNode);
+        return this.userObject.equals(other.userObject);
     }
 
     @Override
     public String toString() {
         return MoreObjects
                 .toStringHelper("UpdateUserObject")
-                .addValue(graphNode)
+                .addValue(userObject)
                 .toString();
     }
 }

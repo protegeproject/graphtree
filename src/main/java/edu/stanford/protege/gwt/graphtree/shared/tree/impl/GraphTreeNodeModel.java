@@ -221,7 +221,7 @@ public class GraphTreeNodeModel<U extends Serializable, K> implements TreeNodeMo
     }
 
     private void handleUpdateUserObject(UpdateUserObject<U> updateUserObject, List<TreeNodeModelChange> resultingChanges) {
-        U userObject = updateUserObject.getGraphNode().getUserObject();
+        U userObject = updateUserObject.getUserObject();
         K userObjectKey = keyProvider.getKey(userObject);
         for (TreeNodeData<U> node : treeNodeIndex.getTreeNodesForUserObjectKey(userObjectKey)) {
             resultingChanges.add(new NodeRenderingChanged<>(node.getId(), node.getUserObject()));
