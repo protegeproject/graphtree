@@ -27,7 +27,7 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
 
     private final HandlerManager handlerManager;
 
-    private final TreeModelIndex<U> treeModelIndex = new TreeModelIndex<>();
+    private final TreeNodeIndex<U> treeNodeIndex = new TreeNodeIndex<>();
 
     private final Set<TreeNodeId> loadedNodes = new HashSet<>();
 
@@ -94,11 +94,11 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
         getTreeNodesForUserObject(userObject, nodes -> {
             Multimap<TreeNodeData<U>, TreeNodeData<U>> branches = HashMultimap.create();
             for (TreeNodeData<U> node : nodes) {
-                Optional<TreeNodeId> parentNode = treeModelIndex.getParent(node.getId());
+                Optional<TreeNodeId> parentNode = treeNodeIndex.getParent(node.getId());
                 while (parentNode.isPresent()) {
-                    branches.putAll(treeModelIndex.getTreeNodeData(parentNode.get()),
-                                    treeModelIndex.getChildren(parentNode.get()));
-                    parentNode = treeModelIndex.getParent(parentNode.get());
+                    branches.putAll(treeNodeIndex.getTreeNodeData(parentNode.get()),
+                                    treeNodeIndex.getChildren(parentNode.get()));
+                    parentNode = treeNodeIndex.getParent(parentNode.get());
                 }
             }
             callback.handleBranches(branches);
@@ -109,12 +109,12 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
     @Override
     public Path<TreeNodeData<U>> getPathToRoot(@Nonnull TreeNodeId treeNodeId) {
         List<TreeNodeData<U>> result = new ArrayList<>();
-        result.add(treeModelIndex.getTreeNodeData(treeNodeId));
-        Optional<TreeNodeId> parentNode = treeModelIndex.getParent(treeNodeId);
+        result.add(treeNodeIndex.getTreeNodeData(treeNodeId));
+        Optional<TreeNodeId> parentNode = treeNodeIndex.getParent(treeNodeId);
         while (parentNode.isPresent()) {
             TreeNodeId theParentNodeId = parentNode.get();
-            result.add(0, treeModelIndex.getTreeNodeData(theParentNodeId));
-            parentNode = treeModelIndex.getParent(theParentNodeId);
+            result.add(0, treeNodeIndex.getTreeNodeData(theParentNodeId));
+            parentNode = treeNodeIndex.getParent(theParentNodeId);
         }
         return new Path<>(result);
     }
@@ -128,7 +128,7 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
         graphModel.getPathsFromKeyNodes(userObject, paths -> {
             // Now we have the paths, ensure that each node on the path is loaded as a tree node
             ensureAllPathNodesAreLoaded(paths, () -> {
-                List<TreeNodeData<U>> treeNodes = treeModelIndex.getTreeNodesForUserObject(userObject);
+                List<TreeNodeData<U>> treeNodes = treeNodeIndex.getTreeNodesForUserObject(userObject);
                 callback.handleNodes(treeNodes);
             });
         });
@@ -168,15 +168,15 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
         GraphNode<U> keyNode = addKeyNode.getNode();
         TreeNodeData<U> rootNode = new TreeNodeData<>(new TreeNode<>(idGenerator.getNextId(),
                                                                      keyNode.getUserObject()), keyNode.isSink());
-        treeModelIndex.addRoot(rootNode);
+        treeNodeIndex.addRoot(rootNode);
         resultingChanges.add(new RootNodeAdded<>(rootNode));
     }
 
     private void handleRemoveKeyNode(RemoveKeyNode removeKeyNode, List<TreeNodeModelChange> resultingChanges) {
-        for (TreeNodeData<U> rootNode : treeModelIndex.getRoots()) {
+        for (TreeNodeData<U> rootNode : treeNodeIndex.getRoots()) {
             GraphNode keyNode = removeKeyNode.getNode();
             if (rootNode.getUserObject().equals(keyNode.getUserObject())) {
-                treeModelIndex.removeRoot(rootNode.getId());
+                treeNodeIndex.removeRoot(rootNode.getId());
                 resultingChanges.add(new RootNodeRemoved<U>(rootNode.getId()));
             }
         }
@@ -184,15 +184,15 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
 
     private void handleAddEdge(AddEdge<U> addEdge, List<TreeNodeModelChange> resultingChanges) {
         U predecessorUserObject = addEdge.getPredecessor().getUserObject();
-        List<TreeNodeData<U>> parentNodes = treeModelIndex.getTreeNodesForUserObject(predecessorUserObject);
+        List<TreeNodeData<U>> parentNodes = treeNodeIndex.getTreeNodesForUserObject(predecessorUserObject);
         for (TreeNodeData<U> parentNode : parentNodes) {
             GraphNode<U> successorNode = addEdge.getSuccessor();
             U successorUserObject = addEdge.getSuccessor().getUserObject();
-            if (!treeModelIndex.containsChildWithUserObject(parentNode.getId(), successorUserObject)) {
+            if (!treeNodeIndex.containsChildWithUserObject(parentNode.getId(), successorUserObject)) {
                 TreeNodeData<U> childNode = new TreeNodeData<>(new TreeNode<>(idGenerator.getNextId(),
                                                                               successorNode.getUserObject()),
                                                                successorNode.isSink());
-                boolean added = treeModelIndex.addChild(parentNode.getId(), childNode);
+                boolean added = treeNodeIndex.addChild(parentNode.getId(), childNode);
                 if (added) {
                     resultingChanges.add(new ChildNodeAdded<>(parentNode.getId(), childNode));
                 }
@@ -205,7 +205,7 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
 
     private void handleRemoveEdge(RemoveEdge<U> removeEdge, List<TreeNodeModelChange> resultingChanges) {
         U predecessorUserObject = removeEdge.getPredecessor().getUserObject();
-        for (TreeNodeData<U> parentNode : treeModelIndex.getTreeNodesForUserObject(predecessorUserObject)) {
+        for (TreeNodeData<U> parentNode : treeNodeIndex.getTreeNodesForUserObject(predecessorUserObject)) {
             GraphNode<U> successor = removeEdge.getSuccessor();
             removeChild(parentNode.getId(), successor, resultingChanges);
         }
@@ -213,7 +213,7 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
 
     private void handleUpdateUserObject(UpdateUserObject<U> updateUserObject, List<TreeNodeModelChange> resultingChanges) {
         U userObject = updateUserObject.getGraphNode().getUserObject();
-        for (TreeNodeData<U> node : treeModelIndex.getTreeNodesForUserObject(userObject)) {
+        for (TreeNodeData<U> node : treeNodeIndex.getTreeNodesForUserObject(userObject)) {
             resultingChanges.add(new NodeRenderingChanged<>(node.getId(), node.getUserObject()));
         }
     }
@@ -222,9 +222,9 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
                              GraphNode<?> successor,
                              List<TreeNodeModelChange> resultingChanges) {
         Multimap<TreeNodeId, TreeNodeId> removedBranches = LinkedHashMultimap.create();
-        for (TreeNodeData<U> childNode : treeModelIndex.getChildren(parentNode)) {
+        for (TreeNodeData<U> childNode : treeNodeIndex.getChildren(parentNode)) {
             if (childNode.getUserObject().equals(successor.getUserObject())) {
-                treeModelIndex.removeChild(parentNode, childNode.getId(), removedBranches);
+                treeNodeIndex.removeChild(parentNode, childNode.getId(), removedBranches);
                 if (!removedBranches.isEmpty()) {
                     for (TreeNodeId removedParentNode : removedBranches.keySet()) {
                         for (TreeNodeId removedChildNode : removedBranches.get(removedParentNode)) {
@@ -240,11 +240,11 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
     }
 
     private void getRootNodes(final GetTreeNodesCallback<U> callback) {
-        if (treeModelIndex.getRoots().isEmpty()) {
+        if (treeNodeIndex.getRoots().isEmpty()) {
             loadRoots(callback);
         }
         else {
-            callback.handleNodes(treeModelIndex.getRoots());
+            callback.handleNodes(treeNodeIndex.getRoots());
         }
     }
 
@@ -254,9 +254,9 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
                 TreeNodeData<U> treeNode = new TreeNodeData<>(new TreeNode<>(idGenerator.getNextId(),
                                                                              keyNode.getUserObject()),
                                                               keyNode.isSink());
-                treeModelIndex.addRoot(treeNode);
+                treeNodeIndex.addRoot(treeNode);
             }
-            callback.handleNodes(treeModelIndex.getRoots());
+            callback.handleNodes(treeNodeIndex.getRoots());
         });
     }
 
@@ -265,23 +265,23 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
             loadChildren(parentNode, callback);
         }
         else {
-            callback.handleNodes(treeModelIndex.getChildren(parentNode));
+            callback.handleNodes(treeNodeIndex.getChildren(parentNode));
         }
     }
 
     private void loadChildren(final TreeNodeId parentNode, final GetTreeNodesCallback<U> callback) {
-        final TreeNodeData<U> data = treeModelIndex.getTreeNodeData(parentNode);
+        final TreeNodeData<U> data = treeNodeIndex.getTreeNodeData(parentNode);
         graphModel.getSuccessorNodes(data.getUserObject(), successors -> {
             loadedNodes.add(parentNode);
             for (GraphNode<U> successor : successors.getSuccessors()) {
-                if (!treeModelIndex.containsChildWithUserObject(parentNode, successor.getUserObject())) {
+                if (!treeNodeIndex.containsChildWithUserObject(parentNode, successor.getUserObject())) {
                     TreeNodeData<U> childNode = new TreeNodeData<>(new TreeNode<>(idGenerator.getNextId(),
                                                                                   successor.getUserObject()),
                                                                    successor.isSink());
-                    treeModelIndex.addChild(parentNode, childNode);
+                    treeNodeIndex.addChild(parentNode, childNode);
                 }
             }
-            callback.handleNodes(treeModelIndex.getChildren(parentNode));
+            callback.handleNodes(treeNodeIndex.getChildren(parentNode));
         });
     }
 
@@ -344,7 +344,7 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
 //            });
 //        }
 //        else {
-//            List<TreeNodeData<U>> children = treeModelIndex.getChildren(node.getId());
+//            List<TreeNodeData<U>> children = treeNodeIndex.getChildren(node.getId());
 //            loadTreeNodesAtPathIndex(path, pathIndex + 1, children, callback);
 //        }
 //        for (TreeNodeData<U> node : candidateNodes) {

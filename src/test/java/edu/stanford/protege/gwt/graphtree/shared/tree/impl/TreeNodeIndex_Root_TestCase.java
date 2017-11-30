@@ -26,7 +26,7 @@ import static org.mockito.Mockito.when;
  * Date: 14/02/2014
  */
 @RunWith(MockitoJUnitRunner.class)
-public class TreeModelIndex_Root_TestCase<U extends Serializable> {
+public class TreeNodeIndex_Root_TestCase<U extends Serializable> {
 
     @Mock
     private TreeNodeData<U> A;
@@ -37,11 +37,11 @@ public class TreeModelIndex_Root_TestCase<U extends Serializable> {
     @Mock
     private TreeNodeId idA, parent, child;
 
-    private TreeModelIndex<U> index;
+    private TreeNodeIndex<U> index;
 
     @Before
     public void setUp() throws Exception {
-        index = new TreeModelIndex<U>();
+        index = new TreeNodeIndex<U>();
         when(A.getId()).thenReturn(idA);
         when(A.getUserObject()).thenReturn(userObjectA);
     }

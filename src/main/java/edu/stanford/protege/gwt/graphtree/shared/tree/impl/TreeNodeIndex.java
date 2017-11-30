@@ -18,8 +18,11 @@ import java.util.*;
  * Stanford University<br>
  * Bio-Medical Informatics Research Group<br>
  * Date: 21/01/2014
+ *
+ * An index for tree nodes for storing an looking up tree nodes by their user object,
+ * parent node, and child node.
  */
-public class TreeModelIndex<U extends Serializable> {
+public class TreeNodeIndex<U extends Serializable> {
 
     private final Map<TreeNodeId, TreeNodeData<U>> roots = Maps.newLinkedHashMap();
 
@@ -31,7 +34,7 @@ public class TreeModelIndex<U extends Serializable> {
 
     private final Map<TreeNodeId, TreeNodeId> child2ParentMap = Maps.newHashMap();
 
-    public TreeModelIndex() {
+    public TreeNodeIndex() {
     }
 
 

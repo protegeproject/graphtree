@@ -26,7 +26,7 @@ import static org.mockito.Mockito.when;
  * Date: 14/02/2014
  */
 @RunWith(MockitoJUnitRunner.class)
-public class TreeModelIndex_ParentChild_TestCase<U extends Serializable> {
+public class TreeNodeIndex_ParentChild_TestCase<U extends Serializable> {
 
     @Mock
     private TreeNodeData<U> child;
@@ -40,11 +40,11 @@ public class TreeModelIndex_ParentChild_TestCase<U extends Serializable> {
     @Mock
     private Multimap<TreeNodeId, TreeNodeId> removedBranches;
 
-    private TreeModelIndex<U> index;
+    private TreeNodeIndex<U> index;
 
     @Before
     public void setUp() throws Exception {
-        index = new TreeModelIndex<U>();
+        index = new TreeNodeIndex<U>();
         when(child.getId()).thenReturn(childId);
         when(child.getUserObject()).thenReturn(childObject);
     }
