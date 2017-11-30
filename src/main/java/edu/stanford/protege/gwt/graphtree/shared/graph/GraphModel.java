@@ -39,7 +39,9 @@ public interface GraphModel<U extends Serializable, K> {
     void getPathsFromRootNodes(@Nonnull K toUserObjectKey,
                                @Nonnull GetPathsBetweenNodesCallback<U> paths);
 
-    void getPathsBetweenNodes(U fromUserObject, U toUserObject, GetPathsBetweenNodesCallback<U> paths);
+    void getPathsBetweenNodes(@Nonnull K fromUserObjectKey,
+                              @Nonnull K toUserObjectKey,
+                              @Nonnull GetPathsBetweenNodesCallback<U> paths);
 
     /**
      * Adds a listener to this graph model.

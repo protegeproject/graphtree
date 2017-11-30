@@ -109,10 +109,13 @@ public class SimpleGraphModel<U extends Serializable, K> implements GraphModel<U
     }
 
     @Override
-    public void getPathsBetweenNodes(U fromUserObject, U toUserObject, GetPathsBetweenNodesCallback<U> callback) {
+    public void getPathsBetweenNodes(@Nonnull K fromUserObjectKey,
+                                     @Nonnull K toUserObjectKey,
+                                     @Nonnull GetPathsBetweenNodesCallback<U> callback) {
         PathFinder<GraphNode<U>> pathFinder = new PathFinder<>(this);
-        Collection<Path<GraphNode<U>>> paths = pathFinder.getPaths(GraphNode.get(fromUserObject),
-                GraphNode.get(toUserObject));
+        Collection<Path<GraphNode<U>>> paths = pathFinder.getPaths(
+                getGraphNode(fromUserObjectKey),
+                getGraphNode(toUserObjectKey));
         callback.handlePaths(paths);
     }
 

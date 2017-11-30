@@ -43,12 +43,12 @@ public class SimpleGraphModel_GetPathsBetweenNodes_TestCase<U extends Serializab
                 .addEdge(B, C)
                 .addEdge(C, D)
                 .build();
-        model.getPathsBetweenNodes(B, D, callback);
+        model.getPathsBetweenNodes(B.toString(), D.toString(), callback);
         verify(callback, times(1)).handlePaths(captor.capture());
         Path<GraphNode<U>> expected = Path.asPath(
-                GraphNode.<U>get(B),
-                GraphNode.<U>get(C),
-                GraphNode.<U>get(D));
+                GraphNode.get(B),
+                GraphNode.get(C),
+                GraphNode.get(D));
         assertEquals(Collections.singleton(expected), captor.getValue());
     }
 }
