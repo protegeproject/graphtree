@@ -11,6 +11,7 @@ import com.google.web.bindery.event.shared.HandlerRegistration;
 import edu.stanford.protege.gwt.graphtree.shared.Path;
 import edu.stanford.protege.gwt.graphtree.shared.tree.*;
 
+import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.*;
 
@@ -247,7 +248,7 @@ public class TreePresenter<U extends Serializable> implements HasTreeNodeDropHan
     }
 
     @Override
-    public void getNodes(Optional<TreeNodeId> parentNode, GetTreeNodesCallback<U> callback) {
+    public void getNodes(@Nonnull Optional<TreeNodeId> parentNode, @Nonnull GetTreeNodesCallback<U> callback) {
         model.getNodes(parentNode, callback);
     }
 

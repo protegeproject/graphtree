@@ -60,7 +60,7 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
         return handlerManager.addHandler(TreeNodeModelEvent.getType(), handler);
     }
 
-    public void getNodes(Optional<TreeNodeId> parentNode, GetTreeNodesCallback<U> callback) {
+    public void getNodes(@Nonnull Optional<TreeNodeId> parentNode, @Nonnull GetTreeNodesCallback<U> callback) {
         if (parentNode.isPresent()) {
             getChildNodes(parentNode.get(), callback);
         }

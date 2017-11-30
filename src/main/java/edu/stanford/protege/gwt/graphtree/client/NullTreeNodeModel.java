@@ -31,7 +31,7 @@ public class NullTreeNodeModel<U extends Serializable> implements TreeNodeModel<
     }
 
     @Override
-    public void getNodes(Optional<TreeNodeId> parentNode, GetTreeNodesCallback<U> callback) {
+    public void getNodes(@Nonnull Optional<TreeNodeId> parentNode, @Nonnull GetTreeNodesCallback<U> callback) {
         callback.handleNodes(Collections.<TreeNodeData<U>>emptyList());
     }
 
