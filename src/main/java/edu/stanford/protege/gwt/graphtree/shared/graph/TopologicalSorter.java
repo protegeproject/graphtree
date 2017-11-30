@@ -1,6 +1,5 @@
 package edu.stanford.protege.gwt.graphtree.shared.graph;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
 
 import java.io.Serializable;
@@ -46,7 +45,7 @@ public class TopologicalSorter<U extends Serializable> {
             if (!marked.contains(node)) {
                 tempMarked.clear();
                 if (!visit(node, marked, tempMarked, result)) {
-                    return Optional.absent();
+                    return Optional.empty();
                 }
             }
         }

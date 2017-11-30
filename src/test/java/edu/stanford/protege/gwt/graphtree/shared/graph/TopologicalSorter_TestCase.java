@@ -1,6 +1,5 @@
 package edu.stanford.protege.gwt.graphtree.shared.graph;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
@@ -11,12 +10,11 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
 
 /**
  * Author: Matthew Horridge<br>
@@ -42,8 +40,8 @@ public class TopologicalSorter_TestCase<T extends Serializable> {
         graph.put(A, B);
         graph.put(B, C);
         graph.put(C, A);
-        TopologicalSorter<T> sorter = new TopologicalSorter<T>(graph);
-        Optional<List<GraphNode<T>>> result = sorter.getTopologicalOrdering();
+        TopologicalSorter<T> sorter = new TopologicalSorter<>(graph);
+        java.util.Optional<List<GraphNode<T>>> result = sorter.getTopologicalOrdering();
         assertTrue(!result.isPresent());
     }
 
@@ -53,8 +51,8 @@ public class TopologicalSorter_TestCase<T extends Serializable> {
         graph.put(A, B);
         graph.put(B, C);
         graph.put(C, A);
-        TopologicalSorter<T> sorter = new TopologicalSorter<T>(graph);
-        Optional<List<GraphNode<T>>> result = sorter.getTopologicalOrdering(TopologicalSorter.Direction.REVERSE);
+        TopologicalSorter<T> sorter = new TopologicalSorter<>(graph);
+        java.util.Optional<List<GraphNode<T>>> result = sorter.getTopologicalOrdering(TopologicalSorter.Direction.REVERSE);
         assertTrue(!result.isPresent());
     }
 
@@ -63,8 +61,8 @@ public class TopologicalSorter_TestCase<T extends Serializable> {
         Multimap<GraphNode<T>, GraphNode<T>> graph = HashMultimap.create();
         graph.put(A, B);
         graph.put(B, C);
-        TopologicalSorter<T> sorter = new TopologicalSorter<T>(graph);
-        Optional<List<GraphNode<T>>> result = sorter.getTopologicalOrdering();
+        TopologicalSorter<T> sorter = new TopologicalSorter<>(graph);
+        java.util.Optional<List<GraphNode<T>>> result = sorter.getTopologicalOrdering();
         assertTrue(result.isPresent());
         List<GraphNode<T>> expected = Lists.newArrayList();
         expected.add(A);
@@ -78,8 +76,8 @@ public class TopologicalSorter_TestCase<T extends Serializable> {
         Multimap<GraphNode<T>, GraphNode<T>> graph = HashMultimap.create();
         graph.put(A, B);
         graph.put(B, C);
-        TopologicalSorter<T> sorter = new TopologicalSorter<T>(graph);
-        Optional<List<GraphNode<T>>> result = sorter.getTopologicalOrdering(TopologicalSorter.Direction.REVERSE);
+        TopologicalSorter<T> sorter = new TopologicalSorter<>(graph);
+        java.util.Optional<List<GraphNode<T>>> result = sorter.getTopologicalOrdering(TopologicalSorter.Direction.REVERSE);
         assertTrue(result.isPresent());
         List<GraphNode<T>> expected = Lists.newArrayList();
         expected.add(C);
