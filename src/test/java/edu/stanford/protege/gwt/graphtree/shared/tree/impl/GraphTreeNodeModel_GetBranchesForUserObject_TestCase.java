@@ -4,9 +4,7 @@ import com.google.common.collect.Multimap;
 import edu.stanford.protege.gwt.graphtree.shared.UserObjectKeyProvider;
 import edu.stanford.protege.gwt.graphtree.shared.graph.impl.local.SimpleGraphModel;
 import edu.stanford.protege.gwt.graphtree.shared.tree.HasGetBranches;
-import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNode;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeData;
-import edu.stanford.protege.gwt.graphtree.shared.tree.impl.GraphTreeNodeModel;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -45,16 +43,16 @@ public class GraphTreeNodeModel_GetBranchesForUserObject_TestCase<U extends Seri
     @Mock
     U A, B, C, D;
 
-    protected UserObjectKeyProvider<U> keyProvider = userObject -> userObject;
+    protected UserObjectKeyProvider<U, String> keyProvider = Object::toString;
 
     @Test
     public void getBranchesShouldReturnCorrectBranches() {
-        SimpleGraphModel<U> graphModel = SimpleGraphModel.<U>builder()
-                .addKeyNode(A)
+        SimpleGraphModel<U, String> graphModel = SimpleGraphModel.<U, String>builder(Object::toString)
+                .addRootNode(A)
                 .addEdge(A, B)
                 .build();
-        GraphTreeNodeModel<U> model = GraphTreeNodeModel.create(graphModel, keyProvider);
-        model.getBranchesContainingUserObject(B, callback);
+        GraphTreeNodeModel<U, String> model = GraphTreeNodeModel.create(graphModel, keyProvider);
+        model.getBranchesContainingUserObjectKey(B.toString(), callback);
         verify(callback, times(1)).handleBranches(captor.capture());
         Multimap<TreeNodeData<U>, TreeNodeData<U>> value = captor.getValue();
         assertThat(value.keySet(), hasSize(1));
@@ -64,15 +62,15 @@ public class GraphTreeNodeModel_GetBranchesForUserObject_TestCase<U extends Seri
 
     @Test
     public void getBranchesShouldReturnCorrectBranchesForDiamond() {
-        SimpleGraphModel<U> graphModel = SimpleGraphModel.<U>builder()
-                .addKeyNode(A)
+        SimpleGraphModel<U, String> graphModel = SimpleGraphModel.<U, String>builder(Object::toString)
+                .addRootNode(A)
                 .addEdge(A, B)
                 .addEdge(A, C)
                 .addEdge(C, D)
                 .addEdge(B, D)
                 .build();
-        GraphTreeNodeModel<U> model = GraphTreeNodeModel.create(graphModel, keyProvider);
-        model.getBranchesContainingUserObject(D, callback);
+        GraphTreeNodeModel<U, String> model = GraphTreeNodeModel.create(graphModel, keyProvider);
+        model.getBranchesContainingUserObjectKey(D.toString(), callback);
         verify(callback, times(1)).handleBranches(captor.capture());
         Multimap<TreeNodeData<U>, TreeNodeData<U>> value = captor.getValue();
         Map<TreeNodeData<U>,Collection<TreeNodeData<U>>> theMap = value.asMap();

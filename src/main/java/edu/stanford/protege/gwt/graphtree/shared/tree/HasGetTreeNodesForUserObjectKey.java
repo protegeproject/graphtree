@@ -9,15 +9,15 @@ import java.io.Serializable;
  * Bio-Medical Informatics Research Group<br>
  * Date: 03/02/2014
  */
-public interface HasGetTreeNodesForUserObject<U extends Serializable> {
+public interface HasGetTreeNodesForUserObjectKey<U extends Serializable, K> {
 
     /**
-     * Gets the tree nodes for the specified user object.  All of the tree nodes that
-     * represent the user object will be returned, whether or not they have been explicitly
+     * Gets the tree nodes for the specified user object key.  All of the tree nodes that
+     * represent the user object with the specified key will be returned, whether or not they have been explicitly
      * revealed by the user.
-     * @param userObject The user object.
+     * @param userObjectKey The user object key.
      * @param callback A callback for receiving the nodes asynchronously.
      */
-    void getTreeNodesForUserObject(@Nonnull U userObject,
+    void getTreeNodesForUserObjectKey(@Nonnull K userObjectKey,
                                    @Nonnull GetTreeNodesCallback<U> callback);
 }

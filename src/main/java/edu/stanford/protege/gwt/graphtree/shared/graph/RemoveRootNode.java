@@ -10,24 +10,24 @@ import java.io.Serializable;
  * Bio-Medical Informatics Research Group<br>
  * Date: 21/01/2014
  */
-public class RemoveKeyNode<U extends Serializable> extends GraphModelChange<U> {
+public class RemoveRootNode<U extends Serializable> extends GraphModelChange<U> {
 
-    private GraphNode<U> keyNode;
+    private GraphNode<U> rootNode;
 
-    private RemoveKeyNode() {
+    private RemoveRootNode() {
     }
 
-    public RemoveKeyNode(GraphNode<U> keyNode) {
-        this.keyNode = keyNode;
+    public RemoveRootNode(GraphNode<U> rootNode) {
+        this.rootNode = rootNode;
     }
 
     @Override
-    public AddKeyNode<U> getReverseChange() {
-        return new AddKeyNode<U>(keyNode);
+    public AddRootNode<U> getReverseChange() {
+        return new AddRootNode<U>(rootNode);
     }
 
     public GraphNode<U> getNode() {
-        return keyNode;
+        return rootNode;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class RemoveKeyNode<U extends Serializable> extends GraphModelChange<U> {
 
     @Override
     public int hashCode() {
-        return "RemoveKeyNode".hashCode() + keyNode.hashCode();
+        return "RemoveRootNode".hashCode() + rootNode.hashCode();
     }
 
     @Override
@@ -45,15 +45,15 @@ public class RemoveKeyNode<U extends Serializable> extends GraphModelChange<U> {
         if(o == this) {
             return true;
         }
-        if(!(o instanceof RemoveKeyNode)) {
+        if(!(o instanceof RemoveRootNode)) {
             return false;
         }
-        RemoveKeyNode other = (RemoveKeyNode) o;
-        return this.keyNode.equals(other.keyNode);
+        RemoveRootNode other = (RemoveRootNode) o;
+        return this.rootNode.equals(other.rootNode);
     }
 
     @Override
     public String toString() {
-        return Objects.toStringHelper("RemoveKeyNode").addValue(keyNode).toString();
+        return Objects.toStringHelper("RemoveRootNode").addValue(rootNode).toString();
     }
 }

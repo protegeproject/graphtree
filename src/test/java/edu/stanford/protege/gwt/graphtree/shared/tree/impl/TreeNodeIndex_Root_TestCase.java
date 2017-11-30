@@ -38,13 +38,13 @@ public class TreeNodeIndex_Root_TestCase<U extends Serializable> {
     @Mock
     private TreeNodeId idA, parent, child;
 
-    private UserObjectKeyProvider<U> keyProvider = userObject -> userObject;
+    private UserObjectKeyProvider<U, String> keyProvider = Object::toString;
 
-    private TreeNodeIndex<U> index;
+    private TreeNodeIndex<U, String> index;
 
     @Before
     public void setUp() throws Exception {
-        index = new TreeNodeIndex<U>(keyProvider);
+        index = new TreeNodeIndex<>(keyProvider);
         when(A.getId()).thenReturn(idA);
         when(A.getUserObject()).thenReturn(userObjectA);
     }
@@ -60,7 +60,7 @@ public class TreeNodeIndex_Root_TestCase<U extends Serializable> {
     @Test
     public void addRootShouldIndexAgainstUserObject() {
         index.addRoot(A);
-        List<TreeNodeData<U>> result = index.getTreeNodesForUserObject(userObjectA);
+        List<TreeNodeData<U>> result = index.getTreeNodesForUserObjectKey(userObjectA.toString());
         assertThat(result.size(), equalTo(1));
         assertThat(result, hasItem(A));
     }
@@ -75,9 +75,9 @@ public class TreeNodeIndex_Root_TestCase<U extends Serializable> {
     @Test
     public void removeRootShouldRemoveIndexAgainstUserObject() {
         index.addRoot(A);
-        assertThat(index.getTreeNodesForUserObject(userObjectA), hasItem(A));
+        assertThat(index.getTreeNodesForUserObjectKey(userObjectA.toString()), hasItem(A));
         index.removeRoot(A.getId());
-        assertThat(index.getTreeNodesForUserObject(userObjectA), is(empty()));
+        assertThat(index.getTreeNodesForUserObjectKey(userObjectA.toString()), is(empty()));
     }
 
     @Test

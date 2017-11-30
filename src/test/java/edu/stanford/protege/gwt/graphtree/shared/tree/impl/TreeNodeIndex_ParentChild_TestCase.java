@@ -41,14 +41,13 @@ public class TreeNodeIndex_ParentChild_TestCase<U extends Serializable> {
     @Mock
     private Multimap<TreeNodeId, TreeNodeId> removedBranches;
 
-    @Mock
-    private UserObjectKeyProvider<U> keyProvider = userObject -> userObject;
+    private UserObjectKeyProvider<U, String> keyProvider = Object::toString;
 
-    private TreeNodeIndex<U> index;
+    private TreeNodeIndex<U, String> index;
 
     @Before
     public void setUp() throws Exception {
-        index = new TreeNodeIndex<U>(keyProvider);
+        index = new TreeNodeIndex<>(keyProvider);
         when(child.getId()).thenReturn(childId);
         when(child.getUserObject()).thenReturn(childObject);
     }
@@ -68,7 +67,7 @@ public class TreeNodeIndex_ParentChild_TestCase<U extends Serializable> {
     @Test
     public void addChildShouldIndexAgainstUserObject() {
         index.addChild(parentId, child);
-        assertThat(index.getTreeNodesForUserObject(childObject), hasItem(child));
+        assertThat(index.getTreeNodesForUserObjectKey(childObject.toString()), hasItem(child));
     }
 
     @Test
@@ -91,7 +90,7 @@ public class TreeNodeIndex_ParentChild_TestCase<U extends Serializable> {
         index.addChild(parentId, child);
         assertThat(index.getTreeNodeData(childId), equalTo(child));
         index.removeChild(parentId, childId, removedBranches);
-        assertThat(index.getTreeNodesForUserObject(childObject), is(empty()));
+        assertThat(index.getTreeNodesForUserObjectKey(childObject.toString()), is(empty()));
     }
 
     @Test

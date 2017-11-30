@@ -8,7 +8,7 @@ import javax.annotation.Nonnull;
  * A function that provides a key for a user object.
  */
 @FunctionalInterface
-public interface UserObjectKeyProvider<U> {
+public interface UserObjectKeyProvider<U, K> {
 
     /**
      * Gets a key for the given user object.  Repeated calls for a given object will always
@@ -16,6 +16,5 @@ public interface UserObjectKeyProvider<U> {
      * @param userObject The user object.
      * @return The key for the user object.
      */
-    @Nonnull
-    Object getKey(@Nonnull U userObject);
+    K getKey(@Nonnull U userObject);
 }

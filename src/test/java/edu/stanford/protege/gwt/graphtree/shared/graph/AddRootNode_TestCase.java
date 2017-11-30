@@ -17,36 +17,35 @@ import static org.hamcrest.core.IsEqual.equalTo;
  * Date: 10/02/2014
  */
 @RunWith(MockitoJUnitRunner.class)
-public class RemoveKeyNode_TestCase<T extends Serializable> {
+public class AddRootNode_TestCase<T extends Serializable> {
 
     @Mock
     private GraphNode<T> node;
 
     @Test
     public void equalsShouldReturnTrueForEqualNodes() {
-        RemoveKeyNode<T> removeKeyNodeA = new RemoveKeyNode<T>(node);
-        RemoveKeyNode<T> removeKeyNodeB = new RemoveKeyNode<T>(node);
-        assertThat(removeKeyNodeA, equalTo(removeKeyNodeB));
+        AddRootNode<T> addRootNodeA = new AddRootNode<T>(node);
+        AddRootNode<T> addRootNodeB = new AddRootNode<T>(node);
+        assertThat(addRootNodeA, equalTo(addRootNodeB));
     }
 
     @Test
     public void hashCodeShouldReturnTrueForEqualNodes() {
-        RemoveKeyNode<T> removeKeyNodeA = new RemoveKeyNode<T>(node);
-        RemoveKeyNode<T> removeKeyNodeB = new RemoveKeyNode<T>(node);
-        assertThat(removeKeyNodeA.hashCode(), equalTo(removeKeyNodeB.hashCode()));
+        AddRootNode<T> addRootNodeA = new AddRootNode<T>(node);
+        AddRootNode<T> addRootNodeB = new AddRootNode<T>(node);
+        assertThat(addRootNodeA.hashCode(), equalTo(addRootNodeB.hashCode()));
     }
 
     @Test
     public void equalToNullShouldReturnFalse() {
-        RemoveKeyNode<T> removeKeyNode = new RemoveKeyNode<T>(node);
-        assertThat(removeKeyNode.equals(null), equalTo(false));
+        AddRootNode<T> addRootNode = new AddRootNode<T>(node);
+        assertThat(addRootNode.equals(null), equalTo(false));
     }
 
     @Test
     public void getReverseChangeShouldReturnRemoveEdgeWithSameEdge() {
-        RemoveKeyNode<T> removeKeyNodeA = new RemoveKeyNode<T>(node);
-        AddKeyNode<T> expected = new AddKeyNode<T>(node);
-        assertThat(removeKeyNodeA.getReverseChange(), equalTo(expected));
+        AddRootNode<T> addRootNodeA = new AddRootNode<T>(node);
+        RemoveRootNode<T> expected = new RemoveRootNode<T>(node);
+        assertThat(addRootNodeA.getReverseChange(), equalTo(expected));
     }
-
 }

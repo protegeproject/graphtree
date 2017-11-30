@@ -10,9 +10,9 @@ import java.io.Serializable;
  */
 public interface GraphModelChangeVisitor<U extends Serializable> {
 
-    void visit(AddKeyNode<U> addKeyNode);
+    void visit(AddRootNode<U> addRootNode);
 
-    void visit(RemoveKeyNode<U> removeKeyNode);
+    void visit(RemoveRootNode<U> removeRootNode);
 
     void visit(AddEdge<U> addEdge);
 

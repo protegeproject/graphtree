@@ -25,9 +25,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * An index for tree nodes for storing an looking up tree nodes by their user object,
  * parent node, and child node.
  */
-public class TreeNodeIndex<U extends Serializable> {
+public class TreeNodeIndex<U extends Serializable, K> {
 
-    private final UserObjectKeyProvider<U> keyProvider;
+    private final UserObjectKeyProvider<U, K> keyProvider;
 
     private final Map<TreeNodeId, TreeNodeData<U>> roots = Maps.newLinkedHashMap();
 
@@ -35,11 +35,11 @@ public class TreeNodeIndex<U extends Serializable> {
 
     private final Multimap<TreeNodeId, TreeNodeData<U>> parent2ChildMap = LinkedHashMultimap.create();
 
-    private final Multimap<Object, TreeNodeData<U>> userObjectKey2Data = HashMultimap.create();
+    private final Multimap<K, TreeNodeData<U>> userObjectKey2Data = HashMultimap.create();
 
     private final Map<TreeNodeId, TreeNodeId> child2ParentMap = Maps.newHashMap();
 
-    public TreeNodeIndex(@Nonnull UserObjectKeyProvider<U> keyProvider) {
+    public TreeNodeIndex(@Nonnull UserObjectKeyProvider<U, K> keyProvider) {
         this.keyProvider = checkNotNull(keyProvider);
     }
 
@@ -124,7 +124,7 @@ public class TreeNodeIndex<U extends Serializable> {
     }
 
     @Nonnull
-    public List<TreeNodeData<U>> getTreeNodesForUserObject(@Nonnull U userObject) {
-        return new ArrayList<>(userObjectKey2Data.get(keyProvider.getKey(userObject)));
+    public List<TreeNodeData<U>> getTreeNodesForUserObjectKey(@Nonnull K userObjectKey) {
+        return new ArrayList<>(userObjectKey2Data.get(userObjectKey));
     }
 }

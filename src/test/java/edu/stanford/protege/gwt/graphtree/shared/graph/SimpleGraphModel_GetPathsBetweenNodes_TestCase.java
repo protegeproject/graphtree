@@ -37,8 +37,8 @@ public class SimpleGraphModel_GetPathsBetweenNodes_TestCase<U extends Serializab
 
     @Test
     public void shouldReturnPath() {
-        SimpleGraphModel<U> model = SimpleGraphModel.<U>builder()
-                .addKeyNode(A)
+        SimpleGraphModel<U, String> model = SimpleGraphModel.<U, String>builder(Object::toString)
+                .addRootNode(A)
                 .addEdge(A, B)
                 .addEdge(B, C)
                 .addEdge(C, D)

@@ -16,7 +16,7 @@ import java.util.Optional;
  * Bio-Medical Informatics Research Group<br>
  * Date: 04/02/2014
  */
-public class NullTreeNodeModel<U extends Serializable> implements TreeNodeModel<U> {
+public class NullTreeNodeModel<U extends Serializable, K> implements TreeNodeModel<U, K> {
 
     private static final HandlerRegistration NULL_HANDLER_REGISTRATION = () -> {};
 
@@ -27,18 +27,18 @@ public class NullTreeNodeModel<U extends Serializable> implements TreeNodeModel<
     }
 
     @Override
-    public void getBranchesContainingUserObject(@Nonnull U userObject, @Nonnull GetBranchesCallback<U> callback) {
-        callback.handleBranches(HashMultimap.<TreeNodeData<U>, TreeNodeData<U>>create());
+    public void getBranchesContainingUserObjectKey(@Nonnull K userObjectKey, @Nonnull GetBranchesCallback<U> callback) {
+        callback.handleBranches(HashMultimap.create());
     }
 
     @Override
     public void getNodes(@Nonnull Optional<TreeNodeId> parentNode, @Nonnull GetTreeNodesCallback<U> callback) {
-        callback.handleNodes(Collections.<TreeNodeData<U>>emptyList());
+        callback.handleNodes(Collections.emptyList());
     }
 
     @Override
-    public void getTreeNodesForUserObject(@Nonnull U userObject, @Nonnull GetTreeNodesCallback<U> callback) {
-        callback.handleNodes(Collections.<TreeNodeData<U>>emptyList());
+    public void getTreeNodesForUserObjectKey(@Nonnull K userObjectKey, @Nonnull GetTreeNodesCallback<U> callback) {
+        callback.handleNodes(Collections.emptyList());
     }
 
     @Nonnull

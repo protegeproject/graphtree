@@ -5,7 +5,6 @@ import edu.stanford.protege.gwt.graphtree.shared.Path;
 
 import javax.annotation.Nonnull;
 import java.io.Serializable;
-import java.util.Collection;
 
 /**
  * Author: Matthew Horridge<br>
@@ -18,7 +17,7 @@ import java.util.Collection;
  *     and is unique to a particular tree model.
  * </p>
  */
-public interface TreeNodeModel<U extends Serializable> extends HasGetNodes<U>, HasGetBranches<U>, HasGetTreeNodesForUserObject<U> {
+public interface TreeNodeModel<U extends Serializable, K> extends HasGetNodes<U>, HasGetBranches<U, K>, HasGetTreeNodesForUserObjectKey<U, K> {
 
     @Nonnull
     HandlerRegistration addTreeNodeModelEventHandler(@Nonnull TreeNodeModelEventHandler handler);

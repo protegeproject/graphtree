@@ -24,7 +24,7 @@ import static edu.stanford.protege.gwt.graphtree.client.TreeNodeViewState.EXPAND
  * Bio-Medical Informatics Research Group<br>
  * Date: 21/01/2014
  */
-public class TreePresenter<U extends Serializable> implements HasTreeNodeDropHandler<U>, HasGetNodes<U>, HasPendingChanges<U>, HasSetTreeNodeExpanded {
+public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDropHandler<U>, HasGetNodes<U>, HasPendingChanges<U>, HasSetTreeNodeExpanded {
 
     private final HasWidgets treeView;
 
@@ -48,7 +48,7 @@ public class TreePresenter<U extends Serializable> implements HasTreeNodeDropHan
 
     private final NodeRenderingChangedHandler<U> nodeRenderingChangedHandler;
 
-    private TreeNodeModel<U> model = new NullTreeNodeModel<>();
+    private TreeNodeModel<U, K> model = new NullTreeNodeModel<>();
 
     private HandlerRegistration modelHandlerRegistration;
 
@@ -106,8 +106,8 @@ public class TreePresenter<U extends Serializable> implements HasTreeNodeDropHan
         initialiseRootNodes();
     }
 
-    public void getTreeNodesForUserObject(U userObject, GetTreeNodesCallback<U> callback) {
-        model.getTreeNodesForUserObject(userObject, callback);
+    public void getTreeNodesForUserObjectKey(K userObjectKey, GetTreeNodesCallback<U> callback) {
+        model.getTreeNodesForUserObjectKey(userObjectKey, callback);
     }
 
     public void setRootNodesExpanded() {
@@ -121,7 +121,7 @@ public class TreePresenter<U extends Serializable> implements HasTreeNodeDropHan
      * @param model The model.  Not {@code null}.
      * @throws NullPointerException if {@code model} is {@code null}.
      */
-    public void setModel(TreeNodeModel<U> model) {
+    public void setModel(TreeNodeModel<U, K> model) {
         checkNotNull(model);
         if(modelHandlerRegistration != null) {
             modelHandlerRegistration.removeHandler();
@@ -226,8 +226,8 @@ public class TreePresenter<U extends Serializable> implements HasTreeNodeDropHan
         }
     }
 
-    public void revealTreeNodesForUserObject(final U userObject, final RevealMode revealMode) {
-        model.getTreeNodesForUserObject(userObject, nodes -> {
+    public void revealTreeNodesForUserObjectKey(final K userObjectKey, final RevealMode revealMode) {
+        model.getTreeNodesForUserObjectKey(userObjectKey, nodes -> {
             for(TreeNodeData<U> tn : nodes) {
                 Path<TreeNodeData<U>> pathToRoot = model.getPathToRoot(tn.getId());
                 for(int i = 0; i < pathToRoot.size(); i++) {

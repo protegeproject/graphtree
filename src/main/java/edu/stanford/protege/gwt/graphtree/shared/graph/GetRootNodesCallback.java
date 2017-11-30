@@ -9,7 +9,7 @@ import java.util.List;
  * Bio-Medical Informatics Research Group<br>
  * Date: 24/07/2013
  */
-public interface GetKeyNodesCallback<U extends Serializable> {
+public interface GetRootNodesCallback<U extends Serializable> {
 
-    void handleKeyNodes(List<GraphNode<U>> roots);
+    void handleRootNodes(List<GraphNode<U>> roots);
 }

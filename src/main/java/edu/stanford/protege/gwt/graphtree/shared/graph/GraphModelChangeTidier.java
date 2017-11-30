@@ -30,15 +30,15 @@ public class GraphModelChangeTidier<U extends Serializable> {
         final Map<GraphNode<U>, UpdateUserObject<U>> setRenderingChanges = Maps.newHashMap();
         for(GraphModelChange<U> change : changes) {
             change.accept(new GraphModelChangeVisitor<U>() {
-                public void visit(AddKeyNode<U> addKeyNode) {
-                    if(!removedKeyNodes.remove(addKeyNode.getNode())) {
-                        addedKeyNodes.add(addKeyNode.getNode());
+                public void visit(AddRootNode<U> addRootNode) {
+                    if(!removedKeyNodes.remove(addRootNode.getNode())) {
+                        addedKeyNodes.add(addRootNode.getNode());
                     }
                 }
 
-                public void visit(RemoveKeyNode<U> removeKeyNode) {
-                    if(!addedKeyNodes.remove(removeKeyNode.getNode())) {
-                        removedKeyNodes.add(removeKeyNode.getNode());
+                public void visit(RemoveRootNode<U> removeRootNode) {
+                    if(!addedKeyNodes.remove(removeRootNode.getNode())) {
+                        removedKeyNodes.add(removeRootNode.getNode());
                     }
                 }
 
@@ -63,10 +63,10 @@ public class GraphModelChangeTidier<U extends Serializable> {
         }
         List<GraphModelChange<U>> result = new ArrayList<GraphModelChange<U>>();
         for(GraphNode<U> node : addedKeyNodes) {
-            result.add(new AddKeyNode<U>(node));
+            result.add(new AddRootNode<U>(node));
         }
         for(GraphNode<U> node : removedKeyNodes) {
-            result.add(new RemoveKeyNode<U>(node));
+            result.add(new RemoveRootNode<U>(node));
         }
         for(GraphEdge<U> edge : getTopologicallyOrderedEdges(addedEdges, TopologicalSorter.Direction.FORWARD)) {
             result.add(new AddEdge<U>(edge));

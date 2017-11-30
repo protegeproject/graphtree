@@ -7,6 +7,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.SimpleEventBus;
 import edu.stanford.protege.gwt.graphtree.shared.Path;
+import edu.stanford.protege.gwt.graphtree.shared.UserObjectKeyProvider;
 import edu.stanford.protege.gwt.graphtree.shared.graph.*;
 
 import javax.annotation.Nonnull;
@@ -24,48 +25,64 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * A local graph model that can be used for testing purposes
  * </p>
  */
-public class SimpleGraphModel<U extends Serializable> implements GraphModel<U>, HasSuccessors<GraphNode<U>> {
+public class SimpleGraphModel<U extends Serializable, K> implements GraphModel<U, K>, HasSuccessors<GraphNode<U>> {
 
-    private final Set<GraphNode<U>> keyNodes;
+    private final UserObjectKeyProvider<U, K> keyProvider;
 
-    private final Multimap<U, U> successorMap;
+    private final Set<GraphNode<U>> keyNodes = Sets.newLinkedHashSet();
+
+    private final Multimap<K, K> successorMap = LinkedHashMultimap.create();
+
+    private final Map<K, U> key2UserObject = new HashMap<>();
 
     private EventBus eventBus;
 
-    private SimpleGraphModel(@Nonnull final Set<U> userObjectKeyNodes,
+    private SimpleGraphModel(@Nonnull final UserObjectKeyProvider<U, K> keyProvider,
+                             @Nonnull final Set<U> keyNodeUserObjects,
                              @Nonnull final Multimap<U, U> edgeMap,
                              @Nonnull final EventBus eventBus) {
-        this.successorMap = LinkedHashMultimap.create();
-        this.keyNodes = Sets.newLinkedHashSet();
+        this.keyProvider = checkNotNull(keyProvider);
         this.eventBus = checkNotNull(eventBus);
-        for (U userObjectKeyNode : checkNotNull(userObjectKeyNodes)) {
-            boolean sink = edgeMap.get(userObjectKeyNode).isEmpty();
-            GraphNode<U> keyNode = GraphNode.get(userObjectKeyNode, sink);
+        for (U keyNodeUserObject : checkNotNull(keyNodeUserObjects)) {
+            boolean sink = edgeMap.get(keyNodeUserObject).isEmpty();
+            GraphNode<U> keyNode = GraphNode.get(keyNodeUserObject, sink);
+            key2UserObject.put(keyProvider.getKey(keyNodeUserObject), keyNodeUserObject);
             keyNodes.add(keyNode);
         }
-        successorMap.putAll(edgeMap);
+        edgeMap.entries().forEach(entry -> {
+            U predecessorUserObject = entry.getKey();
+            U successorUserObject = entry.getValue();
+            K predecessorKey = keyProvider.getKey(predecessorUserObject);
+            K successorKey = keyProvider.getKey(successorUserObject);
+            key2UserObject.put(predecessorKey, predecessorUserObject);
+            key2UserObject.put(successorKey, successorUserObject);
+            successorMap.put(predecessorKey, successorKey);
+        });
     }
 
-    public static <U extends Serializable> SimpleGraphModel<U> create(@Nonnull Set<U> keyNodes,
+    public static <U extends Serializable, K> SimpleGraphModel<U, K> create(@Nonnull UserObjectKeyProvider<U, K> userObjectKeyProvider,
+                                                                      @Nonnull Set<U> keyNodes,
                                                                       @Nonnull Multimap<U, U> successorMap) {
-        return new SimpleGraphModel<>(keyNodes, successorMap, new SimpleEventBus());
+        return new SimpleGraphModel<>(userObjectKeyProvider, keyNodes, successorMap, new SimpleEventBus());
     }
 
-    public static <U extends Serializable> GraphModelBuilder<U> builder() {
-        return new GraphModelBuilder<>();
+    public static <U extends Serializable, K> GraphModelBuilder<U, K> builder(@Nonnull UserObjectKeyProvider<U, K> keyProvider) {
+        return new GraphModelBuilder<>(keyProvider);
     }
 
     public Iterator<GraphEdge> iterator() {
         return new Iterator<GraphEdge>() {
-            private Iterator<Map.Entry<U, U>> iterator = successorMap.entries().iterator();
+            private Iterator<Map.Entry<K, K>> iterator = successorMap.entries().iterator();
 
             public boolean hasNext() {
                 return iterator().hasNext();
             }
 
             public GraphEdge next() {
-                Map.Entry<U, U> entry = iterator.next();
-                return new GraphEdge<>(GraphNode.get(entry.getKey(), false), getGraphNode(entry.getValue()));
+                Map.Entry<K, K> entry = iterator.next();
+                U predecessorUserObject = key2UserObject.get(entry.getKey());
+                return new GraphEdge<>(GraphNode.get(predecessorUserObject, false),
+                                       getGraphNode(entry.getValue()));
             }
 
             public void remove() {
@@ -74,17 +91,18 @@ public class SimpleGraphModel<U extends Serializable> implements GraphModel<U>, 
         };
     }
 
-    public void getKeyNodes(GetKeyNodesCallback<U> callback) {
-        callback.handleKeyNodes(new ArrayList<>(keyNodes));
+    public void getRootNodes(GetRootNodesCallback<U> callback) {
+        callback.handleRootNodes(new ArrayList<>(keyNodes));
     }
 
     @Override
-    public void getSuccessorNodes(U userObject, GetSuccessorNodesCallback<U> callback) {
+    public void getSuccessorNodes(@Nonnull K predecessorUserObjectKey,
+                                  @Nonnull GetSuccessorNodesCallback<U> callback) {
         SuccessorMap.Builder<U> builder = SuccessorMap.builder();
-        final Collection<U> successors = successorMap.get(userObject);
-        if (!successors.isEmpty()) {
-            for (U successorUserObject : successors) {
-                builder.add(getGraphNode(userObject), getGraphNode(successorUserObject));
+        final Collection<K> successorKeys = successorMap.get(predecessorUserObjectKey);
+        if (!successorKeys.isEmpty()) {
+            for (K successorKey : successorKeys) {
+                builder.add(getGraphNode(predecessorUserObjectKey), getGraphNode(successorKey));
             }
         }
         callback.handleSuccessorNodes(builder.build());
@@ -99,11 +117,12 @@ public class SimpleGraphModel<U extends Serializable> implements GraphModel<U>, 
     }
 
     @Override
-    public void getPathsFromKeyNodes(U toUserObject, GetPathsBetweenNodesCallback<U> callback) {
+    public void getPathsFromRootNodes(@Nonnull K toUserObjectKey,
+                                      @Nonnull GetPathsBetweenNodesCallback<U> callback) {
         List<Path<GraphNode<U>>> result = new ArrayList<>();
         for (GraphNode<U> keyNode : keyNodes) {
             PathFinder<GraphNode<U>> pathFinder = new PathFinder<>(this);
-            Collection<Path<GraphNode<U>>> paths = pathFinder.getPaths(keyNode, GraphNode.get(toUserObject));
+            Collection<Path<GraphNode<U>>> paths = pathFinder.getPaths(keyNode, getGraphNode(toUserObjectKey));
             result.addAll(paths);
         }
         callback.handlePaths(result);
@@ -112,7 +131,9 @@ public class SimpleGraphModel<U extends Serializable> implements GraphModel<U>, 
     @Override
     public Iterable<GraphNode<U>> getSuccessors(GraphNode<U> node) {
         List<GraphNode<U>> result = new ArrayList<>();
-        for (U userObject : successorMap.get(node.getUserObject())) {
+        K predecessorKey = keyProvider.getKey(node.getUserObject());
+        for (K successorKey : successorMap.get(predecessorKey)) {
+            U userObject = key2UserObject.get(successorKey);
             result.add(GraphNode.get(userObject));
         }
         return result;
@@ -123,29 +144,35 @@ public class SimpleGraphModel<U extends Serializable> implements GraphModel<U>, 
     }
 
     public void addEdge(U predecessor, U successor) {
-        if (successorMap.put(predecessor, successor)) {
-            final boolean sink = isSink(successor);
-            GraphEdge<U> edge = new GraphEdge<>(GraphNode.get(predecessor, false), getGraphNode(successor));
+        K predecessorKey = keyProvider.getKey(predecessor);
+        K successorKey = keyProvider.getKey(successor);
+        if (successorMap.put(predecessorKey, successorKey)) {
+            GraphEdge<U> edge = new GraphEdge<>(GraphNode.get(predecessor, false), getGraphNode(successorKey));
             GraphModelChangedEvent.fire(eventBus, new AddEdge<>(edge));
         }
     }
 
     public void removeEdge(U predecessor, U successor) {
-        if (successorMap.remove(predecessor, successor)) {
-            GraphEdge<U> edge = new GraphEdge<>(GraphNode.get(predecessor, false), getGraphNode(successor));
+        K predecessorKey = keyProvider.getKey(predecessor);
+        K successorKey = keyProvider.getKey(successor);
+        if (successorMap.remove(predecessorKey, successorKey)) {
+            GraphEdge<U> edge = new GraphEdge<>(GraphNode.get(predecessor, false), getGraphNode(successorKey));
             GraphModelChangedEvent.fire(eventBus, new RemoveEdge<>(edge));
         }
     }
 
-    private GraphNode<U> getGraphNode(U userObject) {
-        return GraphNode.get(userObject, isSink(userObject));
+    private GraphNode<U> getGraphNode(K key) {
+        U userObject = key2UserObject.get(key);
+        return GraphNode.get(userObject, isSink(key));
     }
 
-    private boolean isSink(U successor) {
-        return successorMap.get(successor).isEmpty();
+    private boolean isSink(K key) {
+        return successorMap.get(key).isEmpty();
     }
 
-    public static class GraphModelBuilder<U extends Serializable> {
+    public static class GraphModelBuilder<U extends Serializable, K> {
+
+        private final UserObjectKeyProvider<U, K> keyProvider;
 
         private Set<U> keyNodes = Sets.newLinkedHashSet();
 
@@ -157,18 +184,22 @@ public class SimpleGraphModel<U extends Serializable> implements GraphModel<U>, 
             this.eventBus = eventBus;
         }
 
-        public GraphModelBuilder<U> addKeyNode(U userObject) {
+        public GraphModelBuilder(@Nonnull UserObjectKeyProvider<U, K> keyProvider) {
+            this.keyProvider = checkNotNull(keyProvider);
+        }
+
+        public GraphModelBuilder<U, K> addRootNode(U userObject) {
             keyNodes.add(userObject);
             return this;
         }
 
-        public GraphModelBuilder<U> addEdge(U from, U to) {
+        public GraphModelBuilder<U, K> addEdge(U from, U to) {
             successorMap.put(from, to);
             return this;
         }
 
-        public SimpleGraphModel<U> build() {
-            return new SimpleGraphModel<>(keyNodes, successorMap, eventBus);
+        public SimpleGraphModel<U, K> build() {
+            return new SimpleGraphModel<>(keyProvider, keyNodes, successorMap, eventBus);
         }
     }
 }

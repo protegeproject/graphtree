@@ -4,12 +4,10 @@ package edu.stanford.protege.gwt.graphtree.shared.graph;
 import static edu.stanford.protege.gwt.graphtree.shared.graph.GraphNodeMatcher.graphNodeWithUserObject;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 
-import com.google.common.collect.Sets;
 import edu.stanford.protege.gwt.graphtree.shared.graph.impl.local.SimpleGraphModel;
 import org.hamcrest.core.IsCollectionContaining;
 import org.junit.Test;
@@ -43,16 +41,16 @@ public class SimpleGraphModel_GetSuccessorNodes_TestCase<U extends Serializable>
 
     @Test
     public void getNodes_ShouldReturn_SpecifiedSuccessors() {
-        SimpleGraphModel<U> model = SimpleGraphModel.<U>builder()
+        SimpleGraphModel<U, String> model = SimpleGraphModel.<U, String>builder(Object::toString)
                 .addEdge(A, B)
                 .addEdge(A, C)
                 .build();
-        model.getSuccessorNodes(A, callback);
+        model.getSuccessorNodes(A.toString(), callback);
         verify(callback, times(1)).handleSuccessorNodes(successorsCaptor.capture());
         SuccessorMap<U> result = successorsCaptor.getValue();
         assertThat(result.size(), equalTo(1));
         Collection<GraphNode<U>> successors = result.getSuccessors();
-        assertThat(successors, IsCollectionContaining.<GraphNode<U>>hasItem(graphNodeWithUserObject(B)));
-        assertThat(successors, IsCollectionContaining.<GraphNode<U>>hasItem(graphNodeWithUserObject(C)));
+        assertThat(successors, IsCollectionContaining.hasItem(graphNodeWithUserObject(B)));
+        assertThat(successors, IsCollectionContaining.hasItem(graphNodeWithUserObject(C)));
     }
 }

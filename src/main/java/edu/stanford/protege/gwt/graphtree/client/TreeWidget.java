@@ -25,25 +25,25 @@ import static java.util.stream.Collectors.toList;
  * Bio-Medical Informatics Research Group<br>
  * Date: 21/01/2014
  */
-public class TreeWidget<U extends Serializable> extends Composite implements HasAllMouseHandlers {
+public class TreeWidget<U extends Serializable, K> extends Composite implements HasAllMouseHandlers {
 
-    private TreePresenter<U> treePresenter;
+    private TreePresenter<U, K> treePresenter;
 
     private TreeView treeView;
 
-    public TreeWidget(TreeView treeView, TreeNodeModel<U> model, TreeNodeRenderer<U> renderer) {
+    public TreeWidget(TreeView treeView, TreeNodeModel<U, K> model, TreeNodeRenderer<U> renderer) {
         SingleSelectionModel<TreeNode<U>> selectionModel = new SingleSelectionModel<>();
-        treePresenter = new TreePresenter<U>(treeView, selectionModel, renderer);
+        treePresenter = new TreePresenter<>(treeView, selectionModel, renderer);
         treePresenter.setModel(model);
         this.treeView = treeView;
         initWidget(treeView.asWidget());
     }
 
-    public TreeWidget(TreeNodeModel<U> model) {
+    public TreeWidget(TreeNodeModel<U, K> model) {
         this(model, new TreeNodeRendererImpl<U>());
     }
 
-    public TreeWidget(TreeNodeModel<U> model, TreeNodeRenderer<U> renderer) {
+    public TreeWidget(TreeNodeModel<U, K> model, TreeNodeRenderer<U> renderer) {
         this(new TreeViewImpl(), model, renderer);
     }
 
@@ -52,7 +52,7 @@ public class TreeWidget<U extends Serializable> extends Composite implements Has
 
     }
 
-    public void setModel(TreeNodeModel<U> model) {
+    public void setModel(TreeNodeModel<U, K> model) {
         treePresenter.setModel(model);
     }
 
@@ -111,8 +111,8 @@ public class TreeWidget<U extends Serializable> extends Composite implements Has
         treePresenter.pruneToNodes(selNodeIds);
     }
 
-    public void revealTreeNodesForUserObject(U userObject, RevealMode revealMode) {
-        treePresenter.revealTreeNodesForUserObject(userObject, revealMode);
+    public void revealTreeNodesForUserObjectKey(K userObjectKey, RevealMode revealMode) {
+        treePresenter.revealTreeNodesForUserObjectKey(userObjectKey, revealMode);
     }
 
     @Override

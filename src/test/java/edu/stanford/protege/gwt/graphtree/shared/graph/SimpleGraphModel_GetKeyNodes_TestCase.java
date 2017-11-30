@@ -1,7 +1,6 @@
 package edu.stanford.protege.gwt.graphtree.shared.graph;
 
 import edu.stanford.protege.gwt.graphtree.shared.graph.impl.local.SimpleGraphModel;
-import edu.stanford.protege.gwt.graphtree.shared.graph.impl.local.SimpleGraphModel;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -30,19 +29,19 @@ public class SimpleGraphModel_GetKeyNodes_TestCase<U extends Serializable> {
     private ArgumentCaptor<List<GraphNode<U>>> keyNodesCaptor;
 
     @Mock
-    private GetKeyNodesCallback<U> callback;
+    private GetRootNodesCallback<U> callback;
 
     @Mock
     U A, B;
     
     @Test
     public void getKeyNodes_ShouldReturn_SpecifiedKeyNodes_InSpecifiedOrder() {
-        SimpleGraphModel<U> model = SimpleGraphModel.<U>builder()
-                .addKeyNode(A)
-                .addKeyNode(B)
+        SimpleGraphModel<U, String> model = SimpleGraphModel.<U, String>builder(Object::toString)
+                .addRootNode(A)
+                .addRootNode(B)
                 .build();
-        model.getKeyNodes(callback);
-        verify(callback, times(1)).handleKeyNodes(keyNodesCaptor.capture());
+        model.getRootNodes(callback);
+        verify(callback, times(1)).handleRootNodes(keyNodesCaptor.capture());
         List<GraphNode<U>> value = keyNodesCaptor.getValue();
         assertEquals(2, value.size());
         GraphNode graphNodeA = value.get(0);

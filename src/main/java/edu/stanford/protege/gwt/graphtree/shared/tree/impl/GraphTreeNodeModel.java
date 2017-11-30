@@ -20,17 +20,19 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Author: Matthew Horridge<br> Stanford University<br> Bio-Medical Informatics Research Group<br> Date: 09/07/2013 <p>
  * A tree model that caches nodes.  Nodes are loaded lazily into the model from a GraphModel. </p>
  */
-public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel<U> {
+public class GraphTreeNodeModel<U extends Serializable, K> implements TreeNodeModel<U, K> {
 
     private final IdGenerator idGenerator = new IdGenerator();
 
-    private final GraphModel<U> graphModel;
+    private final GraphModel<U, K> graphModel;
 
     private final HandlerManager handlerManager;
 
-    private final TreeNodeIndex<U> treeNodeIndex;
+    private final TreeNodeIndex<U, K> treeNodeIndex;
 
     private final Set<TreeNodeId> loadedNodes = new HashSet<>();
+
+    private final UserObjectKeyProvider<U, K> keyProvider;
 
     @Nonnull
     private HandlerRegistration graphModelHandlerRegistration = () -> {};
@@ -40,9 +42,10 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
      *
      * @param graphModel The graph that the model is based on.
      */
-    private GraphTreeNodeModel(@Nonnull GraphModel<U> graphModel,
-                               @Nonnull UserObjectKeyProvider<U> keyProvider) {
+    private GraphTreeNodeModel(@Nonnull GraphModel<U, K> graphModel,
+                               @Nonnull UserObjectKeyProvider<U, K> keyProvider) {
         this.graphModel = checkNotNull(graphModel);
+        this.keyProvider = checkNotNull(keyProvider);
         this.treeNodeIndex = new TreeNodeIndex<>(keyProvider);
         this.handlerManager = new HandlerManager(this);
     }
@@ -54,9 +57,9 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
      * the listener that is attached.
      * @param graphModel The graph model.
      */
-    public static <U extends Serializable> GraphTreeNodeModel<U> create(@Nonnull GraphModel<U> graphModel,
-                                                                        @Nonnull UserObjectKeyProvider<U> keyProvider) {
-        GraphTreeNodeModel<U> treeNodeModel = new GraphTreeNodeModel<>(graphModel, keyProvider);
+    public static <U extends Serializable, K> GraphTreeNodeModel<U, K> create(@Nonnull GraphModel<U, K> graphModel,
+                                                                        @Nonnull UserObjectKeyProvider<U, K> keyProvider) {
+        GraphTreeNodeModel<U, K> treeNodeModel = new GraphTreeNodeModel<>(graphModel, keyProvider);
         treeNodeModel.attachListeners();
         return treeNodeModel;
     }
@@ -94,8 +97,8 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
     }
 
     @Override
-    public void getBranchesContainingUserObject(@Nonnull U userObject, @Nonnull final GetBranchesCallback<U> callback) {
-        getTreeNodesForUserObject(userObject, nodes -> {
+    public void getBranchesContainingUserObjectKey(@Nonnull K userObjectKey, @Nonnull final GetBranchesCallback<U> callback) {
+        getTreeNodesForUserObjectKey(userObjectKey, nodes -> {
             Multimap<TreeNodeData<U>, TreeNodeData<U>> branches = HashMultimap.create();
             for (TreeNodeData<U> node : nodes) {
                 Optional<TreeNodeId> parentNode = treeNodeIndex.getParent(node.getId());
@@ -124,15 +127,15 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
     }
 
     @Override
-    public void getTreeNodesForUserObject(@Nonnull final U userObject, @Nonnull final GetTreeNodesCallback<U> callback) {
+    public void getTreeNodesForUserObjectKey(@Nonnull final K userObjectKey, @Nonnull final GetTreeNodesCallback<U> callback) {
         // We need to make sure that the nodes in the graph that have the specified user object as their user object
         // have corresponding tree nodes.
         // We load nodes by loading their parent node.  Search for paths from the key nodes to graph nodes containing
         // the user object and then make sure that the nodes on these paths are loaded.
-        graphModel.getPathsFromKeyNodes(userObject, paths -> {
+        graphModel.getPathsFromRootNodes(userObjectKey, paths -> {
             // Now we have the paths, ensure that each node on the path is loaded as a tree node
             ensureAllPathNodesAreLoaded(paths, () -> {
-                List<TreeNodeData<U>> treeNodes = treeNodeIndex.getTreeNodesForUserObject(userObject);
+                List<TreeNodeData<U>> treeNodes = treeNodeIndex.getTreeNodesForUserObjectKey(userObjectKey);
                 callback.handleNodes(treeNodes);
             });
         });
@@ -144,12 +147,12 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
         final List<TreeNodeModelChange> resultingChanges = new ArrayList<>();
         for (GraphModelChange<U> change : topologicallyOrderedChanges) {
             change.accept(new GraphModelChangeVisitor<U>() {
-                public void visit(AddKeyNode<U> addKeyNode) {
-                    handleAddKeyNode(addKeyNode, resultingChanges);
+                public void visit(AddRootNode<U> addRootNode) {
+                    handleAddKeyNode(addRootNode, resultingChanges);
                 }
 
-                public void visit(RemoveKeyNode<U> removeKeyNode) {
-                    handleRemoveKeyNode(removeKeyNode, resultingChanges);
+                public void visit(RemoveRootNode<U> removeRootNode) {
+                    handleRemoveKeyNode(removeRootNode, resultingChanges);
                 }
 
                 public void visit(AddEdge<U> addEdge) {
@@ -168,17 +171,17 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
         handlerManager.fireEvent(new TreeNodeModelEvent(resultingChanges));
     }
 
-    private void handleAddKeyNode(AddKeyNode<U> addKeyNode, List<TreeNodeModelChange> resultingChanges) {
-        GraphNode<U> keyNode = addKeyNode.getNode();
+    private void handleAddKeyNode(AddRootNode<U> addRootNode, List<TreeNodeModelChange> resultingChanges) {
+        GraphNode<U> keyNode = addRootNode.getNode();
         TreeNodeData<U> rootNode = new TreeNodeData<>(new TreeNode<>(idGenerator.getNextId(),
                                                                      keyNode.getUserObject()), keyNode.isSink());
         treeNodeIndex.addRoot(rootNode);
         resultingChanges.add(new RootNodeAdded<>(rootNode));
     }
 
-    private void handleRemoveKeyNode(RemoveKeyNode removeKeyNode, List<TreeNodeModelChange> resultingChanges) {
+    private void handleRemoveKeyNode(RemoveRootNode removeRootNode, List<TreeNodeModelChange> resultingChanges) {
         for (TreeNodeData<U> rootNode : treeNodeIndex.getRoots()) {
-            GraphNode keyNode = removeKeyNode.getNode();
+            GraphNode keyNode = removeRootNode.getNode();
             if (rootNode.getUserObject().equals(keyNode.getUserObject())) {
                 treeNodeIndex.removeRoot(rootNode.getId());
                 resultingChanges.add(new RootNodeRemoved<U>(rootNode.getId()));
@@ -188,7 +191,8 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
 
     private void handleAddEdge(AddEdge<U> addEdge, List<TreeNodeModelChange> resultingChanges) {
         U predecessorUserObject = addEdge.getPredecessor().getUserObject();
-        List<TreeNodeData<U>> parentNodes = treeNodeIndex.getTreeNodesForUserObject(predecessorUserObject);
+        K predecessorUserObjectKey = keyProvider.getKey(predecessorUserObject);
+        List<TreeNodeData<U>> parentNodes = treeNodeIndex.getTreeNodesForUserObjectKey(predecessorUserObjectKey);
         for (TreeNodeData<U> parentNode : parentNodes) {
             GraphNode<U> successorNode = addEdge.getSuccessor();
             U successorUserObject = addEdge.getSuccessor().getUserObject();
@@ -209,7 +213,8 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
 
     private void handleRemoveEdge(RemoveEdge<U> removeEdge, List<TreeNodeModelChange> resultingChanges) {
         U predecessorUserObject = removeEdge.getPredecessor().getUserObject();
-        for (TreeNodeData<U> parentNode : treeNodeIndex.getTreeNodesForUserObject(predecessorUserObject)) {
+        K predecessorKey = keyProvider.getKey(predecessorUserObject);
+        for (TreeNodeData<U> parentNode : treeNodeIndex.getTreeNodesForUserObjectKey(predecessorKey)) {
             GraphNode<U> successor = removeEdge.getSuccessor();
             removeChild(parentNode.getId(), successor, resultingChanges);
         }
@@ -217,7 +222,8 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
 
     private void handleUpdateUserObject(UpdateUserObject<U> updateUserObject, List<TreeNodeModelChange> resultingChanges) {
         U userObject = updateUserObject.getGraphNode().getUserObject();
-        for (TreeNodeData<U> node : treeNodeIndex.getTreeNodesForUserObject(userObject)) {
+        K userObjectKey = keyProvider.getKey(userObject);
+        for (TreeNodeData<U> node : treeNodeIndex.getTreeNodesForUserObjectKey(userObjectKey)) {
             resultingChanges.add(new NodeRenderingChanged<>(node.getId(), node.getUserObject()));
         }
     }
@@ -253,7 +259,7 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
     }
 
     private void loadRoots(final GetTreeNodesCallback<U> callback) {
-        graphModel.getKeyNodes(keyNodes -> {
+        graphModel.getRootNodes(keyNodes -> {
             for (GraphNode<U> keyNode : keyNodes) {
                 TreeNodeData<U> treeNode = new TreeNodeData<>(new TreeNode<>(idGenerator.getNextId(),
                                                                              keyNode.getUserObject()),
@@ -275,7 +281,8 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
 
     private void loadChildren(final TreeNodeId parentNode, final GetTreeNodesCallback<U> callback) {
         final TreeNodeData<U> data = treeNodeIndex.getTreeNodeData(parentNode);
-        graphModel.getSuccessorNodes(data.getUserObject(), successors -> {
+        K userObjectKey = keyProvider.getKey(data.getUserObject());
+        graphModel.getSuccessorNodes(userObjectKey, successors -> {
             loadedNodes.add(parentNode);
             for (GraphNode<U> successor : successors.getSuccessors()) {
                 if (!treeNodeIndex.containsChildWithUserObject(parentNode, successor.getUserObject())) {
