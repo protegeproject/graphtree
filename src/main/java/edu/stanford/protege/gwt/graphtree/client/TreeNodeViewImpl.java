@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.*;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNode;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeId;
 
+import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
@@ -98,15 +99,18 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
         updateHandleImage();
     }
 
+    @Nonnull
     public TreeNodeId getNodeId() {
         return node.getId();
     }
 
+    @Nonnull
     @Override
     public U getUserObject() {
         return node.getUserObject();
     }
 
+    @Nonnull
     @Override
     public TreeNode<U> getNode() {
         return node;

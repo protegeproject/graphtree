@@ -36,6 +36,7 @@ public class TreeNode<U extends Serializable> implements Serializable, IsSeriali
         return new TreeNodeId(id);
     }
 
+    @Nonnull
     public U getUserObject() {
         return userObject;
     }
