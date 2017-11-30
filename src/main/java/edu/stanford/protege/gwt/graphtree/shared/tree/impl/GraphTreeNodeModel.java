@@ -70,7 +70,7 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
     }
 
     @Override
-    public void getBranchesContainingUserObject(U userObject, final GetBranchesCallback<U> callback) {
+    public void getBranchesContainingUserObject(@Nonnull U userObject, @Nonnull final GetBranchesCallback<U> callback) {
         getTreeNodesForUserObject(userObject, nodes -> {
             Multimap<TreeNodeData<U>, TreeNodeData<U>> branches = HashMultimap.create();
             for (TreeNodeData<U> node : nodes) {

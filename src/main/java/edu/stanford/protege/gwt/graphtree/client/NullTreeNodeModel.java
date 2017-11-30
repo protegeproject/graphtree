@@ -26,7 +26,7 @@ public class NullTreeNodeModel<U extends Serializable> implements TreeNodeModel<
     }
 
     @Override
-    public void getBranchesContainingUserObject(U userObject, GetBranchesCallback<U> callback) {
+    public void getBranchesContainingUserObject(@Nonnull U userObject, @Nonnull GetBranchesCallback<U> callback) {
         callback.handleBranches(HashMultimap.<TreeNodeData<U>, TreeNodeData<U>>create());
     }
 

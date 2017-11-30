@@ -2,6 +2,7 @@ package edu.stanford.protege.gwt.graphtree.shared.tree;
 
 import com.google.common.collect.Multimap;
 
+import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.Collection;
 
@@ -13,9 +14,15 @@ import java.util.Collection;
  */
 public interface HasGetBranches<U extends Serializable> {
 
-    void getBranchesContainingUserObject(U userObject, GetBranchesCallback<U> callback);
+    /**
+     * Gets the branches that contain the specified user object.
+     * @param userObject The user object.
+     * @param callback A callback for receiving the branches.
+     */
+    void getBranchesContainingUserObject(@Nonnull U userObject,
+                                         @Nonnull GetBranchesCallback<U> callback);
 
-    public static interface  GetBranchesCallback<U extends Serializable> {
+    interface  GetBranchesCallback<U extends Serializable> {
         void handleBranches(Multimap<TreeNodeData<U>, TreeNodeData<U>> parent2ChildMap);
     }
 }
