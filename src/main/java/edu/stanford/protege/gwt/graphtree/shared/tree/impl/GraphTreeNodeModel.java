@@ -226,6 +226,7 @@ public class GraphTreeNodeModel<U extends Serializable, K> implements TreeNodeMo
         for (TreeNodeData<U> node : treeNodeIndex.getTreeNodesForUserObjectKey(userObjectKey)) {
             resultingChanges.add(new NodeRenderingChanged<>(node.getId(), node.getUserObject()));
         }
+        treeNodeIndex.updateUserObject(userObject);
     }
 
     private void removeChild(TreeNodeId parentNode,

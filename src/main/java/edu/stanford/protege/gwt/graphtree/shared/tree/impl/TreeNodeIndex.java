@@ -1,11 +1,9 @@
 package edu.stanford.protege.gwt.graphtree.shared.tree.impl;
 
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
+import com.google.common.collect.*;
 import edu.stanford.protege.gwt.graphtree.shared.UserObjectKeyProvider;
+import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNode;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeData;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeId;
 
@@ -15,6 +13,7 @@ import java.io.Serializable;
 import java.util.*;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Author: Matthew Horridge<br>
@@ -29,13 +28,13 @@ public class TreeNodeIndex<U extends Serializable, K> {
 
     private final UserObjectKeyProvider<U, K> keyProvider;
 
-    private final Map<TreeNodeId, TreeNodeData<U>> roots = Maps.newLinkedHashMap();
+    private final Set<TreeNodeId> roots = Sets.newLinkedHashSet();
 
     private final Map<TreeNodeId, TreeNodeData<U>> id2Data = new HashMap<>();
 
-    private final Multimap<TreeNodeId, TreeNodeData<U>> parent2ChildMap = LinkedHashMultimap.create();
-
     private final Multimap<K, TreeNodeData<U>> userObjectKey2Data = HashMultimap.create();
+
+    private final Multimap<TreeNodeId, TreeNodeId> parent2ChildMap = LinkedHashMultimap.create();
 
     private final Map<TreeNodeId, TreeNodeId> child2ParentMap = Maps.newHashMap();
 
@@ -63,29 +62,29 @@ public class TreeNodeIndex<U extends Serializable, K> {
         if(parent2ChildMap.containsValue(node)) {
             throw new RuntimeException("Node is already a child of another node");
         }
-        roots.put(node.getId(), node);
-        id2Data.put(node.getId(), node);
-        userObjectKey2Data.put(keyProvider.getKey(node.getUserObject()), node);
+        if (roots.add(node.getId())) {
+            id2Data.put(node.getId(), node);
+            userObjectKey2Data.put(keyProvider.getKey(node.getUserObject()), node);
+        }
     }
 
     public void removeRoot(@Nonnull TreeNodeId node) {
-        TreeNodeData<U> removed = roots.remove(node);
-        if(removed != null) {
-            id2Data.remove(node);
-            userObjectKey2Data.remove(keyProvider.getKey(removed.getUserObject()), removed);
+        if(roots.remove(node)) {
+            TreeNodeData<U> data = id2Data.remove(node);
+            userObjectKey2Data.remove(keyProvider.getKey(data.getUserObject()), data);
         }
     }
 
     @Nonnull
     public List<TreeNodeData<U>> getRoots() {
-        return new ArrayList<>(roots.values());
+        return roots.stream().map(id2Data::get).collect(toList());
     }
 
     public boolean addChild(@Nonnull TreeNodeId parentId, @Nonnull TreeNodeData<U> childNodeData) {
         if(parent2ChildMap.containsValue(childNodeData)) {
             throw new RuntimeException("Node is already a child of another node");
         }
-        boolean added = parent2ChildMap.put(parentId, childNodeData);
+        boolean added = parent2ChildMap.put(parentId, childNodeData.getId());
         if(added) {
             id2Data.put(childNodeData.getId(), childNodeData);
             child2ParentMap.put(childNodeData.getId(), parentId);
@@ -101,7 +100,7 @@ public class TreeNodeIndex<U extends Serializable, K> {
         if(childData == null) {
             return;
         }
-        boolean removed = parent2ChildMap.remove(parentNode, childData);
+        boolean removed = parent2ChildMap.remove(parentNode, childData.getId());
         if(removed) {
             child2ParentMap.remove(childNode);
             id2Data.remove(childNode);
@@ -113,6 +112,17 @@ public class TreeNodeIndex<U extends Serializable, K> {
         }
     }
 
+    public void updateUserObject(@Nonnull U userObject) {
+        K key = keyProvider.getKey(checkNotNull(userObject));
+        // Replace TreeNodeData that is identified by the user object key
+        userObjectKey2Data.removeAll(key).forEach(data -> {
+            TreeNodeId id = data.getId();
+            TreeNodeData<U> replacementData = new TreeNodeData<>(new TreeNode<>(id, userObject), data.isLeaf());
+            userObjectKey2Data.put(key, replacementData);
+            id2Data.put(id, replacementData);
+        });
+    }
+
     @Nonnull
     public Optional<TreeNodeId> getParent(@Nonnull TreeNodeId childNode) {
         return Optional.ofNullable(child2ParentMap.get(childNode));
@@ -120,7 +130,8 @@ public class TreeNodeIndex<U extends Serializable, K> {
 
     @Nonnull
     public List<TreeNodeData<U>> getChildren(@Nonnull TreeNodeId parentId) {
-        return new ArrayList<>(parent2ChildMap.get(parentId));
+        Collection<TreeNodeId> childIds = parent2ChildMap.get(parentId);
+        return childIds.stream().map(id2Data::get).collect(toList());
     }
 
     @Nonnull
