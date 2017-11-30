@@ -8,6 +8,8 @@ import com.google.common.collect.Multimap;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeData;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeId;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.Serializable;
 import java.util.*;
 
@@ -19,23 +21,27 @@ import java.util.*;
  */
 public class TreeModelIndex<U extends Serializable> {
 
-    private Map<TreeNodeId, TreeNodeData<U>> roots = Maps.newLinkedHashMap();
+    private final Map<TreeNodeId, TreeNodeData<U>> roots = Maps.newLinkedHashMap();
 
-    private Map<TreeNodeId, TreeNodeData<U>> id2Data = new HashMap<>();
+    private final Map<TreeNodeId, TreeNodeData<U>> id2Data = new HashMap<>();
 
-    private Multimap<TreeNodeId, TreeNodeData<U>> parent2ChildMap = LinkedHashMultimap.create();
+    private final Multimap<TreeNodeId, TreeNodeData<U>> parent2ChildMap = LinkedHashMultimap.create();
 
-    private Multimap<U, TreeNodeData<U>> userObject2Data = HashMultimap.create();
+    private final Multimap<U, TreeNodeData<U>> userObject2Data = HashMultimap.create();
 
-    private Map<TreeNodeId, TreeNodeId> child2ParentMap = Maps.newHashMap();
+    private final Map<TreeNodeId, TreeNodeId> child2ParentMap = Maps.newHashMap();
+
+    public TreeModelIndex() {
+    }
 
 
-    public TreeNodeData<U> getTreeNodeData(TreeNodeId treeNodeId) {
+    @Nullable
+    public TreeNodeData<U> getTreeNodeData(@Nonnull TreeNodeId treeNodeId) {
         return id2Data.get(treeNodeId);
     }
 
 
-    public boolean containsChildWithUserObject(TreeNodeId parent, U userObject) {
+    public boolean containsChildWithUserObject(@Nonnull TreeNodeId parent, @Nonnull U userObject) {
         for(TreeNodeData nodeWithUserObject : userObject2Data.get(userObject)) {
             if(parent2ChildMap.containsEntry(parent, nodeWithUserObject)) {
                 return true;
@@ -44,7 +50,7 @@ public class TreeModelIndex<U extends Serializable> {
         return false;
     }
 
-    public void addRoot(TreeNodeData<U> node) {
+    public void addRoot(@Nonnull TreeNodeData<U> node) {
         if(parent2ChildMap.containsValue(node)) {
             throw new RuntimeException("Node is already a child of another node");
         }
@@ -53,7 +59,7 @@ public class TreeModelIndex<U extends Serializable> {
         userObject2Data.put(node.getUserObject(), node);
     }
 
-    public void removeRoot(TreeNodeId node) {
+    public void removeRoot(@Nonnull TreeNodeId node) {
         TreeNodeData<U> removed = roots.remove(node);
         if(removed != null) {
             id2Data.remove(node);
@@ -61,11 +67,12 @@ public class TreeModelIndex<U extends Serializable> {
         }
     }
 
+    @Nonnull
     public List<TreeNodeData<U>> getRoots() {
         return new ArrayList<>(roots.values());
     }
 
-    public boolean addChild(TreeNodeId parentId, TreeNodeData<U> childNodeData) {
+    public boolean addChild(@Nonnull TreeNodeId parentId, @Nonnull TreeNodeData<U> childNodeData) {
         if(parent2ChildMap.containsValue(childNodeData)) {
             throw new RuntimeException("Node is already a child of another node");
         }
@@ -78,7 +85,9 @@ public class TreeModelIndex<U extends Serializable> {
         return added;
     }
 
-    public void removeChild(TreeNodeId parentNode, TreeNodeId childNode, Multimap<TreeNodeId, TreeNodeId> removedBranches) {
+    public void removeChild(@Nonnull TreeNodeId parentNode,
+                            @Nonnull TreeNodeId childNode,
+                            @Nonnull Multimap<TreeNodeId, TreeNodeId> removedBranches) {
         TreeNodeData<U> childData = id2Data.get(childNode);
         if(childData == null) {
             return;
@@ -95,15 +104,18 @@ public class TreeModelIndex<U extends Serializable> {
         }
     }
 
-    public Optional<TreeNodeId> getParent(TreeNodeId childNode) {
+    @Nonnull
+    public Optional<TreeNodeId> getParent(@Nonnull TreeNodeId childNode) {
         return Optional.ofNullable(child2ParentMap.get(childNode));
     }
 
-    public List<TreeNodeData<U>> getChildren(TreeNodeId parentId) {
+    @Nonnull
+    public List<TreeNodeData<U>> getChildren(@Nonnull TreeNodeId parentId) {
         return new ArrayList<>(parent2ChildMap.get(parentId));
     }
 
-    public List<TreeNodeData<U>> getTreeNodesForUserObject(U userObject) {
+    @Nonnull
+    public List<TreeNodeData<U>> getTreeNodesForUserObject(@Nonnull U userObject) {
         return new ArrayList<>(userObject2Data.get(userObject));
     }
 }

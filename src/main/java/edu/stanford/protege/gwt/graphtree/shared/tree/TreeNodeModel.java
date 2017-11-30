@@ -25,4 +25,10 @@ public interface TreeNodeModel<U extends Serializable> extends HasGetNodes<U>, H
 
     @Nonnull
     Path<TreeNodeData<U>> getPathToRoot(@Nonnull TreeNodeId treeNodeId);
+
+    /**
+     * Disposes of this TreeNodeModel, cleaning up any listeners that the tree node model might have
+     * attached to other objects.
+     */
+    void dispose();
 }

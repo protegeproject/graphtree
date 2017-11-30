@@ -3,7 +3,6 @@ package edu.stanford.protege.gwt.graphtree.shared.tree.impl;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.Sets;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import edu.stanford.protege.gwt.graphtree.shared.Path;
@@ -14,6 +13,8 @@ import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.*;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Author: Matthew Horridge<br> Stanford University<br> Bio-Medical Informatics Research Group<br> Date: 09/07/2013 <p>
  * A tree model that caches nodes.  Nodes are loaded lazily into the model from a GraphModel. </p>
@@ -22,29 +23,47 @@ public class GraphTreeNodeModel<U extends Serializable> implements TreeNodeModel
 
     private final IdGenerator idGenerator = new IdGenerator();
 
-    private GraphModel<U> graphModel;
+    private final GraphModel<U> graphModel;
 
-    private HandlerManager handlerManager;
+    private final HandlerManager handlerManager;
 
-    private TreeModelIndex<U> treeModelIndex = new TreeModelIndex<>();
+    private final TreeModelIndex<U> treeModelIndex = new TreeModelIndex<>();
 
-    private Set<TreeNodeId> loadedNodes;
+    private final Set<TreeNodeId> loadedNodes = new HashSet<>();
+
+    @Nonnull
+    private HandlerRegistration graphModelHandlerRegistration = () -> {};
 
     /**
      * Constructs a GraphTreeNodeModel.
      *
      * @param graphModel The graph that the model is based on.
      */
-    public GraphTreeNodeModel(GraphModel<U> graphModel) {
-        this.graphModel = graphModel;
-        this.loadedNodes = Sets.newHashSet();
+    private GraphTreeNodeModel(@Nonnull GraphModel<U> graphModel) {
+        this.graphModel = checkNotNull(graphModel);
         this.handlerManager = new HandlerManager(this);
-        // TODO: Handler reg.  Move attachment out of this constructor.
-        graphModel.addGraphModelHandler(event -> handleGraphModelChanges(event.getChanges()));
     }
 
-    public static <U extends Serializable> GraphTreeNodeModel<U> create(GraphModel<U> graphModel) {
-        return new GraphTreeNodeModel<>(graphModel);
+    /**
+     * A factory method for creating a new {@link GraphTreeNodeModel}.  The model will attach itself
+     * as a listener to the specified graph model so that changes in the graph model are reflected by
+     * changes in this tree model.  Node that the {@link #dispose()} method should be called to remove
+     * the listener that is attached.
+     * @param graphModel The graph model.
+     */
+    public static <U extends Serializable> GraphTreeNodeModel<U> create(@Nonnull GraphModel<U> graphModel) {
+        GraphTreeNodeModel<U> treeNodeModel = new GraphTreeNodeModel<>(graphModel);
+        treeNodeModel.attachListeners();
+        return treeNodeModel;
+    }
+
+    private void attachListeners() {
+        graphModelHandlerRegistration = graphModel.addGraphModelHandler(event -> handleGraphModelChanges(event.getChanges()));
+    }
+
+    @Override
+    public void dispose() {
+        graphModelHandlerRegistration.removeHandler();
     }
 
     private static <U extends Serializable> Optional<TreeNodeData<U>> getNodeWithUserObject(U userObject, Collection<TreeNodeData<U>> inCollection) {

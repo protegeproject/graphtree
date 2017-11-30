@@ -46,4 +46,9 @@ public class NullTreeNodeModel<U extends Serializable> implements TreeNodeModel<
     public Path<TreeNodeData<U>> getPathToRoot(@Nonnull TreeNodeId treeNodeId) {
         return Path.emptyPath();
     }
+
+    @Override
+    public void dispose() {
+
+    }
 }
