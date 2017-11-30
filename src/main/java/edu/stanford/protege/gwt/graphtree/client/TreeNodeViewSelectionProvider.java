@@ -37,9 +37,7 @@ public class TreeNodeViewSelectionProvider<U extends Serializable> implements It
         List<TreeNodeView<U>> result = Lists.newArrayList();
         for(TreeNode<U> selectedNode : selectedSet) {
             Optional<TreeNodeView<U>> view = viewMapper.getViewIfPresent(selectedNode.getId());
-            if(view.isPresent()) {
-                result.add(view.get());
-            }
+            view.ifPresent(result::add);
         }
         return result;
     }

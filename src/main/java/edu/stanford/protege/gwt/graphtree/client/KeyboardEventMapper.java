@@ -45,19 +45,19 @@ public class KeyboardEventMapper<U extends Serializable> {
                 switch (event.getNativeKeyCode()) {
                     case KeyCodes.KEY_UP:
                         event.preventDefault();
-                        selectPreviousTreeNodesHandler.invoke(TreeViewInputEvent.<U>fromEvent(event), selectionProvider);
+                        selectPreviousTreeNodesHandler.invoke(TreeViewInputEvent.fromEvent(event), selectionProvider);
                         break;
                     case KeyCodes.KEY_DOWN:
                         event.preventDefault();
-                        selectNextNodesAction.invoke(TreeViewInputEvent.<U>fromEvent(event), selectionProvider);
+                        selectNextNodesAction.invoke(TreeViewInputEvent.fromEvent(event), selectionProvider);
                         break;
                     case KeyCodes.KEY_LEFT:
                         event.preventDefault();
-                        setNodeCollapsedAction.invoke(TreeViewInputEvent.<U>fromEvent(event), selectionProvider);
+                        setNodeCollapsedAction.invoke(TreeViewInputEvent.fromEvent(event), selectionProvider);
                         break;
                     case KeyCodes.KEY_RIGHT:
                         event.preventDefault();
-                        setNodeExpandedAction.invoke(TreeViewInputEvent.<U>fromEvent(event), selectionProvider);
+                        setNodeExpandedAction.invoke(TreeViewInputEvent.fromEvent(event), selectionProvider);
                         break;
                 }
             }

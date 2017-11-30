@@ -26,7 +26,7 @@ public class TreeNodeViewTraverser<U extends Serializable> {
     };
 
     public static <U extends Serializable> TreeNodeViewTraverser<U> newTreeNodeViewTraverser() {
-        return new TreeNodeViewTraverser<U>();
+        return new TreeNodeViewTraverser<>();
     }
 
     public Optional<TreeNodeView<U>> getPrevious(TreeNodeView<U> treeNodeView) {
@@ -38,7 +38,7 @@ public class TreeNodeViewTraverser<U extends Serializable> {
         if (ancestor.equals(parentView)) {
             Optional<TreeNodeView<U>> previousSibling = treeNodeView.getPreviousSibling();
             if(previousSibling.isPresent()) {
-                return Optional.<TreeNodeView<U>>of(getDeepestLastChild(previousSibling.get()));
+                return Optional.of(getDeepestLastChild(previousSibling.get()));
             }
         }
         return ancestor;
@@ -63,7 +63,7 @@ public class TreeNodeViewTraverser<U extends Serializable> {
     }
 
     public Path<TreeNodeView<U>> getPathToRoot(final TreeNodeView<U> fromView) {
-        return getPathToRoot(fromView, Path.<TreeNodeView<U>>getIdentityTransform());
+        return getPathToRoot(fromView, Path.getIdentityTransform());
     }
 
     public <T> Path<T> getPathToRoot(final TreeNodeView<U> fromView, Path.Transform<TreeNodeView<U>, T> transform) {
@@ -73,7 +73,7 @@ public class TreeNodeViewTraverser<U extends Serializable> {
             pathToRoot.add(0, transform.transform(v.get()));
             v = v.get().getParentView();
         }
-        return new Path<T>(pathToRoot);
+        return new Path<>(pathToRoot);
     }
 
     public Path<U> getUserObjectPathToRoot(final TreeNodeView<U> fromView) {

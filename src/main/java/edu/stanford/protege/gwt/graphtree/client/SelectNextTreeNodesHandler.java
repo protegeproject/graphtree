@@ -19,7 +19,7 @@ public class SelectNextTreeNodesHandler<U extends Serializable> implements TreeN
     private TreeNodeViewTraverser<U> viewTraverser;
 
     public SelectNextTreeNodesHandler(SetSelectionModel<TreeNode<U>> selectionModel) {
-        this(selectionModel, new TreeNodeViewTraverser<U>());
+        this(selectionModel, new TreeNodeViewTraverser<>());
     }
 
     public SelectNextTreeNodesHandler(SetSelectionModel<TreeNode<U>> selectionModel, TreeNodeViewTraverser<U> viewTraverser) {
