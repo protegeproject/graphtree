@@ -18,5 +18,5 @@ public interface TreeNodeModelChangeVisitor<U extends Serializable> {
 
     void visit(ChildNodeRemoved<U> childNodeRemoved);
 
-    void visit(NodeRenderingChanged<U> nodeRenderingChanged);
+    void visit(NodeUserObjectChanged<U> nodeUserObjectChanged);
 }

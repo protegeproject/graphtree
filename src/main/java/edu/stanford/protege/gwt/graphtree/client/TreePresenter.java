@@ -46,7 +46,7 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
 
     private final ChildNodeRemovedHandler<U> childNodeRemovedHandler;
 
-    private final NodeRenderingChangedHandler<U> nodeRenderingChangedHandler;
+    private final NodeUserObjectChangedHandler<U> nodeUserObjectChangedHandler;
 
     private TreeNodeModel<U, K> model = new NullTreeNodeModel<>();
 
@@ -78,7 +78,7 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
         rootNodeRemovedHandler = new RootNodeRemovedHandler<>(viewManager, treeView);
         childNodeAddedHandler = new ChildNodeAddedHandler<>(viewManager);
         childNodeRemovedHandler = new ChildNodeRemovedHandler<>(viewManager);
-        nodeRenderingChangedHandler = new NodeRenderingChangedHandler<>(viewManager, treeNodeRenderer);
+        nodeUserObjectChangedHandler = new NodeUserObjectChangedHandler<>(viewManager, treeNodeRenderer);
     }
 
     @Override
@@ -300,8 +300,8 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
                 childNodeRemovedHandler.handleChildNodeRemoved(childNodeRemoved);
             }
 
-            public void visit(NodeRenderingChanged<U> nodeRenderingChanged) {
-                nodeRenderingChangedHandler.handleNodeRenderingChanged(nodeRenderingChanged);
+            public void visit(NodeUserObjectChanged<U> nodeUserObjectChanged) {
+                nodeUserObjectChangedHandler.handleNodeUserObjectChanged(nodeUserObjectChanged);
             }
         });
     }

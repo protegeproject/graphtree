@@ -32,11 +32,11 @@ public class SelectPreviousTreeNodesHandler<U extends Serializable> implements T
     public void invoke(TreeViewInputEvent<U> event, Iterable<TreeNodeView<U>> views) {
         for (TreeNodeView<U> view : views) {
             Optional<TreeNodeView<U>> previous = viewTraverser.getPrevious(view);
-            if (previous.isPresent()) {
-                selectionModel.setSelected(previous.get().getNode(), true);
+            previous.ifPresent(v -> {
+                selectionModel.setSelected(v.getNode(), true);
                 selectionModel.setSelected(view.getNode(), false);
-                previous.get().scrollIntoView();
-            }
+                v.scrollIntoView();
+            });
         }
     }
 }

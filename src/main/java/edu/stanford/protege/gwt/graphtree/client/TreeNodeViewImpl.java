@@ -63,8 +63,6 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
 
     private TreeNodeViewState viewState = TreeNodeViewState.COLLAPSED;
 
-    private TreeNode<U> node;
-
     private boolean leaf = true;
 
     private int depth;
@@ -75,12 +73,17 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
 
     private TreeNodeView<U> nextSibling;
 
-    public TreeNodeViewImpl(TreeNode<U> treeNode) {
+    private TreeNodeId nodeId;
+
+    private U userObject;
+
+    public TreeNodeViewImpl(@Nonnull TreeNodeId nodeId, U userObject) {
         HTMLPanel rootElement = ourUiBinder.createAndBindUi(this);
         initWidget(rootElement);
         updateHandleImage();
         getElement().setDraggable(Element.DRAGGABLE_TRUE);
-        this.node = treeNode;
+        this.nodeId = checkNotNull(nodeId);
+        this.userObject = checkNotNull(userObject);
     }
 
     public DataState getDataState() {
@@ -101,23 +104,23 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
 
     @Nonnull
     public TreeNodeId getNodeId() {
-        return node.getId();
+        return nodeId;
     }
 
     @Nonnull
     @Override
     public U getUserObject() {
-        return node.getUserObject();
+        return userObject;
+    }
+
+    public void setUserObject(@Nonnull U userObject) {
+        this.userObject = checkNotNull(userObject);
     }
 
     @Nonnull
     @Override
     public TreeNode<U> getNode() {
-        return node;
-    }
-
-    public void setNode(TreeNode<U> node) {
-        this.node = checkNotNull(node);
+        return new TreeNode<>(nodeId, userObject);
     }
 
     public int getDepth() {

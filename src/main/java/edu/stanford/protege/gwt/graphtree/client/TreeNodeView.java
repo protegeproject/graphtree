@@ -37,8 +37,13 @@ public interface TreeNodeView<U extends Serializable> extends IsWidget {
     U getUserObject();
 
     /**
+     * Sets the user objec that this view contains
+     */
+    void setUserObject(@Nonnull U userObject);
+
+    /**
      * Gets the tree node that this view displays.
-     * @return The tree node.
+     * @return The node
      */
     @Nonnull
     TreeNode<U> getNode();

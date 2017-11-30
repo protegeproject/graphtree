@@ -30,7 +30,7 @@ public class GwtTest_TreeNodeViewImpl extends GWTTestCase {
 
     private static TreeNodeViewImpl<String> getTreeNodeView() {
         TreeNode<String> node = getTreeNode();
-        return new TreeNodeViewImpl<>(node);
+        return new TreeNodeViewImpl<>(node.getId(), node.getUserObject());
     }
 
     private static TreeNode<String> getTreeNode() {
@@ -40,7 +40,7 @@ public class GwtTest_TreeNodeViewImpl extends GWTTestCase {
 
     public void test_getNodeId_ShouldReturnSuppliedNodeId() {
         TreeNode<String> node = getTreeNode();
-        TreeNodeViewImpl view = new TreeNodeViewImpl<>(node);
+        TreeNodeViewImpl view = new TreeNodeViewImpl<>(node.getId(), node.getUserObject());
         assertEquals(node.getId(), view.getNodeId());
         finishTest();
     }

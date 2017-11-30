@@ -1,6 +1,6 @@
 package edu.stanford.protege.gwt.graphtree.client;
 
-import edu.stanford.protege.gwt.graphtree.shared.tree.NodeRenderingChanged;
+import edu.stanford.protege.gwt.graphtree.shared.tree.NodeUserObjectChanged;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeId;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
  * Date: 12/02/2014
  */
 @RunWith(MockitoJUnitRunner.class)
-public class NodeRenderingChangedHandler_TestCase<U extends Serializable> {
+public class NodeUserObjectChangedHandler_TestCase<U extends Serializable> {
 
     public static final String NEW_RENDERING = "Rendering";
 
@@ -34,28 +34,28 @@ public class NodeRenderingChangedHandler_TestCase<U extends Serializable> {
     private TreeNodeViewMapper<U> viewMapper;
 
     @Mock
-    private NodeRenderingChanged<U> nodeRenderingChanged;
+    private NodeUserObjectChanged<U> nodeUserObjectChanged;
 
     @Mock
     private U userObject;
 
-    private NodeRenderingChangedHandler<U> handler;
+    private NodeUserObjectChangedHandler<U> handler;
 
     @Mock
     private TreeNodeRenderer<U> renderer;
 
     @Before
     public void setUp() {
-        when(nodeRenderingChanged.getTreeNodeId()).thenReturn(node);
-        when(nodeRenderingChanged.getUserObject()).thenReturn(userObject);
+        when(nodeUserObjectChanged.getTreeNodeId()).thenReturn(node);
+        when(nodeUserObjectChanged.getUserObject()).thenReturn(userObject);
         when(viewMapper.getViewIfPresent(node)).thenReturn(Optional.of(view));
         when(renderer.getHtmlRendering(userObject)).thenReturn(NEW_RENDERING);
-        handler = new NodeRenderingChangedHandler<>(viewMapper, renderer);
+        handler = new NodeUserObjectChangedHandler<>(viewMapper, renderer);
     }
 
     @Test
     public void setNodeRenderingShouldBeCalledWithNewRenderingAsArgument() {
-        handler.handleNodeRenderingChanged(nodeRenderingChanged);
+        handler.handleNodeUserObjectChanged(nodeUserObjectChanged);
         verify(view, times(1)).setRendering(NEW_RENDERING);
     }
 

@@ -1,8 +1,5 @@
 package edu.stanford.protege.gwt.graphtree.shared.tree;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
-
 import javax.annotation.Nonnull;
 import java.io.Serializable;
 
@@ -15,17 +12,17 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Bio-Medical Informatics Research Group<br>
  * Date: 21/01/2014
  */
-public class NodeRenderingChanged<U extends Serializable> extends TreeNodeModelChange<U> {
+public class NodeUserObjectChanged<U extends Serializable> extends TreeNodeModelChange<U> {
 
     private TreeNodeId treeNode;
 
     private U userObject;
 
-    private NodeRenderingChanged() {
+    private NodeUserObjectChanged() {
     }
 
-    public NodeRenderingChanged(@Nonnull TreeNodeId treeNode,
-                                @Nonnull U userObject) {
+    public NodeUserObjectChanged(@Nonnull TreeNodeId treeNode,
+                                 @Nonnull U userObject) {
         this.treeNode = checkNotNull(treeNode);
         this.userObject = checkNotNull(userObject);
     }
@@ -47,7 +44,7 @@ public class NodeRenderingChanged<U extends Serializable> extends TreeNodeModelC
 
     @Override
     public int hashCode() {
-        return "NodeRenderingChanged".hashCode() + treeNode.hashCode();
+        return "NodeUserObjectChanged".hashCode() + treeNode.hashCode();
     }
 
     @Override
@@ -55,15 +52,15 @@ public class NodeRenderingChanged<U extends Serializable> extends TreeNodeModelC
         if(o == this) {
             return true;
         }
-        if(!(o instanceof NodeRenderingChanged)) {
+        if(!(o instanceof NodeUserObjectChanged)) {
             return false;
         }
-        NodeRenderingChanged other = (NodeRenderingChanged) o;
+        NodeUserObjectChanged other = (NodeUserObjectChanged) o;
         return this.treeNode.equals(other.treeNode);
     }
 
     @Override
     public String toString() {
-        return toStringHelper("NodeRenderingChanged").addValue(treeNode).toString();
+        return toStringHelper("NodeUserObjectChanged").addValue(treeNode).toString();
     }
 }

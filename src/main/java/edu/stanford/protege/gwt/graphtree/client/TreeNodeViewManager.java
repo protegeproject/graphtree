@@ -57,10 +57,10 @@ public class TreeNodeViewManager<U extends Serializable> implements TreeNodeView
         return view;
     }
 
-    private TreeNodeView<U> createView(TreeNodeData<U> treeNode) {
-        final TreeNodeView<U> view = new TreeNodeViewImpl<U>(treeNode.getTreeNode());
-        view.setRendering(renderer.getHtmlRendering(treeNode.getUserObject()));
-        view.setLeaf(treeNode.isLeaf());
+    private TreeNodeView<U> createView(TreeNodeData<U> data) {
+        final TreeNodeView<U> view = new TreeNodeViewImpl<U>(data.getId(), data.getUserObject());
+        view.setRendering(renderer.getHtmlRendering(data.getUserObject()));
+        view.setLeaf(data.isLeaf());
         view.asWidget().addStyleName(TREE_NODE_VIEW_STYLE_NAME);
         return view;
     }
