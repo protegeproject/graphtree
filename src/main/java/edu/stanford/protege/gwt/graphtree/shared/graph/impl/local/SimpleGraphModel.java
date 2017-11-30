@@ -9,6 +9,7 @@ import com.google.gwt.event.shared.SimpleEventBus;
 import edu.stanford.protege.gwt.graphtree.shared.Path;
 import edu.stanford.protege.gwt.graphtree.shared.graph.*;
 
+import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.*;
 
@@ -31,7 +32,9 @@ public class SimpleGraphModel<U extends Serializable> implements GraphModel<U>, 
 
     private EventBus eventBus;
 
-    private SimpleGraphModel(final Set<U> userObjectKeyNodes, final Multimap<U, U> edgeMap, final EventBus eventBus) {
+    private SimpleGraphModel(@Nonnull final Set<U> userObjectKeyNodes,
+                             @Nonnull final Multimap<U, U> edgeMap,
+                             @Nonnull final EventBus eventBus) {
         this.successorMap = LinkedHashMultimap.create();
         this.keyNodes = Sets.newLinkedHashSet();
         this.eventBus = checkNotNull(eventBus);
@@ -43,12 +46,13 @@ public class SimpleGraphModel<U extends Serializable> implements GraphModel<U>, 
         successorMap.putAll(edgeMap);
     }
 
-    public static <U extends Serializable> SimpleGraphModel<U> create(Set<U> keyNodes, Multimap<U, U> successorMap) {
-        return new SimpleGraphModel<U>(keyNodes, successorMap, new SimpleEventBus());
+    public static <U extends Serializable> SimpleGraphModel<U> create(@Nonnull Set<U> keyNodes,
+                                                                      @Nonnull Multimap<U, U> successorMap) {
+        return new SimpleGraphModel<>(keyNodes, successorMap, new SimpleEventBus());
     }
 
     public static <U extends Serializable> GraphModelBuilder<U> builder() {
-        return new GraphModelBuilder<U>();
+        return new GraphModelBuilder<>();
     }
 
     public Iterator<GraphEdge> iterator() {
@@ -61,7 +65,7 @@ public class SimpleGraphModel<U extends Serializable> implements GraphModel<U>, 
 
             public GraphEdge next() {
                 Map.Entry<U, U> entry = iterator.next();
-                return new GraphEdge<U>(GraphNode.get(entry.getKey(), false), getGraphNode(entry.getValue()));
+                return new GraphEdge<>(GraphNode.get(entry.getKey(), false), getGraphNode(entry.getValue()));
             }
 
             public void remove() {
@@ -71,7 +75,7 @@ public class SimpleGraphModel<U extends Serializable> implements GraphModel<U>, 
     }
 
     public void getKeyNodes(GetKeyNodesCallback<U> callback) {
-        callback.handleKeyNodes(new ArrayList<GraphNode<U>>(keyNodes));
+        callback.handleKeyNodes(new ArrayList<>(keyNodes));
     }
 
     @Override
@@ -88,7 +92,7 @@ public class SimpleGraphModel<U extends Serializable> implements GraphModel<U>, 
 
     @Override
     public void getPathsBetweenNodes(U fromUserObject, U toUserObject, GetPathsBetweenNodesCallback<U> callback) {
-        PathFinder<GraphNode<U>> pathFinder = new PathFinder<GraphNode<U>>(this);
+        PathFinder<GraphNode<U>> pathFinder = new PathFinder<>(this);
         Collection<Path<GraphNode<U>>> paths = pathFinder.getPaths(GraphNode.get(fromUserObject),
                 GraphNode.get(toUserObject));
         callback.handlePaths(paths);
@@ -96,9 +100,9 @@ public class SimpleGraphModel<U extends Serializable> implements GraphModel<U>, 
 
     @Override
     public void getPathsFromKeyNodes(U toUserObject, GetPathsBetweenNodesCallback<U> callback) {
-        List<Path<GraphNode<U>>> result = new ArrayList<Path<GraphNode<U>>>();
+        List<Path<GraphNode<U>>> result = new ArrayList<>();
         for (GraphNode<U> keyNode : keyNodes) {
-            PathFinder<GraphNode<U>> pathFinder = new PathFinder<GraphNode<U>>(this);
+            PathFinder<GraphNode<U>> pathFinder = new PathFinder<>(this);
             Collection<Path<GraphNode<U>>> paths = pathFinder.getPaths(keyNode, GraphNode.get(toUserObject));
             result.addAll(paths);
         }
@@ -107,7 +111,7 @@ public class SimpleGraphModel<U extends Serializable> implements GraphModel<U>, 
 
     @Override
     public Iterable<GraphNode<U>> getSuccessors(GraphNode<U> node) {
-        List<GraphNode<U>> result = new ArrayList<GraphNode<U>>();
+        List<GraphNode<U>> result = new ArrayList<>();
         for (U userObject : successorMap.get(node.getUserObject())) {
             result.add(GraphNode.get(userObject));
         }
@@ -121,15 +125,15 @@ public class SimpleGraphModel<U extends Serializable> implements GraphModel<U>, 
     public void addEdge(U predecessor, U successor) {
         if (successorMap.put(predecessor, successor)) {
             final boolean sink = isSink(successor);
-            GraphEdge<U> edge = new GraphEdge<U>(GraphNode.get(predecessor, false), getGraphNode(successor));
-            GraphModelChangedEvent.fire(eventBus, new AddEdge<U>(edge));
+            GraphEdge<U> edge = new GraphEdge<>(GraphNode.get(predecessor, false), getGraphNode(successor));
+            GraphModelChangedEvent.fire(eventBus, new AddEdge<>(edge));
         }
     }
 
     public void removeEdge(U predecessor, U successor) {
         if (successorMap.remove(predecessor, successor)) {
-            GraphEdge<U> edge = new GraphEdge<U>(GraphNode.get(predecessor, false), getGraphNode(successor));
-            GraphModelChangedEvent.fire(eventBus, new RemoveEdge<U>(edge));
+            GraphEdge<U> edge = new GraphEdge<>(GraphNode.get(predecessor, false), getGraphNode(successor));
+            GraphModelChangedEvent.fire(eventBus, new RemoveEdge<>(edge));
         }
     }
 
@@ -164,7 +168,7 @@ public class SimpleGraphModel<U extends Serializable> implements GraphModel<U>, 
         }
 
         public SimpleGraphModel<U> build() {
-            return new SimpleGraphModel<U>(keyNodes, successorMap, eventBus);
+            return new SimpleGraphModel<>(keyNodes, successorMap, eventBus);
         }
     }
 }
