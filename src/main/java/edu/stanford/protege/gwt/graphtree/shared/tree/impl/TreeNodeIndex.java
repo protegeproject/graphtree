@@ -2,6 +2,7 @@ package edu.stanford.protege.gwt.graphtree.shared.tree.impl;
 
 
 import com.google.common.collect.*;
+import com.google.gwt.user.client.Window;
 import edu.stanford.protege.gwt.graphtree.shared.UserObjectKeyProvider;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNode;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeData;
@@ -115,7 +116,7 @@ public class TreeNodeIndex<U extends Serializable, K> {
     public void updateUserObject(@Nonnull U userObject) {
         K key = keyProvider.getKey(checkNotNull(userObject));
         // Replace TreeNodeData that is identified by the user object key
-        userObjectKey2Data.removeAll(key).forEach(data -> {
+        new ArrayList<>(userObjectKey2Data.removeAll(key)).forEach(data -> {
             TreeNodeId id = data.getId();
             TreeNodeData<U> replacementData = new TreeNodeData<>(new TreeNode<>(id, userObject), data.isLeaf());
             userObjectKey2Data.put(key, replacementData);

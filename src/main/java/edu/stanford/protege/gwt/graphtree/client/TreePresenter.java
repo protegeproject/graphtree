@@ -2,6 +2,7 @@ package edu.stanford.protege.gwt.graphtree.client;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.SelectionChangeEvent;
@@ -282,7 +283,7 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
     }
 
     private void handleTreeNodeModelChange(TreeNodeModelChange<U> change) {
-
+        GWT.log("[TreePresenter] Handling TreeModelChange: " + change);
         change.accept(new TreeNodeModelChangeVisitor<U>() {
             public void visit(RootNodeAdded<U> rootNodeAdded) {
                 rootNodeAddedHandler.handleRootNodeAdded(rootNodeAdded);

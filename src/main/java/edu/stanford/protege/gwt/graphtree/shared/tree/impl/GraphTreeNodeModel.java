@@ -3,6 +3,7 @@ package edu.stanford.protege.gwt.graphtree.shared.tree.impl;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import edu.stanford.protege.gwt.graphtree.shared.Path;
@@ -142,10 +143,12 @@ public class GraphTreeNodeModel<U extends Serializable, K> implements TreeNodeMo
     }
 
     private void handleGraphModelChanges(List<GraphModelChange<U>> changesList) {
+        GWT.log("[GraphTreeNodeModel] Handling graph model changes: " + changesList);
         List<GraphModelChange<U>> topologicallyOrderedChanges = new GraphModelChangeTidier<>(changesList)
                 .getTidiedChanges();
         final List<TreeNodeModelChange> resultingChanges = new ArrayList<>();
         for (GraphModelChange<U> change : topologicallyOrderedChanges) {
+            GWT.log("[GraphTreeNodeModel] Handling graph model changes.  Change: " + change);
             change.accept(new GraphModelChangeVisitor<U>() {
                 public void visit(AddRootNode<U> addRootNode) {
                     handleAddKeyNode(addRootNode, resultingChanges);
@@ -223,10 +226,12 @@ public class GraphTreeNodeModel<U extends Serializable, K> implements TreeNodeMo
     private void handleUpdateUserObject(UpdateUserObject<U> updateUserObject, List<TreeNodeModelChange> resultingChanges) {
         U userObject = updateUserObject.getUserObject();
         K userObjectKey = keyProvider.getKey(userObject);
+        GWT.log("[GraphTreeNodeModel] Updating user object: " + userObject);
+        GWT.log("[GraphTreeNodeModel] Key for user object: " + userObjectKey);
+        treeNodeIndex.updateUserObject(userObject);
         for (TreeNodeData<U> node : treeNodeIndex.getTreeNodesForUserObjectKey(userObjectKey)) {
             resultingChanges.add(new NodeUserObjectChanged<>(node.getId(), node.getUserObject()));
         }
-        treeNodeIndex.updateUserObject(userObject);
     }
 
     private void removeChild(TreeNodeId parentNode,
