@@ -51,8 +51,10 @@ public class TreeNodeIndex<U extends Serializable, K> {
 
 
     public boolean containsChildWithUserObject(@Nonnull TreeNodeId parent, @Nonnull U userObject) {
-        for(TreeNodeData nodeWithUserObject : userObjectKey2Data.get(keyProvider.getKey(userObject))) {
-            if(parent2ChildMap.containsEntry(parent, nodeWithUserObject)) {
+        K userObjectKey = keyProvider.getKey(userObject);
+        for(TreeNodeData nodeWithUserObject : userObjectKey2Data.get(userObjectKey)) {
+            TreeNodeId nodeWithUserObjectId = nodeWithUserObject.getId();
+            if(parent2ChildMap.containsEntry(parent, nodeWithUserObjectId)) {
                 return true;
             }
         }
@@ -60,7 +62,7 @@ public class TreeNodeIndex<U extends Serializable, K> {
     }
 
     public void addRoot(@Nonnull TreeNodeData<U> node) {
-        if(parent2ChildMap.containsValue(node)) {
+        if(parent2ChildMap.containsValue(node.getId())) {
             throw new RuntimeException("Node is already a child of another node");
         }
         if (roots.add(node.getId())) {
@@ -82,7 +84,7 @@ public class TreeNodeIndex<U extends Serializable, K> {
     }
 
     public boolean addChild(@Nonnull TreeNodeId parentId, @Nonnull TreeNodeData<U> childNodeData) {
-        if(parent2ChildMap.containsValue(childNodeData)) {
+        if(parent2ChildMap.containsValue(childNodeData.getId())) {
             throw new RuntimeException("Node is already a child of another node");
         }
         boolean added = parent2ChildMap.put(parentId, childNodeData.getId());
@@ -94,21 +96,21 @@ public class TreeNodeIndex<U extends Serializable, K> {
         return added;
     }
 
-    public void removeChild(@Nonnull TreeNodeId parentNode,
-                            @Nonnull TreeNodeId childNode,
+    public void removeChild(@Nonnull TreeNodeId parentNodeId,
+                            @Nonnull TreeNodeId childNodeId,
                             @Nonnull Multimap<TreeNodeId, TreeNodeId> removedBranches) {
-        TreeNodeData<U> childData = id2Data.get(childNode);
+        TreeNodeData<U> childData = id2Data.get(childNodeId);
         if(childData == null) {
             return;
         }
-        boolean removed = parent2ChildMap.remove(parentNode, childData.getId());
+        boolean removed = parent2ChildMap.remove(parentNodeId, childData.getId());
         if(removed) {
-            child2ParentMap.remove(childNode);
-            id2Data.remove(childNode);
-            removedBranches.put(parentNode, childNode);
+            child2ParentMap.remove(childNodeId);
+            id2Data.remove(childNodeId);
+            removedBranches.put(parentNodeId, childNodeId);
             userObjectKey2Data.remove(keyProvider.getKey(childData.getUserObject()), childData);
-            for(TreeNodeData<U> grandChildNode : getChildren(childNode)) {
-                removeChild(childNode, grandChildNode.getId(), removedBranches);
+            for(TreeNodeData<U> grandChildNode : getChildren(childNodeId)) {
+                removeChild(childNodeId, grandChildNode.getId(), removedBranches);
             }
         }
     }

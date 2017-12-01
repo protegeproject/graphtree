@@ -109,4 +109,15 @@ public class TreeNodeIndex_ParentChild_TestCase<U extends Serializable> {
         assertThat(index.getParent(childId), equalTo(Optional.empty()));
     }
 
+    @Test
+    public void shouldContainChildNodeWithUserObject() {
+        index.addChild(parentId, child);
+        assertThat(index.containsChildWithUserObject(parentId, childObject), is(true));
+    }
+
+    @Test
+    public void shouldNotContainChildNodeWithUserObject() {
+        assertThat(index.containsChildWithUserObject(parentId, childObject), is(false));
+    }
+
 }

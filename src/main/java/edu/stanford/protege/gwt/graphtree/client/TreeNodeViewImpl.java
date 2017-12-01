@@ -79,6 +79,8 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
 
     private U userObject;
 
+    private boolean loaded = false;
+
     public TreeNodeViewImpl(@Nonnull TreeNodeId nodeId, U userObject) {
         HTMLPanel rootElement = ourUiBinder.createAndBindUi(this);
         initWidget(rootElement);

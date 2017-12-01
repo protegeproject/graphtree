@@ -182,10 +182,10 @@ public class GraphTreeNodeModel<U extends Serializable, K> implements TreeNodeMo
         resultingChanges.add(new RootNodeAdded<>(rootNode));
     }
 
-    private void handleRemoveKeyNode(RemoveRootNode removeRootNode, List<TreeNodeModelChange> resultingChanges) {
+    private void handleRemoveKeyNode(RemoveRootNode<U> removeRootNode, List<TreeNodeModelChange> resultingChanges) {
         for (TreeNodeData<U> rootNode : treeNodeIndex.getRoots()) {
-            GraphNode keyNode = removeRootNode.getNode();
-            if (rootNode.getUserObject().equals(keyNode.getUserObject())) {
+            GraphNode<U> rootGraphNode = removeRootNode.getNode();
+            if (keyProvider.getKey(rootNode.getUserObject()).equals(keyProvider.getKey(rootGraphNode.getUserObject()))) {
                 treeNodeIndex.removeRoot(rootNode.getId());
                 resultingChanges.add(new RootNodeRemoved<U>(rootNode.getId()));
             }
@@ -235,11 +235,11 @@ public class GraphTreeNodeModel<U extends Serializable, K> implements TreeNodeMo
     }
 
     private void removeChild(TreeNodeId parentNode,
-                             GraphNode<?> successor,
+                             GraphNode<U> successor,
                              List<TreeNodeModelChange> resultingChanges) {
         Multimap<TreeNodeId, TreeNodeId> removedBranches = LinkedHashMultimap.create();
         for (TreeNodeData<U> childNode : treeNodeIndex.getChildren(parentNode)) {
-            if (childNode.getUserObject().equals(successor.getUserObject())) {
+            if (keyProvider.getKey(childNode.getUserObject()).equals(keyProvider.getKey(successor.getUserObject()))) {
                 treeNodeIndex.removeChild(parentNode, childNode.getId(), removedBranches);
                 if (!removedBranches.isEmpty()) {
                     for (TreeNodeId removedParentNode : removedBranches.keySet()) {
