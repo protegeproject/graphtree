@@ -3,6 +3,7 @@ package edu.stanford.protege.gwt.graphtree.client;
 import com.google.common.collect.HashMultimap;
 import com.google.gwt.event.shared.HandlerRegistration;
 import edu.stanford.protege.gwt.graphtree.shared.Path;
+import edu.stanford.protege.gwt.graphtree.shared.UserObjectKeyProvider;
 import edu.stanford.protege.gwt.graphtree.shared.tree.*;
 
 import javax.annotation.Nonnull;
@@ -24,6 +25,12 @@ public class NullTreeNodeModel<U extends Serializable, K> implements TreeNodeMod
     @Override
     public HandlerRegistration addTreeNodeModelEventHandler(@Nonnull TreeNodeModelEventHandler handler) {
         return NULL_HANDLER_REGISTRATION;
+    }
+
+    @Nonnull
+    @Override
+    public UserObjectKeyProvider<U, K> getKeyProvider() {
+        return userObject -> null;
     }
 
     @Override

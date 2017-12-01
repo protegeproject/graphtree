@@ -65,6 +65,12 @@ public class GraphTreeNodeModel<U extends Serializable, K> implements TreeNodeMo
         return treeNodeModel;
     }
 
+    @Override
+    @Nonnull
+    public UserObjectKeyProvider<U, K> getKeyProvider() {
+        return keyProvider;
+    }
+
     private void attachListeners() {
         graphModelHandlerRegistration = graphModel.addGraphModelHandler(event -> handleGraphModelChanges(event.getChanges()));
     }

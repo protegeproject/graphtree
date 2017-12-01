@@ -172,12 +172,33 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
         selectionModel.setSelected(object, selected);
     }
 
-    public void setSelected(Object key) {
-//        Collection<TreeNodeView<U>> views = viewManager.getViewsForKey(key);
-//        if(!views.isEmpty()) {
-//            TreeNodeView<U> view = views.iterator().next();
-//            setSelected(view.getNodeId(), true);
-//        }
+    public void setSelected(@Nonnull Path<K> keyPath, boolean selected, @Nonnull Runnable callback) {
+        keyPath.getLast().ifPresent(lastKey -> {
+            model.getTreeNodesForUserObjectKey(lastKey, nodes -> {
+                nodes.forEach(node -> {
+                    Path<TreeNodeData<U>> pathToRoot = model.getPathToRoot(node.getId());
+                    Path<K> curKeyPath = pathToRoot.transform(element -> model.getKeyProvider().getKey(element.getUserObject()));
+                    if(keyPath.equals(curKeyPath)) {
+                        pathToRoot.getLast().ifPresent(tn -> setSelected(tn.getTreeNode(), selected));
+                    }
+                });
+                callback.run();
+            });
+        });
+    }
+
+    public void setExpanded(Path<K> keyPath) {
+        keyPath.getLast().ifPresent(lastKey -> {
+            model.getTreeNodesForUserObjectKey(lastKey, nodes -> {
+                nodes.forEach(node -> {
+                    Path<TreeNodeData<U>> pathToRoot = model.getPathToRoot(node.getId());
+                    Path<K> curKeyPath = pathToRoot.transform(element -> model.getKeyProvider().getKey(element.getUserObject()));
+                    if(keyPath.equals(curKeyPath)) {
+                        pathToRoot.forEach(tnd -> viewManager.getViewIfPresent(tnd.getId()).ifPresent(TreeNodeView::setExpanded));
+                    }
+                });
+            });
+        });
     }
 
     public Object getKey(TreeNode<U> item) {

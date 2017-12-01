@@ -88,12 +88,12 @@ public class TreeWidget<U extends Serializable, K> extends Composite implements 
         treePresenter.setSelected(object, selected);
     }
 
-    public Object getKey(TreeNode<U> item) {
-        return treePresenter.getKey(item);
+    public void setSelected(Path<K> keyPath, boolean selected, Runnable callback) {
+        treePresenter.setSelected(keyPath, selected, callback);
     }
 
-    public void setSelected(Object key) {
-        treePresenter.setSelected(key);
+    public void setExpanded(Path<K> keyPath) {
+        treePresenter.setExpanded(keyPath);
     }
 
     public void clearPruning() {

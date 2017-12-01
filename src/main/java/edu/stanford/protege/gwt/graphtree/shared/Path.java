@@ -72,7 +72,7 @@ public class Path<N> implements Iterable<N>, Serializable {
         return path.contains(element);
     }
 
-    public <T extends Serializable> Path<T> transform(Transform<N, T> transform) {
+    public <T> Path<T> transform(Transform<N, T> transform) {
         List<T> result = new ArrayList<T>(path.size());
         for(N element : path) {
             result.add(transform.transform(element));
