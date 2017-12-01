@@ -63,6 +63,8 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
 
     private TreeNodeViewState viewState = TreeNodeViewState.COLLAPSED;
 
+    private boolean pruned = false;
+
     private boolean leaf = true;
 
     private int depth;
@@ -190,6 +192,21 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
         else if(state == TreeNodeViewState.COLLAPSED) {
             animateClosed();
         }
+    }
+
+    @Override
+    public void setPruned(boolean pruned) {
+        if(this.pruned == pruned) {
+            return;
+        }
+        this.pruned = pruned;
+        if(pruned) {
+            addStyleName(RESOURCES.style().pruned());
+        }
+        else {
+            removeStyleName(RESOURCES.style().pruned());
+        }
+        updateHandleImage();
     }
 
     public boolean isEmpty() {
@@ -406,12 +423,16 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
             handleImageResourceUri = RESOURCES.loading().getSafeUri().asString();
         }
         else {
-
-            if(viewState == TreeNodeViewState.COLLAPSED) {
-                handleImageResourceUri = RESOURCES.collapsed().getSafeUri().asString();
+            if(pruned) {
+                handleImageResourceUri = RESOURCES.pruned().getSafeUri().asString();
             }
             else {
-                handleImageResourceUri = RESOURCES.expanded().getSafeUri().asString();
+                if(viewState == TreeNodeViewState.COLLAPSED) {
+                    handleImageResourceUri = RESOURCES.collapsed().getSafeUri().asString();
+                }
+                else {
+                    handleImageResourceUri = RESOURCES.expanded().getSafeUri().asString();
+                }
             }
         }
         handleImage.setUrl(handleImageResourceUri);

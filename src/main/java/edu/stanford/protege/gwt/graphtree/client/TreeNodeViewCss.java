@@ -27,4 +27,7 @@ public interface TreeNodeViewCss extends CssResource {
 
     @ClassName("gt-tree__handle")
     String handle();
+
+    @ClassName("gt-tree__pruned")
+    String pruned();
 }

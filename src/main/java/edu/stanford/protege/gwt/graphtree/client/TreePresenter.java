@@ -192,6 +192,7 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
             while (iterator.hasNext()) {
                 TreeNodeView itView = iterator.next();
                 itView.setHidden(false);
+                itView.setPruned(false);
             }
         }
         scrollSelectionIntoView();
@@ -218,6 +219,7 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
                 view.setHidden(true);
             }
             else {
+                view.setPruned(true);
                 if (!tailNodes.contains(view.getNodeId())) {
                     for (TreeNodeView<U> childView : view.getChildViews()) {
                         queue.add(childView);

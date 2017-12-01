@@ -109,4 +109,6 @@ public interface TreeNodeView<U extends Serializable> extends IsWidget {
     IsWidget getDragWidget();
 
     void setHidden(boolean hidden);
+
+    void setPruned(boolean b);
 }
