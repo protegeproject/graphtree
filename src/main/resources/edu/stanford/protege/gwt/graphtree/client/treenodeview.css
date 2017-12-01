@@ -1,24 +1,23 @@
-@external gt-tree;
-@external gt-tree-row;
+@external gt-*;
 
 .gt-tree {
     outline: none;
 }
 
 .gt-tree__row {
-    border-bottom: 1px solid #fafafa;
 }
 
 .gt-tree__row:hover {
-    background: #f5f5f5;
+    background-color: #f5f5f5;
 }
 
 .gt-tree__row--selected {
-    background: #d5e1fa;
+    background-color: literal("var(--gt-tree__row--selected--background-color, #d5e1fa)");
+    color: literal("var(--gt-tree__row--selected--color)");
 }
 
 .gt-tree__row--selected:hover {
-    background: #d5e1fa;
+    background-color: literal("var(--gt-tree__row--selected--background-color, #d5e1fa)");
 }
 
 .gt-tree__handle {
@@ -29,6 +28,6 @@
 }
 
 .gt-tree__row--drag-over {
-    background: royalblue;
+    background-color: royalblue;
     color: white;
 }
