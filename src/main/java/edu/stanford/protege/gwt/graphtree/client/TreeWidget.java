@@ -39,7 +39,7 @@ public class TreeWidget<U extends Serializable, K> extends Composite implements 
     }
 
     public TreeWidget(TreeNodeModel<U, K> model) {
-        this(model, new TreeNodeRendererImpl<U>());
+        this(model, new TreeNodeRendererImpl<>());
     }
 
     public TreeWidget(TreeNodeModel<U, K> model, TreeNodeRenderer<U> renderer) {

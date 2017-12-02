@@ -13,7 +13,7 @@ import java.util.List;
  */
 public final class TreeNodeModelEvent extends GwtEvent<TreeNodeModelEventHandler> {
 
-    private static final Type<TreeNodeModelEventHandler> TYPE = new Type<TreeNodeModelEventHandler>();
+    private static final Type<TreeNodeModelEventHandler> TYPE = new Type<>();
 
     private ImmutableList<TreeNodeModelChange> changes;
 

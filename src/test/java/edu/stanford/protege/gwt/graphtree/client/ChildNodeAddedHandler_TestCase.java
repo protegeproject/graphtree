@@ -49,7 +49,7 @@ public class ChildNodeAddedHandler_TestCase<U extends Serializable> {
         when(viewManager.getView(childNodeData)).thenReturn(childView);
         when(childNodeAdded.getChildNode()).thenReturn(childNodeData);
         when(childNodeAdded.getParentNode()).thenReturn(parentNodeId);
-        handler = new ChildNodeAddedHandler<U>(viewManager);
+        handler = new ChildNodeAddedHandler<>(viewManager);
     }
 
     @Test

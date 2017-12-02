@@ -38,9 +38,9 @@ public class TopologicalSorter<U extends Serializable> {
     }
 
     public Optional<List<GraphNode<U>>> getTopologicalOrdering() {
-        List<GraphNode<U>> result = new ArrayList<GraphNode<U>>();
-        Set<GraphNode<U>> marked = new HashSet<GraphNode<U>>();
-        Set<GraphNode<U>> tempMarked = new HashSet<GraphNode<U>>();
+        List<GraphNode<U>> result = new ArrayList<>();
+        Set<GraphNode<U>> marked = new HashSet<>();
+        Set<GraphNode<U>> tempMarked = new HashSet<>();
         for (GraphNode<U> node : graph.keySet()) {
             if (!marked.contains(node)) {
                 tempMarked.clear();

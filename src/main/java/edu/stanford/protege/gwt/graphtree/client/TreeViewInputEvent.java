@@ -33,7 +33,7 @@ public class TreeViewInputEvent<U extends Serializable> {
     }
 
     public static <U extends Serializable> Builder<U> builder() {
-        return new Builder<U>();
+        return new Builder<>();
     }
 
     public boolean isAltDown() {
@@ -89,7 +89,7 @@ public class TreeViewInputEvent<U extends Serializable> {
 
 
         public TreeViewInputEvent<U> build() {
-            return new TreeViewInputEvent<U>(altDown, ctrlDown, shiftDown);
+            return new TreeViewInputEvent<>(altDown, ctrlDown, shiftDown);
         }
     }
 }

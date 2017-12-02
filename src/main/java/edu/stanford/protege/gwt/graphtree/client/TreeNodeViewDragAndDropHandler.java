@@ -48,7 +48,7 @@ public class TreeNodeViewDragAndDropHandler<U extends Serializable> implements H
     @Inject
     public TreeNodeViewDragAndDropHandler(HasPendingChanges<U> hasPendingChanges) {
         this.hasPendingChanges = hasPendingChanges;
-        this.treeNodeDropHandler = new NoOpTreeNodeDropHandler<U>();
+        this.treeNodeDropHandler = new NoOpTreeNodeDropHandler<>();
     }
 
     public void setDropHandler(TreeNodeDropHandler<U> handler) {

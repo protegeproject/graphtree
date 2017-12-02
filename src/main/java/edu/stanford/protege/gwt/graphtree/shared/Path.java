@@ -24,7 +24,7 @@ public class Path<N> implements Iterable<N>, Serializable {
         }
     };
 
-    private List<N> path = new ArrayList<N>();
+    private List<N> path = new ArrayList<>();
 
 
     @SuppressWarnings("unchecked")
@@ -39,12 +39,12 @@ public class Path<N> implements Iterable<N>, Serializable {
     }
 
     public Path(List<N> path) {
-        this.path = new ArrayList<N>(path);
+        this.path = new ArrayList<>(path);
     }
 
     @SafeVarargs
     public static <N> Path<N> asPath(N... elements) {
-        return new Path<N>(Arrays.<N>asList(elements));
+        return new Path<>(Arrays.<N>asList(elements));
     }
 
     @SuppressWarnings("unchecked")
@@ -53,7 +53,7 @@ public class Path<N> implements Iterable<N>, Serializable {
     }
 
     public List<N> asList() {
-        return new ArrayList<N>(path);
+        return new ArrayList<>(path);
     }
 
     public int getLength() {
@@ -73,11 +73,11 @@ public class Path<N> implements Iterable<N>, Serializable {
     }
 
     public <T> Path<T> transform(Transform<N, T> transform) {
-        List<T> result = new ArrayList<T>(path.size());
+        List<T> result = new ArrayList<>(path.size());
         for(N element : path) {
             result.add(transform.transform(element));
         }
-        return new Path<T>(result);
+        return new Path<>(result);
     }
 
     @Override
@@ -108,7 +108,7 @@ public class Path<N> implements Iterable<N>, Serializable {
     }
 
     public Path<N> reverse() {
-        return new Path<N>(Lists.<N>reverse(path));
+        return new Path<>(Lists.<N>reverse(path));
     }
 
     @Override

@@ -10,7 +10,7 @@ import com.google.gwt.event.shared.GwtEvent;
  */
 public class TreeNodeModelReplacedEvent extends GwtEvent<TreeNodeModelReplacedHandler> {
 
-    private static final Type<TreeNodeModelReplacedHandler> TYPE = new Type<TreeNodeModelReplacedHandler>();
+    private static final Type<TreeNodeModelReplacedHandler> TYPE = new Type<>();
 
     @Override
     public Type<TreeNodeModelReplacedHandler> getAssociatedType() {

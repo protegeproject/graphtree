@@ -22,7 +22,7 @@ public class RemoveRootNode<U extends Serializable> extends GraphModelChange<U> 
     }
 
     public AddRootNode<U> getReverseChange() {
-        return new AddRootNode<U>(rootNode);
+        return new AddRootNode<>(rootNode);
     }
 
     public GraphNode<U> getNode() {

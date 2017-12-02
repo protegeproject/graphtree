@@ -34,7 +34,7 @@ public class TreeViewEventTargetFinder<U extends Serializable> {
                 }
                 java.util.Optional<TreeNodeView<U>> view = viewManager.getTreeNodeView(targetElement);
                 if (view.isPresent()) {
-                    return Optional.of(new TreeNodeViewEventTarget<U>(view.get(), handleIsTarget));
+                    return Optional.of(new TreeNodeViewEventTarget<>(view.get(), handleIsTarget));
                 }
                 targetElement = targetElement.getParentElement();
             }

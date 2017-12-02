@@ -37,18 +37,18 @@ public class GraphModelChangeTidier_TopologicalOrdering_TestCase<T extends Seria
 
     @Before
     public void initialiseEdges() {
-        edgeAB = new GraphEdge<T>(nodeA, nodeB);
-        edgeBC = new GraphEdge<T>(nodeB, nodeC);
+        edgeAB = new GraphEdge<>(nodeA, nodeB);
+        edgeBC = new GraphEdge<>(nodeB, nodeC);
     }
 
     @Test
     public void addEdge_AB_FollowedBy_addEdge_BC_shouldPreserveOrdering() {
-        AddEdge<T> addAB = new AddEdge<T>(edgeAB);
-        AddEdge<T> addBC = new AddEdge<T>(edgeBC);
+        AddEdge<T> addAB = new AddEdge<>(edgeAB);
+        AddEdge<T> addBC = new AddEdge<>(edgeBC);
         List<GraphModelChange<T>> changes = Lists.newArrayList();
         changes.add(addAB);
         changes.add(addBC);
-        GraphModelChangeTidier<T> filter = new GraphModelChangeTidier<T>(changes);
+        GraphModelChangeTidier<T> filter = new GraphModelChangeTidier<>(changes);
         List<GraphModelChange<T>> result = filter.getTidiedChanges();
         List<GraphModelChange<T>> expected = Lists.newArrayList();
         expected.add(addAB);
@@ -58,12 +58,12 @@ public class GraphModelChangeTidier_TopologicalOrdering_TestCase<T extends Seria
 
     @Test
     public void addEdge_BC_FollowedBy_addEdge_AB_shouldOrderChangesTopologically() {
-        AddEdge<T> addAB = new AddEdge<T>(edgeAB);
-        AddEdge<T> addBC = new AddEdge<T>(edgeBC);
+        AddEdge<T> addAB = new AddEdge<>(edgeAB);
+        AddEdge<T> addBC = new AddEdge<>(edgeBC);
         List<GraphModelChange<T>> changes = Lists.newArrayList();
         changes.add(addBC);
         changes.add(addAB);
-        GraphModelChangeTidier<T> filter = new GraphModelChangeTidier<T>(changes);
+        GraphModelChangeTidier<T> filter = new GraphModelChangeTidier<>(changes);
         List<GraphModelChange<T>> result = filter.getTidiedChanges();
         List<GraphModelChange<T>> expected = Lists.newArrayList();
         expected.add(addAB);
@@ -73,12 +73,12 @@ public class GraphModelChangeTidier_TopologicalOrdering_TestCase<T extends Seria
 
     @Test
     public void RemoveEdge_AB_FollowedBy_RemoveEdge_BC_ShouldOrderReverseTopologically() {
-        RemoveEdge<T> remAB = new RemoveEdge<T>(edgeAB);
-        RemoveEdge<T> remBC = new RemoveEdge<T>(edgeBC);
+        RemoveEdge<T> remAB = new RemoveEdge<>(edgeAB);
+        RemoveEdge<T> remBC = new RemoveEdge<>(edgeBC);
         List<GraphModelChange<T>> changes = Lists.newArrayList();
         changes.add(remAB);
         changes.add(remBC);
-        GraphModelChangeTidier<T> filter = new GraphModelChangeTidier<T>(changes);
+        GraphModelChangeTidier<T> filter = new GraphModelChangeTidier<>(changes);
         List<GraphModelChange<T>> result = filter.getTidiedChanges();
         List<GraphModelChange<T>> expected = Lists.newArrayList();
         expected.add(remBC);

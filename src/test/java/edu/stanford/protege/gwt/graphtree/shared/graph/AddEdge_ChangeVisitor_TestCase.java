@@ -36,7 +36,7 @@ public class AddEdge_ChangeVisitor_TestCase<T extends Serializable> {
 
     @Test
     public void AddEdgeAcceptShouldVisitAddEdge() {
-        AddEdge<T> addEdge = new AddEdge<T>(edge);
+        AddEdge<T> addEdge = new AddEdge<>(edge);
         addEdge.accept(visitor);
         Mockito.verify(visitor, times(1)).visit(captor.capture());
         assertThat(captor.getValue(), equalTo(addEdge));

@@ -45,7 +45,7 @@ public class TreeNodeViewTraverser<U extends Serializable> {
     }
 
     public Iterator<TreeNodeView<U>> iterator(TreeNodeView<U> fromView) {
-        return new TreeNodeViewIterator<U>(fromView);
+        return new TreeNodeViewIterator<>(fromView);
     }
 
     public Optional<TreeNodeView<U>> getFirstVisibleAncestor(final TreeNodeView<U> fromView) {

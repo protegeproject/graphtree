@@ -21,17 +21,17 @@ public class PathFinder<N> {
     }
 
     public Collection<Path<N>> getPaths(N from, N to) {
-        HashSet<Path<N>> result = new HashSet<Path<N>>();
-        ArrayList<N> currentPath = new ArrayList<N>();
+        HashSet<Path<N>> result = new HashSet<>();
+        ArrayList<N> currentPath = new ArrayList<>();
         currentPath.add(from);
-        doIt(from, to, from, currentPath, new HashSet<N>(), result);
+        doIt(from, to, from, currentPath, new HashSet<>(), result);
         return result;
     }
 
     public void doIt(N from, N to, N current, List<N> currentPath, Set<N> visited, Set<Path<N>> paths) {
         if(current.equals(to)) {
             // Got a path
-            paths.add(new Path<N>(currentPath));
+            paths.add(new Path<>(currentPath));
             return;
         }
         for(N successor : hasSuccessors.getSuccessors(current)) {

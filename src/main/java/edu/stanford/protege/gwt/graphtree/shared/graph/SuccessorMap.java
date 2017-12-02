@@ -36,7 +36,7 @@ public class SuccessorMap<U extends Serializable> implements Serializable {
     }
 
     public static <U extends Serializable> Builder<U> builder() {
-        return new Builder<U>();
+        return new Builder<>();
     }
 
     public static class Builder<U extends Serializable> implements Serializable {
@@ -53,12 +53,12 @@ public class SuccessorMap<U extends Serializable> implements Serializable {
         }
 
         public SuccessorMap<U> build() {
-            return new SuccessorMap<U>(ImmutableMultimap.copyOf(successorMap));
+            return new SuccessorMap<>(ImmutableMultimap.copyOf(successorMap));
         }
 
         public Builder<U> sort(Comparator<GraphNode<U>> comparator) {
             for(GraphNode<U> predecessor : new ArrayList<>(successorMap.keySet())) {
-                List<GraphNode<U>> successors = new ArrayList<GraphNode<U>>(successorMap.get(predecessor));
+                List<GraphNode<U>> successors = new ArrayList<>(successorMap.get(predecessor));
                 successors.sort(comparator);
                 successorMap.replaceValues(predecessor, successors);
             }

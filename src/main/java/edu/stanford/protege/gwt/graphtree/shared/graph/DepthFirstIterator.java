@@ -18,9 +18,9 @@ public class DepthFirstIterator<N> implements Iterator<N> {
 
     public DepthFirstIterator(N N, HasSuccessors<N> hasSuccessors) {
         this.hasSuccessors = hasSuccessors;
-        stack = new Stack<N>();
+        stack = new Stack<>();
         stack.add(N);
-        visited = new HashSet<N>();
+        visited = new HashSet<>();
         visited.add(N);
     }
 

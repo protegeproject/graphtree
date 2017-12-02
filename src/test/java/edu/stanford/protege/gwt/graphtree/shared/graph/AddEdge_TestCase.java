@@ -24,28 +24,28 @@ public class AddEdge_TestCase<T extends Serializable> {
 
     @Test
     public void equalsShouldReturnTrueForEqualEdges() {
-        AddEdge<T> addEdgeA = new AddEdge<T>(edge);
-        AddEdge<T> addEdgeB = new AddEdge<T>(edge);
+        AddEdge<T> addEdgeA = new AddEdge<>(edge);
+        AddEdge<T> addEdgeB = new AddEdge<>(edge);
         assertThat(addEdgeA, equalTo(addEdgeB));
     }
 
     @Test
     public void hashCodeShouldReturnTrueForEqualEdges() {
-        AddEdge<T> addEdgeA = new AddEdge<T>(edge);
-        AddEdge<T> addEdgeB = new AddEdge<T>(edge);
+        AddEdge<T> addEdgeA = new AddEdge<>(edge);
+        AddEdge<T> addEdgeB = new AddEdge<>(edge);
         assertThat(addEdgeA.hashCode(), equalTo(addEdgeB.hashCode()));
     }
 
     @Test
     public void equalToNullShouldReturnFalse() {
-        AddEdge<T> addEdge = new AddEdge<T>(edge);
+        AddEdge<T> addEdge = new AddEdge<>(edge);
         assertThat(addEdge.equals(null), equalTo(false));
     }
 
     @Test
     public void getReverseChangeShouldReturnRemoveEdgeWithSameEdge() {
-        AddEdge<T> addEdge = new AddEdge<T>(edge);
-        RemoveEdge<T> expected = new RemoveEdge<T>(edge);
+        AddEdge<T> addEdge = new AddEdge<>(edge);
+        RemoveEdge<T> expected = new RemoveEdge<>(edge);
         assertThat(addEdge.getReverseChange(), equalTo(expected));
     }
 

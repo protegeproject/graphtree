@@ -30,8 +30,8 @@ public class GraphModelChangeTidier_TestCase<T extends Serializable> {
     @Test
     public void addEdgeShouldReturnAddEdge() {
         List<GraphModelChange<T>> changes = Lists.newArrayList();
-        changes.add(new AddEdge<T>(edge));
-        GraphModelChangeTidier<T> filter = new GraphModelChangeTidier<T>(changes);
+        changes.add(new AddEdge<>(edge));
+        GraphModelChangeTidier<T> filter = new GraphModelChangeTidier<>(changes);
         List<GraphModelChange<T>> result = filter.getTidiedChanges();
         assertEquals(changes, result);
     }
@@ -39,8 +39,8 @@ public class GraphModelChangeTidier_TestCase<T extends Serializable> {
     @Test
     public void removeEdgeShouldReturnRemoveEdge() {
         List<GraphModelChange<T>> changes = Lists.newArrayList();
-        changes.add(new RemoveEdge<T>(edge));
-        GraphModelChangeTidier<T> filter = new GraphModelChangeTidier<T>(changes);
+        changes.add(new RemoveEdge<>(edge));
+        GraphModelChangeTidier<T> filter = new GraphModelChangeTidier<>(changes);
         List<GraphModelChange<T>> result = filter.getTidiedChanges();
         assertEquals(changes, result);
     }
@@ -48,9 +48,9 @@ public class GraphModelChangeTidier_TestCase<T extends Serializable> {
     @Test
     public void addFollowedByRemoveShouldMinimiseToEmptyList() {
         List<GraphModelChange<T>> changes = Lists.newArrayList();
-        changes.add(new AddEdge<T>(edge));
-        changes.add(new RemoveEdge<T>(edge));
-        GraphModelChangeTidier<T> filter = new GraphModelChangeTidier<T>(changes);
+        changes.add(new AddEdge<>(edge));
+        changes.add(new RemoveEdge<>(edge));
+        GraphModelChangeTidier<T> filter = new GraphModelChangeTidier<>(changes);
         List<GraphModelChange<T>> result = filter.getTidiedChanges();
         assertTrue(result.isEmpty());
     }
@@ -62,7 +62,7 @@ public class GraphModelChangeTidier_TestCase<T extends Serializable> {
         changes.add(removeEdge);
         AddEdge<T> addEdge = new AddEdge<T>(mock(GraphEdge.class));
         changes.add(addEdge);
-        GraphModelChangeTidier<T> filter = new GraphModelChangeTidier<T>(changes);
+        GraphModelChangeTidier<T> filter = new GraphModelChangeTidier<>(changes);
         List<GraphModelChange<T>> result = filter.getTidiedChanges();
         List<GraphModelChange<T>> expected = Lists.newArrayList();
         expected.add(addEdge);

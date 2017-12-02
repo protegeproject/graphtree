@@ -29,6 +29,6 @@ public class GraphNodeMatcher<U extends Serializable> extends TypeSafeMatcher<Gr
     }
 
     public static <U extends Serializable> GraphNodeMatcher<U> graphNodeWithUserObject(U userObject) {
-        return new GraphNodeMatcher<U>(userObject);
+        return new GraphNodeMatcher<>(userObject);
     }
 }

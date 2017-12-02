@@ -33,11 +33,11 @@ public final class GraphModelChangedEvent<U extends Serializable> extends GwtEve
 
 
     public static <U extends Serializable> void fire(HasHandlers source, Iterable<GraphModelChange<U>> changes) {
-        source.fireEvent(new GraphModelChangedEvent<U>(changes));
+        source.fireEvent(new GraphModelChangedEvent<>(changes));
     }
 
     public static <U extends Serializable> void fire(HasHandlers source, GraphModelChange<U> change) {
-        source.fireEvent(new GraphModelChangedEvent<U>(Collections.singleton(change)));
+        source.fireEvent(new GraphModelChangedEvent<>(Collections.singleton(change)));
     }
 
     public ImmutableList<GraphModelChange<U>> getChanges() {

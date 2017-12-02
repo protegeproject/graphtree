@@ -11,7 +11,7 @@ import com.google.gwt.event.shared.GwtEvent;
  */
 public class TreeNodeViewMouseDownEvent extends GwtEvent<TreeNodeViewMouseDownHandler> {
 
-    private static final Type<TreeNodeViewMouseDownHandler> TYPE = new Type<TreeNodeViewMouseDownHandler>();
+    private static final Type<TreeNodeViewMouseDownHandler> TYPE = new Type<>();
 
     private final TreeNodeView view;
 

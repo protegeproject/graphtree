@@ -27,7 +27,7 @@ public class TreeNodeViewTraverserTestCase<U extends Serializable> {
     @Mock
     private TreeNodeView<U> view, parent, child, childSibling, parentSibling;
 
-    private final TreeNodeViewTraverser<U> traverser = new TreeNodeViewTraverser<U>();
+    private final TreeNodeViewTraverser<U> traverser = new TreeNodeViewTraverser<>();
 
     @Test
     public void getNextShouldReturnSiblingOfCollapsedNode() {
@@ -81,7 +81,7 @@ public class TreeNodeViewTraverserTestCase<U extends Serializable> {
         when(view.getParentView()).thenReturn(java.util.Optional.of(parent));
         Path<TreeNodeView<U>> path = traverser.getPathToRoot(view);
         assertEquals(2, path.size());
-        List<TreeNodeView<U>> expected = new ArrayList<TreeNodeView<U>>();
+        List<TreeNodeView<U>> expected = new ArrayList<>();
         expected.add(parent);
         expected.add(view);
         assertThat(path.asList(), equalTo(expected));

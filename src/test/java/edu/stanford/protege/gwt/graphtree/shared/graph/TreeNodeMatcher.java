@@ -33,6 +33,6 @@ public class TreeNodeMatcher<U extends Serializable> extends TypeSafeMatcher<Tre
 
     @Factory
     public static <U extends Serializable> Matcher<TreeNodeData<U>> thatIsATreeNodeWithUserObject(U userObject) {
-        return new TreeNodeMatcher<U>(userObject);
+        return new TreeNodeMatcher<>(userObject);
     }
 }

@@ -29,8 +29,8 @@ public class PathFinder_TestCase<U extends Serializable> {
     @Test
     public void shouldReturnEmptyCollectionForFromNotInGraph() {
         final Multimap<U, U> successorMap = HashMultimap.create();
-        HasSuccessors<U> hasSuccessors = new HasSuccessorsImpl<U>(successorMap);
-        PathFinder<U> pathFinder = new PathFinder<U>(hasSuccessors);
+        HasSuccessors<U> hasSuccessors = new HasSuccessorsImpl<>(successorMap);
+        PathFinder<U> pathFinder = new PathFinder<>(hasSuccessors);
         Collection<Path<U>> result = pathFinder.getPaths(A, C);
         assertEquals(Collections.<Path<U>>emptySet(), result);
     }
@@ -38,9 +38,9 @@ public class PathFinder_TestCase<U extends Serializable> {
     @Test
     public void shouldReturnEmptyCollectionForToNotInGraph() {
         final Multimap<U, U> successorMap = HashMultimap.create();
-        HasSuccessors<U> hasSuccessors = new HasSuccessorsImpl<U>(successorMap);
+        HasSuccessors<U> hasSuccessors = new HasSuccessorsImpl<>(successorMap);
         successorMap.put(A, B);
-        PathFinder<U> pathFinder = new PathFinder<U>(hasSuccessors);
+        PathFinder<U> pathFinder = new PathFinder<>(hasSuccessors);
         Collection<Path<U>> result = pathFinder.getPaths(A, C);
         assertEquals(Collections.<Path<U>>emptySet(), result);
     }
@@ -50,8 +50,8 @@ public class PathFinder_TestCase<U extends Serializable> {
     public void shouldReturnSingleElementListForDirectLoop() {
         final Multimap<U, U> successorMap = HashMultimap.create();
         successorMap.put(A, A);
-        HasSuccessors<U> hasSuccessors = new HasSuccessorsImpl<U>(successorMap);
-        PathFinder<U> pathFinder = new PathFinder<U>(hasSuccessors);
+        HasSuccessors<U> hasSuccessors = new HasSuccessorsImpl<>(successorMap);
+        PathFinder<U> pathFinder = new PathFinder<>(hasSuccessors);
         Collection<Path<U>> result = pathFinder.getPaths(A, A);
         Path<U> expectedPath = Path.<U>asPath(A);
         assertEquals(Collections.<Path<U>>singleton(expectedPath), result);
@@ -63,8 +63,8 @@ public class PathFinder_TestCase<U extends Serializable> {
         successorMap.put(A, B);
         successorMap.put(B, C);
         successorMap.put(C, A);
-        HasSuccessors<U> hasSuccessors = new HasSuccessorsImpl<U>(successorMap);
-        PathFinder<U> pathFinder = new PathFinder<U>(hasSuccessors);
+        HasSuccessors<U> hasSuccessors = new HasSuccessorsImpl<>(successorMap);
+        PathFinder<U> pathFinder = new PathFinder<>(hasSuccessors);
         Collection<Path<U>> result = pathFinder.getPaths(A, C);
         Path<U> expectedPath = Path.<U>asPath(A, B, C);
         assertEquals(Collections.<Path<U>>singleton(expectedPath), result);
@@ -75,8 +75,8 @@ public class PathFinder_TestCase<U extends Serializable> {
         final Multimap<U, U> successorMap = HashMultimap.create();
         successorMap.put(A, B);
         successorMap.put(B, A);
-        HasSuccessors<U> hasSuccessors = new HasSuccessorsImpl<U>(successorMap);
-        PathFinder<U> pathFinder = new PathFinder<U>(hasSuccessors);
+        HasSuccessors<U> hasSuccessors = new HasSuccessorsImpl<>(successorMap);
+        PathFinder<U> pathFinder = new PathFinder<>(hasSuccessors);
         Collection<Path<U>> result = pathFinder.getPaths(A, C);
         assertEquals(Collections.<Path<U>>emptySet(), result);
     }
@@ -85,8 +85,8 @@ public class PathFinder_TestCase<U extends Serializable> {
     public void shouldReturnSuccessorForDirectPath() {
         final Multimap<U, U> successorMap = HashMultimap.create();
         successorMap.put(A, B);
-        HasSuccessors<U> hasSuccessors = new HasSuccessorsImpl<U>(successorMap);
-        PathFinder<U> pathFinder = new PathFinder<U>(hasSuccessors);
+        HasSuccessors<U> hasSuccessors = new HasSuccessorsImpl<>(successorMap);
+        PathFinder<U> pathFinder = new PathFinder<>(hasSuccessors);
         Collection<Path<U>> result = pathFinder.getPaths(A, B);
         Path<U> expectedPath = Path.<U>asPath(A, B);
         assertEquals(Collections.<Path<U>>singleton(expectedPath), result);
@@ -97,8 +97,8 @@ public class PathFinder_TestCase<U extends Serializable> {
         final Multimap<U, U> successorMap = HashMultimap.create();
         successorMap.put(A, B);
         successorMap.put(B, C);
-        HasSuccessors<U> hasSuccessors = new HasSuccessorsImpl<U>(successorMap);
-        PathFinder<U> pathFinder = new PathFinder<U>(hasSuccessors);
+        HasSuccessors<U> hasSuccessors = new HasSuccessorsImpl<>(successorMap);
+        PathFinder<U> pathFinder = new PathFinder<>(hasSuccessors);
         Collection<Path<U>> result = pathFinder.getPaths(A, C);
         Path<U> expectedPath = Path.asPath(A, B, C);
         assertEquals(Collections.<Path<U>>singleton(expectedPath), result);
@@ -110,8 +110,8 @@ public class PathFinder_TestCase<U extends Serializable> {
         successorMap.put(A, B);
         successorMap.put(B, B);
         successorMap.put(B, C);
-        HasSuccessors<U> hasSuccessors = new HasSuccessorsImpl<U>(successorMap);
-        PathFinder<U> pathFinder = new PathFinder<U>(hasSuccessors);
+        HasSuccessors<U> hasSuccessors = new HasSuccessorsImpl<>(successorMap);
+        PathFinder<U> pathFinder = new PathFinder<>(hasSuccessors);
         Collection<Path<U>> result = pathFinder.getPaths(A, C);
         Path<U> expectedPath = Path.asPath(A, B, C);
         assertEquals(Collections.<Path<U>>singleton(expectedPath), result);
@@ -124,10 +124,10 @@ public class PathFinder_TestCase<U extends Serializable> {
         successorMap.put(B, D);
         successorMap.put(A, C);
         successorMap.put(C, D);
-        HasSuccessors<U> hasSuccessors = new HasSuccessorsImpl<U>(successorMap);
-        PathFinder<U> pathFinder = new PathFinder<U>(hasSuccessors);
+        HasSuccessors<U> hasSuccessors = new HasSuccessorsImpl<>(successorMap);
+        PathFinder<U> pathFinder = new PathFinder<>(hasSuccessors);
         Collection<Path<U>> result = pathFinder.getPaths(A, D);
-        Set<Path<U>> expectedPaths = new HashSet<Path<U>>();
+        Set<Path<U>> expectedPaths = new HashSet<>();
         expectedPaths.add(Path.<U>asPath(A, B, D));
         expectedPaths.add(Path.<U>asPath(A, C, D));
         assertEquals(expectedPaths, result);

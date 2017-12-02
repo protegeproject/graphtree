@@ -39,7 +39,7 @@ public class SetTreeNodeExpandedHandler<U extends Serializable> implements TreeN
             if (view.getDataState() == DataState.UNLOADED) {
                 view.setDataState(DataState.LOADING);
                 Optional<TreeNodeId> parent = Optional.of(view.getNodeId());
-                hasGetNodes.getNodes(parent, new LoadChildNodeViewsCallback<U>(view, selectionModel, viewManager));
+                hasGetNodes.getNodes(parent, new LoadChildNodeViewsCallback<>(view, selectionModel, viewManager));
             }
             else {
                 view.setExpanded();

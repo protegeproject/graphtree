@@ -28,41 +28,41 @@ public class GraphNode_TestCase<T extends Serializable> {
 
     @Test
     public void shouldReturnEqualForNodesWithEqualUserObjects() {
-        GraphNode<T> nodeA = new GraphNode<T>(userObject, false);
-        GraphNode<T> nodeB = new GraphNode<T>(userObject, false);
+        GraphNode<T> nodeA = new GraphNode<>(userObject, false);
+        GraphNode<T> nodeB = new GraphNode<>(userObject, false);
         assertEquals(nodeA, nodeB);
     }
 
     @Test
     public void shouldReturnEqualHashCodesForNodesWithEqualUserObjects() {
-        GraphNode<T> nodeA = new GraphNode<T>(userObject, false);
-        GraphNode<T> nodeB = new GraphNode<T>(userObject, false);
+        GraphNode<T> nodeA = new GraphNode<>(userObject, false);
+        GraphNode<T> nodeB = new GraphNode<>(userObject, false);
         assertEquals(nodeA.hashCode(), nodeB.hashCode());
     }
 
     @Test
     public void shouldReturnEqualForNodesWithEqualUserObjectsButDifferentSinkFlags() {
-        GraphNode<T> nodeA = new GraphNode<T>(userObject, false);
-        GraphNode<T> nodeB = new GraphNode<T>(userObject, true);
+        GraphNode<T> nodeA = new GraphNode<>(userObject, false);
+        GraphNode<T> nodeB = new GraphNode<>(userObject, true);
         assertEquals(nodeA, nodeB);
     }
 
     @Test
     public void shouldReturnNotEqualForNodesWithDifferentUserObjects() {
-        GraphNode<T> nodeA = new GraphNode<T>(userObject, false);
-        GraphNode<T> nodeB = new GraphNode<T>(otherUserObject, false);
+        GraphNode<T> nodeA = new GraphNode<>(userObject, false);
+        GraphNode<T> nodeB = new GraphNode<>(otherUserObject, false);
         assertFalse(nodeA.equals(nodeB));
     }
 
     @Test
     public void shouldReturnFalseForEqualsCalledWithNullArgument() {
-        GraphNode<T> node = new GraphNode<T>(userObject);
+        GraphNode<T> node = new GraphNode<>(userObject);
         assertFalse(node.equals(null));
     }
 
     @Test
     public void isSinkShouldReturnSuppliedSinkFlag() {
-        GraphNode<T> node = new GraphNode<T>(userObject, true);
+        GraphNode<T> node = new GraphNode<>(userObject, true);
         assertTrue(node.isSink());
     }
 

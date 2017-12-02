@@ -17,7 +17,7 @@ import java.util.Set;
  */
 public class PendingChangesManager<U extends Serializable> implements TreeNodeModelEventHandler, HasPendingChanges<U> {
 
-    private final Set<PendingChangeHandler> pending = new HashSet<PendingChangeHandler>();
+    private final Set<PendingChangeHandler> pending = new HashSet<>();
 
     private final SetSelectionModel<TreeNode<U>> selectionModel;
 

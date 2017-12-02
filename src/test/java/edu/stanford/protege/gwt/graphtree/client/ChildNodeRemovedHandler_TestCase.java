@@ -48,7 +48,7 @@ public class ChildNodeRemovedHandler_TestCase<U extends Serializable> {
         when(viewManager.getViewIfPresent(childNode)).thenReturn(Optional.of(childView));
         when(childNodeRemoved.getChildNode()).thenReturn(childNode);
         when(childNodeRemoved.getParentNode()).thenReturn(parentNode);
-        handler = new ChildNodeRemovedHandler<U>(viewManager);
+        handler = new ChildNodeRemovedHandler<>(viewManager);
     }
 
 

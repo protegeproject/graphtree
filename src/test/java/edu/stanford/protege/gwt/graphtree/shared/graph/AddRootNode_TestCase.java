@@ -24,28 +24,28 @@ public class AddRootNode_TestCase<T extends Serializable> {
 
     @Test
     public void equalsShouldReturnTrueForEqualNodes() {
-        AddRootNode<T> addRootNodeA = new AddRootNode<T>(node);
-        AddRootNode<T> addRootNodeB = new AddRootNode<T>(node);
+        AddRootNode<T> addRootNodeA = new AddRootNode<>(node);
+        AddRootNode<T> addRootNodeB = new AddRootNode<>(node);
         assertThat(addRootNodeA, equalTo(addRootNodeB));
     }
 
     @Test
     public void hashCodeShouldReturnTrueForEqualNodes() {
-        AddRootNode<T> addRootNodeA = new AddRootNode<T>(node);
-        AddRootNode<T> addRootNodeB = new AddRootNode<T>(node);
+        AddRootNode<T> addRootNodeA = new AddRootNode<>(node);
+        AddRootNode<T> addRootNodeB = new AddRootNode<>(node);
         assertThat(addRootNodeA.hashCode(), equalTo(addRootNodeB.hashCode()));
     }
 
     @Test
     public void equalToNullShouldReturnFalse() {
-        AddRootNode<T> addRootNode = new AddRootNode<T>(node);
+        AddRootNode<T> addRootNode = new AddRootNode<>(node);
         assertThat(addRootNode.equals(null), equalTo(false));
     }
 
     @Test
     public void getReverseChangeShouldReturnRemoveEdgeWithSameEdge() {
-        AddRootNode<T> addRootNodeA = new AddRootNode<T>(node);
-        RemoveRootNode<T> expected = new RemoveRootNode<T>(node);
+        AddRootNode<T> addRootNodeA = new AddRootNode<>(node);
+        RemoveRootNode<T> expected = new RemoveRootNode<>(node);
         assertThat(addRootNodeA.getReverseChange(), equalTo(expected));
     }
 }

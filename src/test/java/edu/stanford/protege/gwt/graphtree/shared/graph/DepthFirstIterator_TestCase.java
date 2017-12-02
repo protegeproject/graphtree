@@ -33,7 +33,7 @@ public class DepthFirstIterator_TestCase<U extends Serializable> {
     public void shouldReturnParentFollowedByChild() {
         when(hasSuccessors.getSuccessors(A)).thenReturn(Collections.<U>singleton(B));
         when(hasSuccessors.getSuccessors(B)).thenReturn(Collections.<U>emptySet());
-        DepthFirstIterator<U> iterator = new DepthFirstIterator<U>(A, hasSuccessors);
+        DepthFirstIterator<U> iterator = new DepthFirstIterator<>(A, hasSuccessors);
         assertTrue(iterator.hasNext());
         assertEquals(A, iterator.next());
         assertTrue(iterator.hasNext());
@@ -46,7 +46,7 @@ public class DepthFirstIterator_TestCase<U extends Serializable> {
         when(hasSuccessors.getSuccessors(A)).thenReturn(Arrays.asList(B, C));
         when(hasSuccessors.getSuccessors(B)).thenReturn(Collections.<U>emptySet());
         when(hasSuccessors.getSuccessors(C)).thenReturn(Collections.<U>emptySet());
-        DepthFirstIterator<U> iterator = new DepthFirstIterator<U>(A, hasSuccessors);
+        DepthFirstIterator<U> iterator = new DepthFirstIterator<>(A, hasSuccessors);
         assertTrue(iterator.hasNext());
         assertEquals(A, iterator.next());
         assertTrue(iterator.hasNext());
@@ -62,7 +62,7 @@ public class DepthFirstIterator_TestCase<U extends Serializable> {
         when(hasSuccessors.getSuccessors(B)).thenReturn(Collections.<U>singleton(D));
         when(hasSuccessors.getSuccessors(C)).thenReturn(Collections.<U>singleton(D));
         when(hasSuccessors.getSuccessors(D)).thenReturn(Collections.<U>emptySet());
-        DepthFirstIterator<U> iterator = new DepthFirstIterator<U>(A, hasSuccessors);
+        DepthFirstIterator<U> iterator = new DepthFirstIterator<>(A, hasSuccessors);
         assertTrue(iterator.hasNext());
         assertEquals(A, iterator.next());
         assertTrue(iterator.hasNext());
@@ -80,7 +80,7 @@ public class DepthFirstIterator_TestCase<U extends Serializable> {
         when(hasSuccessors.getSuccessors(B)).thenReturn(Collections.<U>singleton(D));
         when(hasSuccessors.getSuccessors(C)).thenReturn(Collections.<U>emptySet());
         when(hasSuccessors.getSuccessors(D)).thenReturn(Collections.<U>singleton(A));
-        DepthFirstIterator<U> iterator = new DepthFirstIterator<U>(A, hasSuccessors);
+        DepthFirstIterator<U> iterator = new DepthFirstIterator<>(A, hasSuccessors);
         assertTrue(iterator.hasNext());
         assertEquals(A, iterator.next());
         assertTrue(iterator.hasNext());
