@@ -8,7 +8,6 @@ import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeData;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeId;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.Serializable;
 import java.util.*;
 

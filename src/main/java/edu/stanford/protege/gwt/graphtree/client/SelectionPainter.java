@@ -2,7 +2,6 @@ package edu.stanford.protege.gwt.graphtree.client;
 
 import com.google.common.collect.Sets;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SetSelectionModel;
 import com.google.inject.Inject;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNode;
