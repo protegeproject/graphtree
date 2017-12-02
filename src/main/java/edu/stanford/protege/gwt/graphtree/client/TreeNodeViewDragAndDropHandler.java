@@ -1,6 +1,5 @@
 package edu.stanford.protege.gwt.graphtree.client;
 
-import com.google.common.base.Optional;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DataTransfer;
 import com.google.gwt.dom.client.NativeEvent;
@@ -11,6 +10,7 @@ import com.google.inject.Inject;
 import edu.stanford.protege.gwt.graphtree.shared.Path;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 /**
  * Author: Matthew Horridge<br>
@@ -39,7 +39,7 @@ public class TreeNodeViewDragAndDropHandler<U extends Serializable> implements H
         }
     }
 
-    private Optional<TreeNodeView<U>> draggedNode = Optional.absent();
+    private Optional<TreeNodeView<U>> draggedNode = Optional.empty();
 
     private TreeNodeDropHandler<U> treeNodeDropHandler;
 
@@ -161,7 +161,7 @@ public class TreeNodeViewDragAndDropHandler<U extends Serializable> implements H
     }
 
     private void clearDraggedTreeNode() {
-        draggedNode = Optional.absent();
+        draggedNode = Optional.empty();
     }
 
     private void updateDropEffect(DragDropEventBase<?> event, TreeNodeView<U> targetView) {

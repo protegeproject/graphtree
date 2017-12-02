@@ -1,8 +1,7 @@
 package edu.stanford.protege.gwt.graphtree.client;
 
-import com.google.common.base.Optional;
-
 import java.io.Serializable;
+import java.util.Optional;
 
 /**
  * Author: Matthew Horridge<br>
@@ -19,17 +18,17 @@ public class TreeNodeViewPreviousSiblingFinder<U extends Serializable> {
     }
 
     public Optional<TreeNodeView<U>> getPreviousSibling() {
-        java.util.Optional<TreeNodeView<U>> parent = view.getParentView();
+        Optional<TreeNodeView<U>> parent = view.getParentView();
         if (!parent.isPresent()) {
-            return Optional.absent();
+            return Optional.empty();
         }
         TreeNodeView<U> previousSibling = null;
         for(TreeNodeView<U> childView : parent.get().getChildViews()) {
             if(childView == view) {
-                return Optional.fromNullable(previousSibling);
+                return Optional.ofNullable(previousSibling);
             }
             previousSibling = childView;
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 }

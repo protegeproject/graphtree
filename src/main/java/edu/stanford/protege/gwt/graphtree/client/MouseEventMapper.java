@@ -1,10 +1,12 @@
 package edu.stanford.protege.gwt.graphtree.client;
 
-import com.google.common.base.Optional;
-import com.google.gwt.event.dom.client.*;
+import com.google.gwt.event.dom.client.DoubleClickEvent;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseUpEvent;
 
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.Optional;
 
 /**
  * Author: Matthew Horridge<br>

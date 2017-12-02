@@ -1,9 +1,9 @@
 package edu.stanford.protege.gwt.graphtree.client;
 
-import com.google.common.base.Optional;
 import com.google.gwt.event.dom.client.*;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 /**
  * Author: Matthew Horridge<br>

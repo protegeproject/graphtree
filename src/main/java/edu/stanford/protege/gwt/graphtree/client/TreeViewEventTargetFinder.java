@@ -1,12 +1,12 @@
 package edu.stanford.protege.gwt.graphtree.client;
 
-import com.google.common.base.Optional;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.EventTarget;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.DomEvent;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 /**
  * Author: Matthew Horridge<br>
@@ -32,14 +32,14 @@ public class TreeViewEventTargetFinder<U extends Serializable> {
                 if(isTreeNodeViewHandle(targetElement)) {
                     handleIsTarget = TreeNodeViewEventTarget.ViewTargetType.HANDLE;
                 }
-                java.util.Optional<TreeNodeView<U>> view = viewManager.getTreeNodeView(targetElement);
+                Optional<TreeNodeView<U>> view = viewManager.getTreeNodeView(targetElement);
                 if (view.isPresent()) {
                     return Optional.of(new TreeNodeViewEventTarget<>(view.get(), handleIsTarget));
                 }
                 targetElement = targetElement.getParentElement();
             }
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     private static boolean isTreeNodeViewHandle(Element targetElement) {
