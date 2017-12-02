@@ -17,12 +17,7 @@ public class Path<N> implements Iterable<N>, Serializable {
 
     private static final Path<?> EMPTY_PATH = new Path();
 
-    private static final transient Transform<?, ?> IDENTITY_TRANSFORM = new Transform() {
-        @Override
-        public Object transform(Object element) {
-            return element;
-        }
-    };
+    private static final transient Transform<?, ?> IDENTITY_TRANSFORM = element -> element;
 
     private List<N> path = new ArrayList<>();
 

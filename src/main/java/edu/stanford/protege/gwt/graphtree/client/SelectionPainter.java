@@ -58,11 +58,7 @@ public class SelectionPainter<U extends Serializable> {
 
     public void bind(SetSelectionModel<TreeNode<U>> selectionModel) {
         this.selectionModel = selectionModel;
-        handlerRegistration = selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
-            public void onSelectionChange(SelectionChangeEvent event) {
-                handleSelectionChange();
-            }
-        });
+        handlerRegistration = selectionModel.addSelectionChangeHandler(event -> handleSelectionChange());
     }
 
     public void unbind() {

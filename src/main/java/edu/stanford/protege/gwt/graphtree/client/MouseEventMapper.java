@@ -29,21 +29,9 @@ public class MouseEventMapper<U extends Serializable> {
     }
 
     public void bind(TreeView hasHandlers) {
-        hasHandlers.addMouseDownHandler(new MouseDownHandler() {
-            public void onMouseDown(MouseDownEvent event) {
-                handleMouseDownEvent(event);
-            }
-        });
-        hasHandlers.addMouseUpHandler(new MouseUpHandler() {
-            public void onMouseUp(MouseUpEvent event) {
-                handleMouseUpEvent(event);
-            }
-        });
-        hasHandlers.addDoubleClickHandler(new DoubleClickHandler() {
-            public void onDoubleClick(DoubleClickEvent event) {
-                handleDoubleClickEvent(event);
-            }
-        });
+        hasHandlers.addMouseDownHandler(this::handleMouseDownEvent);
+        hasHandlers.addMouseUpHandler(this::handleMouseUpEvent);
+        hasHandlers.addDoubleClickHandler(this::handleDoubleClickEvent);
     }
 
 

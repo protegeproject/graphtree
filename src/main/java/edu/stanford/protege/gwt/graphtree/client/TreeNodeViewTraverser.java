@@ -18,12 +18,7 @@ import java.util.Queue;
  */
 public class TreeNodeViewTraverser<U extends Serializable> {
 
-    private final Path.Transform<TreeNodeView<U>,U>  view2UserObjectTransform = new Path.Transform<TreeNodeView<U>, U>() {
-        @Override
-        public U transform(TreeNodeView<U> element) {
-            return element.getUserObject();
-        }
-    };
+    private final Path.Transform<TreeNodeView<U>,U>  view2UserObjectTransform = element -> element.getUserObject();
 
     public static <U extends Serializable> TreeNodeViewTraverser<U> newTreeNodeViewTraverser() {
         return new TreeNodeViewTraverser<>();
@@ -81,12 +76,7 @@ public class TreeNodeViewTraverser<U extends Serializable> {
     }
 
     public Path<TreeNodeId> getTreeNodePathToRoot(final TreeNodeView<U> fromView) {
-        return getPathToRoot(fromView, new Path.Transform<TreeNodeView<U>, TreeNodeId>() {
-            @Override
-            public TreeNodeId transform(TreeNodeView<U> element) {
-                return element.getNodeId();
-            }
-        });
+        return getPathToRoot(fromView, TreeNodeView::getNodeId);
     }
 
     public Optional<TreeNodeView<U>> getNext(TreeNodeView<U> treeNodeView) {

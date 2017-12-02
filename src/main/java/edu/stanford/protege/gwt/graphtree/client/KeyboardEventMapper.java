@@ -35,26 +35,24 @@ public class KeyboardEventMapper<U extends Serializable> {
     }
 
     public void bind(TreeView view) {
-        view.addKeyDownHandler(new KeyDownHandler() {
-            public void onKeyDown(KeyDownEvent event) {
-                switch (event.getNativeKeyCode()) {
-                    case KeyCodes.KEY_UP:
-                        event.preventDefault();
-                        selectPreviousTreeNodesHandler.invoke(TreeViewInputEvent.fromEvent(event), selectionProvider);
-                        break;
-                    case KeyCodes.KEY_DOWN:
-                        event.preventDefault();
-                        selectNextNodesAction.invoke(TreeViewInputEvent.fromEvent(event), selectionProvider);
-                        break;
-                    case KeyCodes.KEY_LEFT:
-                        event.preventDefault();
-                        setNodeCollapsedAction.invoke(TreeViewInputEvent.fromEvent(event), selectionProvider);
-                        break;
-                    case KeyCodes.KEY_RIGHT:
-                        event.preventDefault();
-                        setNodeExpandedAction.invoke(TreeViewInputEvent.fromEvent(event), selectionProvider);
-                        break;
-                }
+        view.addKeyDownHandler(event -> {
+            switch (event.getNativeKeyCode()) {
+                case KeyCodes.KEY_UP:
+                    event.preventDefault();
+                    selectPreviousTreeNodesHandler.invoke(TreeViewInputEvent.fromEvent(event), selectionProvider);
+                    break;
+                case KeyCodes.KEY_DOWN:
+                    event.preventDefault();
+                    selectNextNodesAction.invoke(TreeViewInputEvent.fromEvent(event), selectionProvider);
+                    break;
+                case KeyCodes.KEY_LEFT:
+                    event.preventDefault();
+                    setNodeCollapsedAction.invoke(TreeViewInputEvent.fromEvent(event), selectionProvider);
+                    break;
+                case KeyCodes.KEY_RIGHT:
+                    event.preventDefault();
+                    setNodeExpandedAction.invoke(TreeViewInputEvent.fromEvent(event), selectionProvider);
+                    break;
             }
         });
     }
