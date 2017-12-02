@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -18,6 +19,7 @@ import static org.mockito.Mockito.when;
 /**
  * Matthew Horridge Stanford Center for Biomedical Informatics Research 30 Nov 2017
  */
+@SuppressWarnings("ConstantConditions")
 @RunWith(MockitoJUnitRunner.class)
 public class TreeNodeIndex_UpdateUserObject_TestCase<U extends Serializable> {
 
@@ -45,18 +47,18 @@ public class TreeNodeIndex_UpdateUserObject_TestCase<U extends Serializable> {
     public void shouldUpdateUserObjectForParentChild() {
         index.addChild(parentId, child);
         index.updateUserObject(updatedChildObject);
-        TreeNodeData<U> updatedData = index.getTreeNodeData(childId);
-        assertThat(updatedData != null, is(true));
-        assertThat(updatedData.getUserObject(), is(updatedChildObject));
+        Optional<TreeNodeData<U>> updatedData = index.getTreeNodeData(childId);
+        assertThat(updatedData.isPresent(), is(true));
+        assertThat(updatedData.get().getUserObject(), is(updatedChildObject));
     }
 
     @Test
     public void shouldUpdateUserObjectForRoot() {
         index.addRoot(child);
         index.updateUserObject(updatedChildObject);
-        TreeNodeData<U> updatedData = index.getTreeNodeData(childId);
-        assertThat(updatedData != null, is(true));
-        assertThat(updatedData.getUserObject(), is(updatedChildObject));
+        Optional<TreeNodeData<U>> updatedData = index.getTreeNodeData(childId);
+        assertThat(updatedData.isPresent(), is(true));
+        assertThat(updatedData.get().getUserObject(), is(updatedChildObject));
     }
 
 }

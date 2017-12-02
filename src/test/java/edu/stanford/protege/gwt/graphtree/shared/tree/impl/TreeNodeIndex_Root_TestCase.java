@@ -11,6 +11,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItem;
@@ -68,8 +69,8 @@ public class TreeNodeIndex_Root_TestCase<U extends Serializable> {
     @Test
     public void addRootShouldIndexAgainstTreeNodeId() {
         index.addRoot(A);
-        TreeNodeData<U> result = index.getTreeNodeData(idA);
-        assertThat(result, equalTo(A));
+        Optional<TreeNodeData<U>> result = index.getTreeNodeData(idA);
+        assertThat(result, equalTo(Optional.of(A)));
     }
 
     @Test
@@ -83,8 +84,8 @@ public class TreeNodeIndex_Root_TestCase<U extends Serializable> {
     @Test
     public void removeRootShouldRemoveIndexAgainstTreeNodeId() {
         index.addRoot(A);
-        assertThat(index.getTreeNodeData(idA), equalTo(A));
+        assertThat(index.getTreeNodeData(idA), equalTo(Optional.of(A)));
         index.removeRoot(idA);
-        assertThat(index.getTreeNodeData(idA), nullValue());
+        assertThat(index.getTreeNodeData(idA), equalTo(Optional.empty()));
     }
 }

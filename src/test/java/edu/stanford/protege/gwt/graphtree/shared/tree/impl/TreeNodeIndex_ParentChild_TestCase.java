@@ -73,13 +73,13 @@ public class TreeNodeIndex_ParentChild_TestCase<U extends Serializable> {
     @Test
     public void addChildShouldIndexAgainstTreeNodeId() {
         index.addChild(parentId, child);
-        assertThat(index.getTreeNodeData(childId), equalTo(child));
+        assertThat(index.getTreeNodeData(childId), equalTo(Optional.of(child)));
     }
 
     @Test
     public void removeChildShouldRemoveChild() {
         index.addChild(parentId, child);
-        assertThat(index.getTreeNodeData(childId), equalTo(child));
+        assertThat(index.getTreeNodeData(childId), equalTo(Optional.of(child)));
         index.removeChild(parentId, childId, removedBranches);
         verify(removedBranches).put(parentId, childId);
         assertThat(index.getChildren(parentId), is(empty()));
@@ -88,7 +88,7 @@ public class TreeNodeIndex_ParentChild_TestCase<U extends Serializable> {
     @Test
     public void removeChildShouldRemoveIndexAgainstUserObject() {
         index.addChild(parentId, child);
-        assertThat(index.getTreeNodeData(childId), equalTo(child));
+        assertThat(index.getTreeNodeData(childId), equalTo(Optional.of(child)));
         index.removeChild(parentId, childId, removedBranches);
         assertThat(index.getTreeNodesForUserObjectKey(childObject.toString()), is(empty()));
     }
@@ -96,15 +96,15 @@ public class TreeNodeIndex_ParentChild_TestCase<U extends Serializable> {
     @Test
     public void removeChildShouldRemoveIndexAgainstTreeNodeId() {
         index.addChild(parentId, child);
-        assertThat(index.getTreeNodeData(childId), equalTo(child));
+        assertThat(index.getTreeNodeData(childId), equalTo(Optional.of(child)));
         index.removeChild(parentId, childId, removedBranches);
-        assertThat(index.getTreeNodeData(childId), nullValue());
+        assertThat(index.getTreeNodeData(childId), equalTo(Optional.empty()));
     }
 
     @Test
     public void removeChildShouldRemoveIndexToParent() {
         index.addChild(parentId, child);
-        assertThat(index.getTreeNodeData(childId), equalTo(child));
+        assertThat(index.getTreeNodeData(childId), equalTo(Optional.of(child)));
         index.removeChild(parentId, childId, removedBranches);
         assertThat(index.getParent(childId), equalTo(Optional.empty()));
     }

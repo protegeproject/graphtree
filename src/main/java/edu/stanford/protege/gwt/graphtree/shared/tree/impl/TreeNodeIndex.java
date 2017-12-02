@@ -43,9 +43,9 @@ public class TreeNodeIndex<U extends Serializable, K> {
     }
 
 
-    @Nullable
-    public TreeNodeData<U> getTreeNodeData(@Nonnull TreeNodeId treeNodeId) {
-        return id2Data.get(treeNodeId);
+    @Nonnull
+    public Optional<TreeNodeData<U>> getTreeNodeData(@Nonnull TreeNodeId treeNodeId) {
+        return Optional.ofNullable(id2Data.get(treeNodeId));
     }
 
 
