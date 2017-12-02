@@ -24,6 +24,7 @@ import static java.util.stream.Collectors.toList;
  * Bio-Medical Informatics Research Group<br>
  * Date: 21/01/2014
  */
+@SuppressWarnings("unused")
 public class TreeWidget<U extends Serializable, K> extends Composite implements HasAllMouseHandlers {
 
     private final TreePresenter<U, K> treePresenter;
