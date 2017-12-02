@@ -115,10 +115,7 @@ public class TreeNodeViewTraverser<U extends Serializable> {
             return fromView;
         }
         Optional<TreeNodeView<U>> lastChildView = fromView.getLastChildView();
-        if(lastChildView.isPresent()) {
-            return getDeepestLastChild(lastChildView.get());
-        }
-        return fromView;
+        return lastChildView.map(this::getDeepestLastChild).orElse(fromView);
     }
 
 

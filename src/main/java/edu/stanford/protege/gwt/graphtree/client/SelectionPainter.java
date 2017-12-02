@@ -43,9 +43,7 @@ public class SelectionPainter<U extends Serializable> {
     private void repaintTreeNodes(Set<TreeNode<U>> nodes, boolean selected) {
         for (TreeNode<U> node : nodes) {
             Optional<TreeNodeView<U>> view = treeNodeViewManager.getViewIfPresent(node.getId());
-            if(view.isPresent()) {
-                view.get().setSelected(selected);
-            }
+            view.ifPresent(theView -> theView.setSelected(selected));
         }
     }
 

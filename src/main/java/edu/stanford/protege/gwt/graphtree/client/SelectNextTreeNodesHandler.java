@@ -30,11 +30,11 @@ public class SelectNextTreeNodesHandler<U extends Serializable> implements TreeN
     public void invoke(TreeViewInputEvent<U> event, Iterable<TreeNodeView<U>> treeNodeViews) {
         for (TreeNodeView<U> view : treeNodeViews) {
             Optional<TreeNodeView<U>> next = viewTraverser.getNext(view);
-            if (next.isPresent()) {
-                selectionModel.setSelected(next.get().getNode(), true);
+            next.ifPresent(nextView -> {
+                selectionModel.setSelected(nextView.getNode(), true);
                 selectionModel.setSelected(view.getNode(), false);
-                next.get().scrollIntoView();
-            }
+                nextView.scrollIntoView();
+            });
         }
     }
 }

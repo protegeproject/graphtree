@@ -25,10 +25,9 @@ public class RootNodeRemovedHandler<U extends Serializable> {
 
     public void handleRootNodeRemoved(RootNodeRemoved<U> rootNodeRemoved) {
         Optional<TreeNodeView<U>> childView = viewManager.getViewIfPresent(rootNodeRemoved.getRootNode());
-        if (childView.isPresent()) {
-            TreeNodeView<U> node = childView.get();
-            viewManager.releaseView(node.getNodeId());
-            rootNodeContainer.remove(node.asWidget());
-        }
+        childView.ifPresent(view -> {
+            viewManager.releaseView(view.getNodeId());
+            rootNodeContainer.remove(view.asWidget());
+        });
     }
 }
