@@ -54,10 +54,12 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
     private HandlerRegistration modelHandlerRegistration;
 
     @Inject
-    public TreePresenter(TreeView treeView, SetSelectionModel<TreeNode<U>> selectionModel, TreeNodeRenderer<U> treeNodeRenderer) {
-        this.treeView = treeView;
-        this.selectionModel = selectionModel;
-        this.viewManager = new TreeNodeViewManager<>(treeNodeRenderer);
+    public TreePresenter(@Nonnull TreeView treeView,
+                         @Nonnull SetSelectionModel<TreeNode<U>> selectionModel,
+                         @Nonnull TreeNodeRenderer<U> treeNodeRenderer) {
+        this.treeView = checkNotNull(treeView);
+        this.selectionModel = checkNotNull(selectionModel);
+        this.viewManager = new TreeNodeViewManager<>(checkNotNull(treeNodeRenderer));
         this.pendingChangeManager = new PendingChangesManager<>(this, selectionModel);
         treeNodeViewSelectionProvider = new TreeNodeViewSelectionProvider<>(selectionModel, viewManager);
         KeyboardEventMapper keyboardEventMapper = new KeyboardEventMapper<>(treeNodeViewSelectionProvider,
@@ -82,32 +84,50 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
         nodeUserObjectChangedHandler = new NodeUserObjectChangedHandler<>(viewManager, treeNodeRenderer);
     }
 
+
+    /**
+     * Sets the TreeNodeModel used by this presenter.
+     * @param model The model.  Not {@code null}.
+     * @throws NullPointerException if {@code model} is {@code null}.
+     */
+    public void setModel(@Nonnull TreeNodeModel<U, K> model) {
+        checkNotNull(model);
+        if(modelHandlerRegistration != null) {
+            modelHandlerRegistration.removeHandler();
+        }
+        viewManager.purge();
+        this.model = model;
+        modelHandlerRegistration = model.addTreeNodeModelEventHandler(TreePresenter.this::handleTreeNodeModelEvent);
+        initialiseRootNodes();
+    }
+
     @Override
-    public void setChildAdditionPending(TreeNodeView parentView) {
+    public void setChildAdditionPending(@Nonnull TreeNodeView parentView) {
         pendingChangeManager.setChildAdditionPending(parentView);
     }
 
     @Override
-    public void setRemovalPending(TreeNodeView removedView) {
+    public void setRemovalPending(@Nonnull TreeNodeView removedView) {
         pendingChangeManager.setRemovalPending(removedView);
     }
 
     @Override
-    public void setRendingChangePending(TreeNodeView view) {
+    public void setRendingChangePending(@Nonnull TreeNodeView view) {
         pendingChangeManager.setRendingChangePending(view);
     }
 
     @Override
-    public void setPendingChangedCancelled(TreeNodeView view) {
+    public void setPendingChangedCancelled(@Nonnull TreeNodeView view) {
         pendingChangeManager.setPendingChangedCancelled(view);
     }
 
 
     public void reload() {
-        initialiseRootNodes();
+        setModel(model);
     }
 
-    public void getTreeNodesForUserObjectKey(K userObjectKey, GetTreeNodesCallback<U> callback) {
+    public void getTreeNodesForUserObjectKey(@Nonnull K userObjectKey,
+                                             @Nonnull GetTreeNodesCallback<U> callback) {
         model.getTreeNodesForUserObjectKey(userObjectKey, callback);
     }
 
@@ -117,31 +137,17 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
         }
     }
 
-    /**
-     * Sets the TreeNodeModel used by this presenter.
-     * @param model The model.  Not {@code null}.
-     * @throws NullPointerException if {@code model} is {@code null}.
-     */
-    public void setModel(TreeNodeModel<U, K> model) {
-        checkNotNull(model);
-        if(modelHandlerRegistration != null) {
-            modelHandlerRegistration.removeHandler();
-        }
-        viewManager.purge();
-        this.model = model;
-        modelHandlerRegistration = model.addTreeNodeModelEventHandler(TreePresenter.this::handleTreeNodeModelEvent);
-        reload();
-    }
-
-    public void setDropHandler(TreeNodeDropHandler<U> dropHandler) {
+    public void setDropHandler(@Nonnull TreeNodeDropHandler<U> dropHandler) {
         dragAndDropManager.setDropHandler(dropHandler);
     }
 
-    public HandlerRegistration addSelectionChangeHandler(SelectionChangeEvent.Handler handler) {
+    @Nonnull
+    public HandlerRegistration addSelectionChangeHandler(@Nonnull SelectionChangeEvent.Handler handler) {
         return selectionModel.addSelectionChangeHandler(handler);
     }
 
-    public Path<TreeNodeId> getPathToRoot(TreeNodeId fromNode) {
+    @Nonnull
+    public Path<TreeNodeId> getPathToRoot(@Nonnull TreeNodeId fromNode) {
         java.util.Optional<TreeNodeView<U>> view = viewManager.getViewIfPresent(fromNode);
         if (!view.isPresent()) {
             return Path.emptyPath();
@@ -151,7 +157,7 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
     }
 
     @Override
-    public void setTreeNodeExpanded(TreeNodeId node) {
+    public void setTreeNodeExpanded(@Nonnull TreeNodeId node) {
         Optional<TreeNodeView<U>> view = viewManager.getViewIfPresent(node);
         view.ifPresent(v -> setTreeNodeHandleState(TreeViewInputEvent.empty(), v, EXPANDED));
     }
@@ -160,15 +166,16 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
         selectionModel.clear();
     }
 
+    @Nonnull
     public Set<TreeNode<U>> getSelectedSet() {
         return selectionModel.getSelectedSet();
     }
 
-    public boolean isSelected(TreeNode<U> object) {
+    public boolean isSelected(@Nonnull TreeNode<U> object) {
         return selectionModel.isSelected(object);
     }
 
-    public void setSelected(TreeNode<U> object, boolean selected) {
+    public void setSelected(@Nonnull TreeNode<U> object, boolean selected) {
         selectionModel.setSelected(object, selected);
     }
 
@@ -187,7 +194,7 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
         });
     }
 
-    public void setExpanded(Path<K> keyPath) {
+    public void setExpanded(@Nonnull Path<K> keyPath) {
         keyPath.getLast().ifPresent(lastKey -> {
             model.getTreeNodesForUserObjectKey(lastKey, nodes -> {
                 nodes.forEach(node -> {
@@ -201,9 +208,12 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
         });
     }
 
-    public Object getKey(TreeNode<U> item) {
-        return selectionModel.getKey(item);
+    public void scrollSelectionIntoView() {
+        for (TreeNodeView<U> selectedView : treeNodeViewSelectionProvider.getSelection()) {
+            selectedView.scrollIntoView();
+        }
     }
+
 
     public void clearPruning() {
         for (TreeNodeView<U> rootView : getRootViews()) {
@@ -218,14 +228,7 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
         }
         scrollSelectionIntoView();
     }
-
-    public void scrollSelectionIntoView() {
-        for (TreeNodeView<U> selectedView : treeNodeViewSelectionProvider.getSelection()) {
-            selectedView.scrollIntoView();
-        }
-    }
-
-    public void pruneToNodes(Collection<TreeNodeId> treeNodes) {
+    public void pruneToNodes(@Nonnull Collection<TreeNodeId> treeNodes) {
         final Set<TreeNodeId> tailNodes = Sets.newHashSet(treeNodes);
         final Set<TreeNodeId> pathNodes = Sets.newHashSet();
         for (TreeNodeId treeNode : treeNodes) {
@@ -250,7 +253,8 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
         }
     }
 
-    public void revealTreeNodesForUserObjectKey(final K userObjectKey, final RevealMode revealMode) {
+    public void revealTreeNodesForUserObjectKey(@Nonnull final K userObjectKey,
+                                                @Nonnull final RevealMode revealMode) {
         model.getTreeNodesForUserObjectKey(userObjectKey, nodes -> {
             for(TreeNodeData<U> tn : nodes) {
                 Path<TreeNodeData<U>> pathToRoot = model.getPathToRoot(tn.getId());
@@ -272,7 +276,8 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
     }
 
     @Override
-    public void getNodes(@Nonnull Optional<TreeNodeId> parentNode, @Nonnull GetTreeNodesCallback<U> callback) {
+    public void getNodes(@Nonnull Optional<TreeNodeId> parentNode,
+                         @Nonnull GetTreeNodesCallback<U> callback) {
         model.getNodes(parentNode, callback);
     }
 
@@ -288,6 +293,7 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
     }
 
     @SuppressWarnings("unchecked")
+    @Nonnull
     private List<TreeNodeView<U>> getRootViews() {
         List<TreeNodeView<U>> result = Lists.newArrayList();
         for (Widget widget : treeView) {
@@ -298,14 +304,14 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
         return result;
     }
 
-    private void handleTreeNodeModelEvent(TreeNodeModelEvent event) {
+    private void handleTreeNodeModelEvent(@Nonnull TreeNodeModelEvent event) {
         pendingChangeManager.handleTreeNodeModelEvent(event);
         for (TreeNodeModelChange change : event.getChanges()) {
             handleTreeNodeModelChange(change);
         }
     }
 
-    private void handleTreeNodeModelChange(TreeNodeModelChange<U> change) {
+    private void handleTreeNodeModelChange(@Nonnull TreeNodeModelChange<U> change) {
         GWT.log("[TreePresenter] Handling TreeModelChange: " + change);
         change.accept(new TreeNodeModelChangeVisitor<U>() {
             public void visit(RootNodeAdded<U> rootNodeAdded) {
@@ -330,9 +336,9 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
         });
     }
 
-    private void setTreeNodeHandleState(TreeViewInputEvent<U> event,
-                                        TreeNodeView<U> treeNodeView,
-                                        TreeNodeViewState nextState) {
+    private void setTreeNodeHandleState(@Nonnull TreeViewInputEvent<U> event,
+                                        @Nonnull TreeNodeView<U> treeNodeView,
+                                        @Nonnull TreeNodeViewState nextState) {
         if (nextState == TreeNodeViewState.COLLAPSED) {
             new SetTreeNodeCollapsedHandler<U>().invoke(event, Collections.singleton(treeNodeView));
         }
