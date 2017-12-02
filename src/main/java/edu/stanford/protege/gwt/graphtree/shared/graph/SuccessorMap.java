@@ -15,6 +15,7 @@ public class SuccessorMap<U extends Serializable> implements Serializable {
 
     private ImmutableMultimap<GraphNode<U>, GraphNode<U>> successorMap;
 
+    @SuppressWarnings("unused")
     private SuccessorMap() {
     }
 
