@@ -136,7 +136,7 @@ public class Path<N> implements Iterable<N>, Serializable {
                           .toString();
     }
 
-    public static interface Transform<N, T> {
+    public interface Transform<N, T> {
         T transform(N element);
     }
 

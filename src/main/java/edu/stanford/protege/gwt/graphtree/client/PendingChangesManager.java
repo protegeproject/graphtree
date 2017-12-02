@@ -53,12 +53,12 @@ public class PendingChangesManager<U extends Serializable> implements TreeNodeMo
 //        }
 //    }
 
-    public static enum FinalExpansionState {
+    public enum FinalExpansionState {
         SET_EXPANDED,
         DO_NOTHING
     }
 
-    public static enum FinalSelectionState {
+    public enum FinalSelectionState {
         SET_SELECTED,
         DO_NOTHING
     }

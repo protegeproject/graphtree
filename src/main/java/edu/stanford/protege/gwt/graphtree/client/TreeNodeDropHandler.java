@@ -13,12 +13,12 @@ import java.io.Serializable;
  */
 public interface TreeNodeDropHandler<U extends Serializable> {
 
-    public static enum  DropType {
+    enum  DropType {
         MOVE,
         ADD
     }
 
-    public static interface DropEndHandler {
+    interface DropEndHandler {
 
         void handleDropComplete();
 

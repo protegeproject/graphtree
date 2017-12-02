@@ -10,7 +10,7 @@ import java.io.Serializable;
  */
 public class TreeNodeViewEventTarget<U extends Serializable> {
 
-    public static enum ViewTargetType {
+    public enum ViewTargetType {
         HANDLE,
         CONTENT
     }

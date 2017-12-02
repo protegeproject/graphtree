@@ -15,7 +15,7 @@ public class TopologicalSorter<U extends Serializable> {
 
     private final Multimap<GraphNode<U>, GraphNode<U>> graph;
 
-    public static enum Direction {
+    public enum Direction {
 
         FORWARD,
 
