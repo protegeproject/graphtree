@@ -15,9 +15,11 @@ import edu.stanford.protege.gwt.graphtree.shared.tree.*;
 import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static edu.stanford.protege.gwt.graphtree.client.TreeNodeViewState.EXPANDED;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * Author: Matthew Horridge<br>
@@ -164,12 +166,32 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
     }
 
     @Nonnull
-    public Set<TreeNode<U>> getSelectedSet() {
+    public Set<TreeNode<U>> getSelectedNodes() {
         return selectionModel.getSelectedSet();
+    }
+
+    @Nonnull
+    public Set<K> getSelectedKeys() {
+        return selectionModel.getSelectedSet().stream()
+                .map(node -> model.getKeyProvider().getKey(node.getUserObject()))
+                .collect(toSet());
+    }
+
+    @Nonnull
+    public Optional<K> getFirstSelectedKey() {
+        return selectionModel.getSelectedSet().stream()
+                .map(node -> model.getKeyProvider().getKey(node.getUserObject()))
+                .findFirst();
     }
 
     public boolean isSelected(@Nonnull TreeNode<U> object) {
         return selectionModel.isSelected(object);
+    }
+
+    public boolean isSelected(@Nonnull K key) {
+        return selectionModel.getSelectedSet().stream()
+                .map(node -> model.getKeyProvider().getKey(node.getUserObject()))
+                .findFirst().isPresent();
     }
 
     public void setSelected(@Nonnull TreeNode<U> object, boolean selected) {

@@ -15,6 +15,7 @@ import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -56,7 +57,7 @@ public class TreeWidget<U extends Serializable, K> extends Composite implements 
         treePresenter.reload();
     }
 
-    public void setModel(TreeNodeModel<U, K> model) {
+    public void setModel(@Nonnull TreeNodeModel<U, K> model) {
         treePresenter.setModel(model);
     }
 
@@ -64,15 +65,17 @@ public class TreeWidget<U extends Serializable, K> extends Composite implements 
         treePresenter.setRootNodesExpanded();
     }
 
-    public void setDropHandler(TreeNodeDropHandler<U> dropHandler) {
+    public void setDropHandler(@Nonnull TreeNodeDropHandler<U> dropHandler) {
         treePresenter.setDropHandler(dropHandler);
     }
 
-    public HandlerRegistration addSelectionChangeHandler(SelectionChangeEvent.Handler handler) {
+    @Nonnull
+    public HandlerRegistration addSelectionChangeHandler(@Nonnull SelectionChangeEvent.Handler handler) {
         return treePresenter.addSelectionChangeHandler(handler);
     }
 
-    public Path<TreeNodeId> getPathToRoot(TreeNodeId fromNode) {
+    @Nonnull
+    public Path<TreeNodeId> getPathToRoot(@Nonnull TreeNodeId fromNode) {
         return treePresenter.getPathToRoot(fromNode);
     }
 
@@ -80,23 +83,41 @@ public class TreeWidget<U extends Serializable, K> extends Composite implements 
         treePresenter.clearSelection();
     }
 
-    public Set<TreeNode<U>> getSelectedSet() {
-        return treePresenter.getSelectedSet();
+    @Nonnull
+    public Set<TreeNode<U>> getSelectedNodes() {
+        return treePresenter.getSelectedNodes();
     }
 
-    public boolean isSelected(TreeNode<U> object) {
+    @Nonnull
+    public Set<K> getSelectedKeys() {
+        return treePresenter.getSelectedKeys();
+    }
+
+    @Nonnull
+    public Optional<K> getFirstSelectedKey() {
+        return treePresenter.getFirstSelectedKey();
+    }
+
+    public boolean isSelected(@Nonnull TreeNode<U> object) {
         return treePresenter.isSelected(object);
     }
 
-    public void setSelected(TreeNode<U> object, boolean selected) {
+    public boolean isSelected(@Nonnull K key) {
+        return treePresenter.isSelected(key);
+    }
+
+    public void setSelected(@Nonnull TreeNode<U> object,
+                            boolean selected) {
         treePresenter.setSelected(object, selected);
     }
 
-    public void setSelected(Path<K> keyPath, boolean selected, Runnable callback) {
+    public void setSelected(@Nonnull Path<K> keyPath,
+                            boolean selected,
+                            @Nonnull Runnable callback) {
         treePresenter.setSelected(keyPath, selected, callback);
     }
 
-    public void setExpanded(Path<K> keyPath) {
+    public void setExpanded(@Nonnull Path<K> keyPath) {
         treePresenter.setExpanded(keyPath);
     }
 
@@ -104,20 +125,23 @@ public class TreeWidget<U extends Serializable, K> extends Composite implements 
         treePresenter.clearPruning();
     }
 
-    public void pruneToNodes(Collection<TreeNodeId> treeNodes) {
+    public void pruneToNodes(@Nonnull Collection<TreeNodeId> treeNodes) {
         treePresenter.pruneToNodes(treeNodes);
     }
 
     public void pruneToSelectedNodes() {
-        List<TreeNodeId> selNodeIds = treePresenter.getSelectedSet().stream()
+        List<TreeNodeId> selNodeIds = treePresenter.getSelectedNodes().stream()
                                                    .map(TreeNode::getId)
                                                    .collect(toList());
         treePresenter.pruneToNodes(selNodeIds);
     }
 
-    public void revealTreeNodesForUserObjectKey(K userObjectKey, RevealMode revealMode) {
+    public void revealTreeNodesForUserObjectKey(@Nonnull K userObjectKey,
+                                                @Nonnull RevealMode revealMode) {
         treePresenter.revealTreeNodesForUserObjectKey(userObjectKey, revealMode);
     }
+
+
 
     @Override
     public com.google.gwt.event.shared.HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
