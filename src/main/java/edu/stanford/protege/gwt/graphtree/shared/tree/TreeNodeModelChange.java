@@ -3,7 +3,6 @@ package edu.stanford.protege.gwt.graphtree.shared.tree;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 import java.io.Serializable;
-import java.util.Set;
 
 /**
  * Author: Matthew Horridge<br>

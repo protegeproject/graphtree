@@ -2,7 +2,6 @@ package edu.stanford.protege.gwt.graphtree.shared.tree.impl;
 
 
 import com.google.common.collect.*;
-import com.google.gwt.user.client.Window;
 import edu.stanford.protege.gwt.graphtree.shared.UserObjectKeyProvider;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNode;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeData;

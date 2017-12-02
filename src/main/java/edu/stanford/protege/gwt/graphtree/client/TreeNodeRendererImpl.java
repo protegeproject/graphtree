@@ -1,7 +1,5 @@
 package edu.stanford.protege.gwt.graphtree.client;
 
-import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeData;
-
 import java.io.Serializable;
 
 /**

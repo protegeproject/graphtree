@@ -1,13 +1,8 @@
 package edu.stanford.protege.gwt.graphtree.client;
 
-import com.google.common.base.Optional;
 import com.google.gwt.event.dom.client.*;
-import com.google.gwt.view.client.SetSelectionModel;
-import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNode;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Author: Matthew Horridge<br>

@@ -4,7 +4,6 @@ import com.google.common.collect.Multimap;
 
 import javax.annotation.Nonnull;
 import java.io.Serializable;
-import java.util.Collection;
 
 /**
  * Author: Matthew Horridge<br>

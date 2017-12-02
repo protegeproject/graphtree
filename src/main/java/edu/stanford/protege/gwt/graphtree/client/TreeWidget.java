@@ -2,7 +2,6 @@ package edu.stanford.protege.gwt.graphtree.client;
 
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.web.bindery.event.shared.HandlerRegistration;

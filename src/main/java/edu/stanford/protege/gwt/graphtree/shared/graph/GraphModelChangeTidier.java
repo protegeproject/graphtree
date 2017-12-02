@@ -1,7 +1,6 @@
 package edu.stanford.protege.gwt.graphtree.shared.graph;
 
 import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 

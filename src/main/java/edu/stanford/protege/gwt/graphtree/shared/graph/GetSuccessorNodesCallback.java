@@ -1,7 +1,5 @@
 package edu.stanford.protege.gwt.graphtree.shared.graph;
 
-import com.google.common.collect.Multimap;
-
 import java.io.Serializable;
 
 /**

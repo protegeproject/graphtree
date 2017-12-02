@@ -1,9 +1,6 @@
 package edu.stanford.protege.gwt.graphtree.client;
 
-import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNode;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeId;
-
-import java.io.Serializable;
 
 /**
  * Author: Matthew Horridge<br>

@@ -3,7 +3,6 @@ package edu.stanford.protege.gwt.graphtree.client;
 import com.google.gwt.view.client.SetSelectionModel;
 import com.google.inject.Inject;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNode;
-import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeId;
 
 import java.io.Serializable;
 

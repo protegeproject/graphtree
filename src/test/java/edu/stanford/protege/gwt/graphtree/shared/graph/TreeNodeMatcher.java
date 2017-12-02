@@ -1,6 +1,5 @@
 package edu.stanford.protege.gwt.graphtree.shared.graph;
 
-import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNode;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeData;
 import org.hamcrest.Description;
 import org.hamcrest.Factory;

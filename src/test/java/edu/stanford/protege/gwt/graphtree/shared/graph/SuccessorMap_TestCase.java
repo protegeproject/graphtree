@@ -9,7 +9,6 @@ import java.io.Serializable;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsCollectionContaining.hasItem;
 
 /**
  * Author: Matthew Horridge<br>

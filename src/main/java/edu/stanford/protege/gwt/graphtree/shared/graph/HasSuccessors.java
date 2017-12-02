@@ -1,7 +1,5 @@
 package edu.stanford.protege.gwt.graphtree.shared.graph;
 
-import java.io.Serializable;
-
 /**
  * Author: Matthew Horridge<br>
  * Stanford University<br>

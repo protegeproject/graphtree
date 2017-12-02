@@ -1,7 +1,6 @@
 package edu.stanford.protege.gwt.graphtree.shared;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
 import javax.annotation.Nonnull;

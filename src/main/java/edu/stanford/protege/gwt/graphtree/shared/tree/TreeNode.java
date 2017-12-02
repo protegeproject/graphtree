@@ -1,9 +1,6 @@
 package edu.stanford.protege.gwt.graphtree.shared.tree;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
 import com.google.gwt.user.client.rpc.IsSerializable;
-import com.google.gwt.view.client.ProvidesKey;
 
 import javax.annotation.Nonnull;
 import java.io.Serializable;
