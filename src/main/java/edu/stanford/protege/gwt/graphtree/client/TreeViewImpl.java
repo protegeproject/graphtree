@@ -6,6 +6,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import javax.annotation.Nonnull;
 import java.util.Iterator;
 
 /**
@@ -84,6 +85,7 @@ public class TreeViewImpl extends Composite implements TreeView {
     }
 
     @Override
+    @Nonnull
     public Iterator<Widget> iterator() {
         return delegate.iterator();
     }

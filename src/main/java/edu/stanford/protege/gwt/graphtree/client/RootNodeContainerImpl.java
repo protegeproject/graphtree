@@ -3,6 +3,7 @@ package edu.stanford.protege.gwt.graphtree.client;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import javax.annotation.Nonnull;
 import java.util.Iterator;
 
 /**
@@ -23,6 +24,7 @@ public class RootNodeContainerImpl implements RootNodeContainer {
         delegate.clear();
     }
 
+    @Nonnull
     public Iterator<Widget> iterator() {
         return delegate.iterator();
     }

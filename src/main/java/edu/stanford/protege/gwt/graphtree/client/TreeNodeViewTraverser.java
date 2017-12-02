@@ -18,7 +18,7 @@ import java.util.Queue;
  */
 public class TreeNodeViewTraverser<U extends Serializable> {
 
-    private final Path.Transform<TreeNodeView<U>,U>  view2UserObjectTransform = element -> element.getUserObject();
+    private final Path.Transform<TreeNodeView<U>,U>  view2UserObjectTransform = TreeNodeView::getUserObject;
 
     public static <U extends Serializable> TreeNodeViewTraverser<U> newTreeNodeViewTraverser() {
         return new TreeNodeViewTraverser<>();

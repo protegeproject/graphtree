@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.gwt.view.client.SetSelectionModel;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNode;
 
+import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.*;
 
@@ -25,6 +26,7 @@ public class TreeNodeViewSelectionProvider<U extends Serializable> implements It
     }
 
     @Override
+    @Nonnull
     public Iterator<TreeNodeView<U>> iterator() {
         return getSelection().iterator();
     }
