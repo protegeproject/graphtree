@@ -1,5 +1,6 @@
 package edu.stanford.protege.gwt.graphtree.shared.graph;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 import java.io.Serializable;
@@ -54,6 +55,6 @@ public class RemoveRootNode<U extends Serializable> extends GraphModelChange<U> 
 
     @Override
     public String toString() {
-        return Objects.toStringHelper("RemoveRootNode").addValue(rootNode).toString();
+        return MoreObjects.toStringHelper("RemoveRootNode").addValue(rootNode).toString();
     }
 }

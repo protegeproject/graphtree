@@ -1,5 +1,6 @@
 package edu.stanford.protege.gwt.graphtree.shared;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
@@ -130,7 +131,9 @@ public class Path<N> implements Iterable<N>, Serializable {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper("Path").addValue(path).toString();
+        return MoreObjects.toStringHelper("Path")
+                          .addValue(path)
+                          .toString();
     }
 
     public static interface Transform<N, T> {

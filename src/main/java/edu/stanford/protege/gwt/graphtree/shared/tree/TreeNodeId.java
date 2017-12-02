@@ -1,5 +1,6 @@
 package edu.stanford.protege.gwt.graphtree.shared.tree;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
@@ -45,6 +46,6 @@ public class TreeNodeId implements Serializable, IsSerializable {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper("TreeNodeId").addValue(id).toString();
+        return MoreObjects.toStringHelper("TreeNodeId").addValue(id).toString();
     }
 }

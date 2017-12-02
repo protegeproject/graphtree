@@ -1,5 +1,6 @@
 package edu.stanford.protege.gwt.graphtree.shared.graph;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 import java.io.Serializable;
@@ -51,9 +52,9 @@ public class GraphEdge<U extends Serializable> implements Serializable {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper("Edge")
-                .add("predecessor", predecessor)
-                .add("successor", successor)
-                .toString();
+        return MoreObjects.toStringHelper("Edge")
+                          .add("predecessor", predecessor)
+                          .add("successor", successor)
+                          .toString();
     }
 }

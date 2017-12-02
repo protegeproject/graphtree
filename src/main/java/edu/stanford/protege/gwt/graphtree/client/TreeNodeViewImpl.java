@@ -39,9 +39,6 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
 
     private static TreeNodeViewImplUiBinder ourUiBinder = GWT.create(TreeNodeViewImplUiBinder.class);
 
-//    @UiField
-//    protected Widget handle;
-
     @UiField
     protected Image handleImage;
 

@@ -1,5 +1,6 @@
 package edu.stanford.protege.gwt.graphtree.shared.tree;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 import java.io.Serializable;
@@ -56,8 +57,8 @@ public class RootNodeAdded<U extends Serializable> extends TreeNodeModelChange<U
 
     @Override
     public String toString() {
-        return Objects.toStringHelper("RootNodeAdded")
-                .addValue(rootNode)
-                .toString();
+        return MoreObjects.toStringHelper("RootNodeAdded")
+                          .addValue(rootNode)
+                          .toString();
     }
 }

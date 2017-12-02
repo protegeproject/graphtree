@@ -1,5 +1,6 @@
 package edu.stanford.protege.gwt.graphtree.shared.tree;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
 
@@ -64,9 +65,9 @@ public class ChildNodeRemoved<U extends Serializable> extends TreeNodeModelChang
 
     @Override
     public String toString() {
-        return Objects.toStringHelper("ChildNodeRemoved")
-                .add("node", treeNode)
-                .add("childNode", childNode)
-                .toString();
+        return MoreObjects.toStringHelper("ChildNodeRemoved")
+                          .add("node", treeNode)
+                          .add("childNode", childNode)
+                          .toString();
     }
 }
