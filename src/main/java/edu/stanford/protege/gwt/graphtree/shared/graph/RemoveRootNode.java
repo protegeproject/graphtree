@@ -22,7 +22,6 @@ public class RemoveRootNode<U extends Serializable> extends GraphModelChange<U> 
         this.rootNode = rootNode;
     }
 
-    @Override
     public AddRootNode<U> getReverseChange() {
         return new AddRootNode<U>(rootNode);
     }

@@ -20,7 +20,6 @@ public class AddEdge<U extends Serializable> extends EdgeChange<U> {
         super(edge);
     }
 
-    @Override
     public RemoveEdge<U> getReverseChange() {
         return new RemoveEdge<U>(getEdge());
     }

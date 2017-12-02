@@ -33,7 +33,6 @@ public class AddRootNode<U extends Serializable> extends GraphModelChange<U> {
         visitor.visit(this);
     }
 
-    @Override
     public RemoveRootNode<U> getReverseChange() {
         return new RemoveRootNode<U>(rootNode);
     }

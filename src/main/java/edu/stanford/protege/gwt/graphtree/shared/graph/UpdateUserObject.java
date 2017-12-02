@@ -1,7 +1,6 @@
 package edu.stanford.protege.gwt.graphtree.shared.graph;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
 
 import javax.annotation.Nonnull;
 import java.io.Serializable;
@@ -28,11 +27,6 @@ public class UpdateUserObject<U extends Serializable> extends GraphModelChange<U
     @Nonnull
     public U getUserObject() {
         return userObject;
-    }
-
-    @Override
-    public GraphModelChange<U> getReverseChange() {
-        return this;
     }
 
     @Override

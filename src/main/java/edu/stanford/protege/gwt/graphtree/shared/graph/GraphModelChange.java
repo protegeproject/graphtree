@@ -15,7 +15,5 @@ public abstract class GraphModelChange<U extends Serializable> implements Serial
     public GraphModelChange() {
     }
 
-    public abstract GraphModelChange<U> getReverseChange();
-
     public abstract void accept(GraphModelChangeVisitor<U> visitor);
 }
