@@ -13,9 +13,9 @@ public class TreeNodeViewMouseDownEvent extends GwtEvent<TreeNodeViewMouseDownHa
 
     private static final Type<TreeNodeViewMouseDownHandler> TYPE = new Type<TreeNodeViewMouseDownHandler>();
 
-    private TreeNodeView view;
+    private final TreeNodeView view;
 
-    private MouseDownEvent event;
+    private final MouseDownEvent event;
 
     public TreeNodeViewMouseDownEvent(TreeNodeView view, MouseDownEvent event) {
         setSource(view);

@@ -14,9 +14,9 @@ import java.util.Collections;
  */
 public abstract class TreeNodeMouseDownHandler implements MouseDownHandler {
 
-    private TreeViewEventTargetFinder eventTargetFinder;
+    private final TreeViewEventTargetFinder eventTargetFinder;
 
-    private TreeNodeViewActionHandler handler;
+    private final TreeNodeViewActionHandler handler;
 
     public TreeNodeMouseDownHandler(TreeNodeViewActionHandler handler, TreeViewEventTargetFinder eventTargetFinder) {
         this.handler = handler;

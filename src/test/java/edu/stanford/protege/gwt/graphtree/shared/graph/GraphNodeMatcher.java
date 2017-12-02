@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 public class GraphNodeMatcher<U extends Serializable> extends TypeSafeMatcher<GraphNode<U>> {
 
-    private U userObject;
+    private final U userObject;
 
     public GraphNodeMatcher(U userObject) {
         this.userObject = userObject;

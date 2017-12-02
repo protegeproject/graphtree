@@ -137,7 +137,7 @@ public class PathFinder_TestCase<U extends Serializable> {
 
     private static class HasSuccessorsImpl<N> implements HasSuccessors<N> {
 
-        private Multimap<N, N> map;
+        private final Multimap<N, N> map;
 
         private HasSuccessorsImpl(Multimap<N, N> map) {
             this.map = map;

@@ -15,7 +15,7 @@ import java.util.Optional;
  */
 public class ChildNodeAddedHandler<U extends Serializable> {
 
-    private TreeNodeViewManager<U> viewManager;
+    private final TreeNodeViewManager<U> viewManager;
 
     @Inject
     public ChildNodeAddedHandler(TreeNodeViewManager<U> viewManager) {

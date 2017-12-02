@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 public class TreeNodeViewPreviousSiblingFinder<U extends Serializable> {
 
-    private TreeNodeView<U> view;
+    private final TreeNodeView<U> view;
 
     public TreeNodeViewPreviousSiblingFinder(TreeNodeView<U> view) {
         this.view = view;

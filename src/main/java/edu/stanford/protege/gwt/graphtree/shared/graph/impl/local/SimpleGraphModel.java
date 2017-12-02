@@ -35,7 +35,7 @@ public class SimpleGraphModel<U extends Serializable, K> implements GraphModel<U
 
     private final Map<K, U> key2UserObject = new HashMap<>();
 
-    private EventBus eventBus;
+    private final EventBus eventBus;
 
     private SimpleGraphModel(@Nonnull final UserObjectKeyProvider<U, K> keyProvider,
                              @Nonnull final Set<U> keyNodeUserObjects,
@@ -72,7 +72,7 @@ public class SimpleGraphModel<U extends Serializable, K> implements GraphModel<U
 
     public Iterator<GraphEdge> iterator() {
         return new Iterator<GraphEdge>() {
-            private Iterator<Map.Entry<K, K>> iterator = successorMap.entries().iterator();
+            private final Iterator<Map.Entry<K, K>> iterator = successorMap.entries().iterator();
 
             public boolean hasNext() {
                 return iterator().hasNext();
@@ -177,9 +177,9 @@ public class SimpleGraphModel<U extends Serializable, K> implements GraphModel<U
 
         private final UserObjectKeyProvider<U, K> keyProvider;
 
-        private Set<U> keyNodes = Sets.newLinkedHashSet();
+        private final Set<U> keyNodes = Sets.newLinkedHashSet();
 
-        private Multimap<U, U> successorMap = LinkedHashMultimap.create();
+        private final Multimap<U, U> successorMap = LinkedHashMultimap.create();
 
         private EventBus eventBus = new SimpleEventBus();
 

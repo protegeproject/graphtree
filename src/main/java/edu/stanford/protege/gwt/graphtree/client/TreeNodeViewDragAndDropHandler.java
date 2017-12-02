@@ -28,7 +28,7 @@ public class TreeNodeViewDragAndDropHandler<U extends Serializable> implements H
         LINK("link"),
         NONE("none");
 
-        String dropEffect;
+        final String dropEffect;
 
         DropEffect(String dropEffect) {
             this.dropEffect = dropEffect;
@@ -43,7 +43,7 @@ public class TreeNodeViewDragAndDropHandler<U extends Serializable> implements H
 
     private TreeNodeDropHandler<U> treeNodeDropHandler;
 
-    private HasPendingChanges<U> hasPendingChanges;
+    private final HasPendingChanges<U> hasPendingChanges;
 
     @Inject
     public TreeNodeViewDragAndDropHandler(HasPendingChanges<U> hasPendingChanges) {

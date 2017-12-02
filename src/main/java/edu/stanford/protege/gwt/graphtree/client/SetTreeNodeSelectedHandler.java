@@ -15,7 +15,7 @@ import java.io.Serializable;
  */
 public class SetTreeNodeSelectedHandler<U extends Serializable> implements TreeNodeViewActionHandler<U> {
 
-    private SetSelectionModel<TreeNode<U>> selectionModel;
+    private final SetSelectionModel<TreeNode<U>> selectionModel;
 
     @Inject
     public SetTreeNodeSelectedHandler(SetSelectionModel<TreeNode<U>> selectionModel) {

@@ -17,7 +17,7 @@ import java.io.Serializable;
  */
 public class TreeNodeMatcher<U extends Serializable> extends TypeSafeMatcher<TreeNodeData<U>> {
 
-    private Object userObject;
+    private final Object userObject;
 
     public TreeNodeMatcher(Object userObject) {
         this.userObject = userObject;

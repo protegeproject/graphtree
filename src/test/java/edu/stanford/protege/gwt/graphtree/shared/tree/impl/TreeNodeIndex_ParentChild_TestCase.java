@@ -41,7 +41,7 @@ public class TreeNodeIndex_ParentChild_TestCase<U extends Serializable> {
     @Mock
     private Multimap<TreeNodeId, TreeNodeId> removedBranches;
 
-    private UserObjectKeyProvider<U, String> keyProvider = Object::toString;
+    private final UserObjectKeyProvider<U, String> keyProvider = Object::toString;
 
     private TreeNodeIndex<U, String> index;
 

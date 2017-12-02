@@ -17,11 +17,11 @@ import java.util.Set;
  */
 public class PendingChangesManager<U extends Serializable> implements TreeNodeModelEventHandler, HasPendingChanges<U> {
 
-    private Set<PendingChangeHandler> pending = new HashSet<PendingChangeHandler>();
+    private final Set<PendingChangeHandler> pending = new HashSet<PendingChangeHandler>();
 
-    private SetSelectionModel<TreeNode<U>> selectionModel;
+    private final SetSelectionModel<TreeNode<U>> selectionModel;
 
-    private HasSetTreeNodeExpanded hasSetTreeNodeExpanded;
+    private final HasSetTreeNodeExpanded hasSetTreeNodeExpanded;
 
     public PendingChangesManager(HasSetTreeNodeExpanded hasSetTreeNodeExpanded,
                                  SetSelectionModel<TreeNode<U>> selectionModel) {
@@ -96,7 +96,7 @@ public class PendingChangesManager<U extends Serializable> implements TreeNodeMo
 
     private static abstract class PendingChangeHandler<U extends Serializable> {
 
-        private TreeNodeView<U> view;
+        private final TreeNodeView<U> view;
 
         protected PendingChangeHandler(TreeNodeView<U> view) {
             this.view = view;
@@ -120,9 +120,9 @@ public class PendingChangesManager<U extends Serializable> implements TreeNodeMo
 
         private FinalSelectionState selectionState;
 
-        private HasSetTreeNodeExpanded hasSetTreeNodeExpanded;
+        private final HasSetTreeNodeExpanded hasSetTreeNodeExpanded;
 
-        private SetSelectionModel<TreeNodeId> selectionModel;
+        private final SetSelectionModel<TreeNodeId> selectionModel;
 
         private PendingChildAdditionHandler(TreeNodeView<U> view,
                                             HasSetTreeNodeExpanded hasSetTreeNodeExpanded,

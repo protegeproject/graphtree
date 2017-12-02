@@ -15,9 +15,9 @@ import java.util.Optional;
  */
 public class SelectPreviousTreeNodesHandler<U extends Serializable> implements TreeNodeViewActionHandler<U> {
 
-    private SetSelectionModel<TreeNode<U>> selectionModel;
+    private final SetSelectionModel<TreeNode<U>> selectionModel;
 
-    private TreeNodeViewTraverser<U> viewTraverser;
+    private final TreeNodeViewTraverser<U> viewTraverser;
 
     public SelectPreviousTreeNodesHandler(SetSelectionModel<TreeNode<U>> selectionModel) {
         this(selectionModel, TreeNodeViewTraverser.<U>newTreeNodeViewTraverser());

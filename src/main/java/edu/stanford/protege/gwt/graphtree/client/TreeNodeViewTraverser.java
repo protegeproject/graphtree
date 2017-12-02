@@ -123,7 +123,7 @@ public class TreeNodeViewTraverser<U extends Serializable> {
 
     private class TreeNodeViewIterator<U extends Serializable> implements Iterator<TreeNodeView<U>> {
 
-        private Queue<TreeNodeView<U>> queue = Lists.newLinkedList();
+        private final Queue<TreeNodeView<U>> queue = Lists.newLinkedList();
 
         private TreeNodeViewIterator(TreeNodeView<U> fromView) {
             queue.add(fromView);

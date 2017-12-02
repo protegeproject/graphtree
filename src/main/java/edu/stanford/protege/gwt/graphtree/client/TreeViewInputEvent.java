@@ -15,11 +15,11 @@ public class TreeViewInputEvent<U extends Serializable> {
 
     public static final TreeViewInputEvent EMPTY_EVENT = new TreeViewInputEvent(false, false, false);
 
-    private boolean altDown;
+    private final boolean altDown;
 
-    private boolean ctrlDown;
+    private final boolean ctrlDown;
 
-    private boolean shiftDown;
+    private final boolean shiftDown;
 
     public TreeViewInputEvent(boolean altDown, boolean ctrlDown, boolean shiftDown) {
         this.altDown = altDown;

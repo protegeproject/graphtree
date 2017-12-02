@@ -16,7 +16,7 @@ import java.util.Iterator;
  */
 public class TreeViewImpl extends Composite implements TreeView {
 
-    private FocusPanel delegate;
+    private final FocusPanel delegate;
 
     public TreeViewImpl() {
         initWidget(delegate = new FocusPanel());

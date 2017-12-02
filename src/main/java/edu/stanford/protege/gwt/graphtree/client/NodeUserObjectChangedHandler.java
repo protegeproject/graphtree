@@ -16,8 +16,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class NodeUserObjectChangedHandler<U extends Serializable> {
 
-    private TreeNodeViewMapper<U> viewMapper;
-    private TreeNodeRenderer<U> treeNodeRenderer;
+    private final TreeNodeViewMapper<U> viewMapper;
+    private final TreeNodeRenderer<U> treeNodeRenderer;
 
     public NodeUserObjectChangedHandler(@Nonnull TreeNodeViewMapper<U> viewMapper,
                                         @Nonnull TreeNodeRenderer<U> treeNodeRenderer) {

@@ -18,11 +18,11 @@ import java.util.Optional;
 public class SetTreeNodeExpandedHandler<U extends Serializable> implements TreeNodeViewActionHandler<U> {
 
 
-    private HasGetNodes<U> hasGetNodes;
+    private final HasGetNodes<U> hasGetNodes;
 
-    private TreeNodeViewManager<U> viewManager;
+    private final TreeNodeViewManager<U> viewManager;
 
-    private SetSelectionModel<TreeNode<U>> selectionModel;
+    private final SetSelectionModel<TreeNode<U>> selectionModel;
 
     @Inject
     public SetTreeNodeExpandedHandler(HasGetNodes<U> hasGetNodes, SetSelectionModel<TreeNode<U>> selectionModel, TreeNodeViewManager<U> viewMapper) {
@@ -49,11 +49,11 @@ public class SetTreeNodeExpandedHandler<U extends Serializable> implements TreeN
 
     private static class LoadChildNodeViewsCallback<U extends Serializable> implements GetTreeNodesCallback<U> {
 
-        private TreeNodeViewManager<U> viewManager;
+        private final TreeNodeViewManager<U> viewManager;
 
-        private TreeNodeView<U> parentView;
+        private final TreeNodeView<U> parentView;
 
-        private SetSelectionModel<TreeNode<U>> selectionModel;
+        private final SetSelectionModel<TreeNode<U>> selectionModel;
 
         protected LoadChildNodeViewsCallback(TreeNodeView<U> parentView, SetSelectionModel<TreeNode<U>> selectionModel, TreeNodeViewManager<U> viewManager) {
             this.parentView = parentView;

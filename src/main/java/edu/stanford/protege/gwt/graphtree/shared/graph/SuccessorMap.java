@@ -40,7 +40,7 @@ public class SuccessorMap<U extends Serializable> implements Serializable {
 
     public static class Builder<U extends Serializable> implements Serializable {
 
-        private transient Multimap<GraphNode<U>, GraphNode<U>> successorMap;
+        private final transient Multimap<GraphNode<U>, GraphNode<U>> successorMap;
 
         public Builder() {
             this.successorMap = LinkedHashMultimap.create();

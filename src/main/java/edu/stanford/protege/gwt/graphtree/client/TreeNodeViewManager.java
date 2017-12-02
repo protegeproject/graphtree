@@ -21,11 +21,11 @@ public class TreeNodeViewManager<U extends Serializable> implements TreeNodeView
 
     public static final String TREE_NODE_VIEW_STYLE_NAME = "tree-node-view";
 
-    private Map<TreeNodeId, TreeNodeView<U>> node2viewMap = HashBiMap.create();
+    private final Map<TreeNodeId, TreeNodeView<U>> node2viewMap = HashBiMap.create();
 
-    private Map<Element, TreeNodeView<U>> element2TreeNodeMap = Maps.newHashMap();
+    private final Map<Element, TreeNodeView<U>> element2TreeNodeMap = Maps.newHashMap();
 
-    private TreeNodeRenderer<U> renderer;
+    private final TreeNodeRenderer<U> renderer;
 
     @Inject
     public TreeNodeViewManager(TreeNodeRenderer<U> renderer) {

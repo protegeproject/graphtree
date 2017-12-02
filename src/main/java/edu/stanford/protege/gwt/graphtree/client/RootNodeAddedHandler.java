@@ -13,9 +13,9 @@ import java.io.Serializable;
  */
 public class RootNodeAddedHandler<U extends Serializable> {
 
-    private TreeNodeViewManager<U> viewManager;
+    private final TreeNodeViewManager<U> viewManager;
 
-    private HasWidgets rootNodeContainer;
+    private final HasWidgets rootNodeContainer;
 
     public RootNodeAddedHandler(TreeNodeViewManager<U> viewManager, HasWidgets rootNodeContainer) {
         this.viewManager = viewManager;

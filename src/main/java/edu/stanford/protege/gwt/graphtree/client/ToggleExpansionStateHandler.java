@@ -17,9 +17,9 @@ import java.util.Collections;
  */
 public class ToggleExpansionStateHandler<U extends Serializable> implements TreeNodeViewActionHandler<U> {
 
-    private SetTreeNodeExpandedHandler<U> setTreeNodeExpandedAction;
+    private final SetTreeNodeExpandedHandler<U> setTreeNodeExpandedAction;
 
-    private SetTreeNodeCollapsedHandler<U> setTreeNodeCollapsedAction;
+    private final SetTreeNodeCollapsedHandler<U> setTreeNodeCollapsedAction;
 
     public ToggleExpansionStateHandler(HasGetNodes<U> hasGetNodes, SetSelectionModel<TreeNode<U>> selectionModel, TreeNodeViewManager<U> viewManager) {
         this(new SetTreeNodeExpandedHandler<U>(hasGetNodes, selectionModel, viewManager), new SetTreeNodeCollapsedHandler<U>());

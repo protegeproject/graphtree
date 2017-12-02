@@ -40,7 +40,7 @@ public class GraphTreeNodeModelTestCase<U extends Serializable> {
     @Mock
     U A, B, C, D, E;
 
-    UserObjectKeyProvider<U, String> keyProvider = Object::toString;
+    final UserObjectKeyProvider<U, String> keyProvider = Object::toString;
 
     @Test
     public void getNodes_Callback_isCalledForEmptyGraph() {

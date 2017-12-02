@@ -17,15 +17,15 @@ import java.util.List;
  */
 public class KeyboardEventMapper<U extends Serializable> {
 
-    private SelectPreviousTreeNodesHandler<U> selectPreviousTreeNodesHandler;
+    private final SelectPreviousTreeNodesHandler<U> selectPreviousTreeNodesHandler;
 
-    private SelectNextTreeNodesHandler<U> selectNextNodesAction;
+    private final SelectNextTreeNodesHandler<U> selectNextNodesAction;
 
-    private SetTreeNodeCollapsedHandler<U> setNodeCollapsedAction;
+    private final SetTreeNodeCollapsedHandler<U> setNodeCollapsedAction;
 
-    private SetTreeNodeExpandedHandler<U> setNodeExpandedAction;
+    private final SetTreeNodeExpandedHandler<U> setNodeExpandedAction;
 
-    private TreeNodeViewSelectionProvider<U> selectionProvider;
+    private final TreeNodeViewSelectionProvider<U> selectionProvider;
 
     public KeyboardEventMapper(TreeNodeViewSelectionProvider<U> selectionProvider,
                                SetTreeNodeExpandedHandler<U> setNodeExpandedAction,

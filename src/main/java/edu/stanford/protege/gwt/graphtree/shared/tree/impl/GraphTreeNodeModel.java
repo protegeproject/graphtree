@@ -408,11 +408,11 @@ public class GraphTreeNodeModel<U extends Serializable, K> implements TreeNodeMo
 
     private class LoadPathElement implements GetTreeNodesCallback<U> {
 
-        private U currentElement;
+        private final U currentElement;
 
-        private Iterator<U> nextElements;
+        private final Iterator<U> nextElements;
 
-        private LoadPathCallback<U> callback;
+        private final LoadPathCallback<U> callback;
 
         private LoadPathElement(U currentElement, Iterator<U> nextElements, LoadPathCallback<U> callback) {
             this.currentElement = currentElement;

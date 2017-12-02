@@ -16,7 +16,7 @@ import java.io.Serializable;
  */
 public class TreeViewEventTargetFinder<U extends Serializable> {
 
-    private TreeNodeViewManager<U> viewManager;
+    private final TreeNodeViewManager<U> viewManager;
 
     public TreeViewEventTargetFinder(TreeNodeViewManager<U> viewManager) {
         this.viewManager = viewManager;

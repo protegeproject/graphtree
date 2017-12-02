@@ -14,11 +14,11 @@ import java.util.Collections;
  */
 public class MouseEventMapper<U extends Serializable> {
 
-    private SetTreeNodeSelectedHandler<U> setTreeNodeSelectedHandler;
+    private final SetTreeNodeSelectedHandler<U> setTreeNodeSelectedHandler;
 
-    private ToggleExpansionStateHandler<U> toggleExpansionStateAction;
+    private final ToggleExpansionStateHandler<U> toggleExpansionStateAction;
 
-    private TreeViewEventTargetFinder<U> eventTargetFinder;
+    private final TreeViewEventTargetFinder<U> eventTargetFinder;
 
     public MouseEventMapper(SetTreeNodeSelectedHandler<U> setTreeNodeSelectedHandler,
                             ToggleExpansionStateHandler<U> toggleExpansionStateAction,

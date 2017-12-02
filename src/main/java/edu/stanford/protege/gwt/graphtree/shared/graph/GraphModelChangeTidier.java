@@ -16,7 +16,7 @@ import java.util.*;
  */
 public class GraphModelChangeTidier<U extends Serializable> {
 
-    private List<GraphModelChange<U>> changes;
+    private final List<GraphModelChange<U>> changes;
 
     public GraphModelChangeTidier(List<GraphModelChange<U>> changes) {
         this.changes = new ArrayList<>(changes);

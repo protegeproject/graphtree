@@ -30,7 +30,7 @@ public class TreeNodeIndex_UpdateUserObject_TestCase<U extends Serializable> {
     @Mock
     private TreeNodeId parentId, childId;
 
-    private UserObjectKeyProvider<U, String> keyProvider = userObject -> "TheKey";
+    private final UserObjectKeyProvider<U, String> keyProvider = userObject -> "TheKey";
 
     private TreeNodeIndex<U, String> index;
 

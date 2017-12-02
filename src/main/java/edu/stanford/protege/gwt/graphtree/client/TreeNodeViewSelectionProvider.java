@@ -15,9 +15,9 @@ import java.util.*;
  */
 public class TreeNodeViewSelectionProvider<U extends Serializable> implements Iterable<TreeNodeView<U>> {
 
-    private SetSelectionModel<TreeNode<U>> selectionModel;
+    private final SetSelectionModel<TreeNode<U>> selectionModel;
 
-    private TreeNodeViewMapper<U> viewMapper;
+    private final TreeNodeViewMapper<U> viewMapper;
 
     public TreeNodeViewSelectionProvider(SetSelectionModel<TreeNode<U>> selectionModel, TreeNodeViewMapper<U> viewMapper) {
         this.selectionModel = selectionModel;

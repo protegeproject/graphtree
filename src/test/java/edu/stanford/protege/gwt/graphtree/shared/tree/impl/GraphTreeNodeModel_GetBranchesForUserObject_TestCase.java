@@ -43,7 +43,7 @@ public class GraphTreeNodeModel_GetBranchesForUserObject_TestCase<U extends Seri
     @Mock
     U A, B, C, D;
 
-    protected UserObjectKeyProvider<U, String> keyProvider = Object::toString;
+    protected final UserObjectKeyProvider<U, String> keyProvider = Object::toString;
 
     @Test
     public void getBranchesShouldReturnCorrectBranches() {

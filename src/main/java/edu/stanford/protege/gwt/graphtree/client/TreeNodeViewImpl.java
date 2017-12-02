@@ -40,7 +40,7 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
 
     private static final TreeNodeViewResources RESOURCES = GWT.create(TreeNodeViewResources.class);
 
-    private static TreeNodeViewImplUiBinder ourUiBinder = GWT.create(TreeNodeViewImplUiBinder.class);
+    private static final TreeNodeViewImplUiBinder ourUiBinder = GWT.create(TreeNodeViewImplUiBinder.class);
 
     @UiField
     protected Image handleImage;
@@ -465,13 +465,13 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
 
     private static class AnimateOpen extends Animation {
 
-        private int finalHeight;
+        private final int finalHeight;
 
-        private Widget holderWidget;
+        private final Widget holderWidget;
 
-        private Widget childWidget;
+        private final Widget childWidget;
 
-        private int initialHeight;
+        private final int initialHeight;
 
         private AnimateOpen(int finalHeight, Widget holderWidget, Widget childWidget) {
             this.finalHeight = finalHeight;
@@ -508,11 +508,11 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
 
     private static class AnimateClose extends Animation {
 
-        private int rowCount;
+        private final int rowCount;
 
-        private Widget holderWidget;
+        private final Widget holderWidget;
 
-        private Widget childWidget;
+        private final Widget childWidget;
 
         private AnimateClose(int rowCount, Widget holderWidget, Widget childWidget) {
             this.rowCount = rowCount;
@@ -537,9 +537,9 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
 
     private static class AnimateRemove extends Animation {
 
-        private Widget widget;
+        private final Widget widget;
 
-        private int initialHeight;
+        private final int initialHeight;
 
         private AnimateRemove(Widget widget) {
             this.widget = widget;

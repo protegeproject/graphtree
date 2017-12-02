@@ -13,9 +13,9 @@ import java.io.Serializable;
  */
 public class DragAndDropEventMapper<U extends Serializable> implements HasTreeNodeDropHandler<U> {
 
-    private TreeViewEventTargetFinder<U> eventTargetManager;
+    private final TreeViewEventTargetFinder<U> eventTargetManager;
 
-    private TreeNodeViewDragAndDropHandler<U> dragAndDropHandler;
+    private final TreeNodeViewDragAndDropHandler<U> dragAndDropHandler;
 
     public DragAndDropEventMapper(TreeViewEventTargetFinder<U> eventTargetManager,
                                   TreeNodeViewDragAndDropHandler<U> dragAndDropHandler) {

@@ -15,9 +15,9 @@ public class TreeNodeViewEventTarget<U extends Serializable> {
         CONTENT
     }
 
-    private TreeNodeView<U> view;
+    private final TreeNodeView<U> view;
 
-    private ViewTargetType viewHandleIsTarget;
+    private final ViewTargetType viewHandleIsTarget;
 
     public TreeNodeViewEventTarget(TreeNodeView<U> view, ViewTargetType viewHandleIsTarget) {
         this.view = view;

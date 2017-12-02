@@ -10,11 +10,11 @@ import java.util.*;
  */
 public class DepthFirstIterator<N> implements Iterator<N> {
 
-    private HasSuccessors<N> hasSuccessors;
+    private final HasSuccessors<N> hasSuccessors;
 
-    private List<N> stack;
+    private final List<N> stack;
 
-    private Set<N> visited;
+    private final Set<N> visited;
 
     public DepthFirstIterator(N N, HasSuccessors<N> hasSuccessors) {
         this.hasSuccessors = hasSuccessors;

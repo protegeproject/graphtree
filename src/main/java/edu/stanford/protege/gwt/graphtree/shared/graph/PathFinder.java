@@ -14,7 +14,7 @@ import java.util.*;
 public class PathFinder<N> {
 
 
-    private HasSuccessors<N> hasSuccessors;
+    private final HasSuccessors<N> hasSuccessors;
 
     public PathFinder(HasSuccessors<N> hasSuccessors) {
         this.hasSuccessors = hasSuccessors;

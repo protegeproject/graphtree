@@ -14,9 +14,9 @@ import java.util.Optional;
  */
 public class RootNodeRemovedHandler<U extends Serializable> {
 
-    private TreeNodeViewManager<U> viewManager;
+    private final TreeNodeViewManager<U> viewManager;
 
-    private HasWidgets rootNodeContainer;
+    private final HasWidgets rootNodeContainer;
 
     public RootNodeRemovedHandler(TreeNodeViewManager<U> viewManager, HasWidgets rootNodeContainer) {
         this.viewManager = viewManager;

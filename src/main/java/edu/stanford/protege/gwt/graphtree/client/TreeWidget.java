@@ -27,9 +27,9 @@ import static java.util.stream.Collectors.toList;
  */
 public class TreeWidget<U extends Serializable, K> extends Composite implements HasAllMouseHandlers {
 
-    private TreePresenter<U, K> treePresenter;
+    private final TreePresenter<U, K> treePresenter;
 
-    private TreeView treeView;
+    private final TreeView treeView;
 
     public TreeWidget(TreeView treeView, TreeNodeModel<U, K> model, TreeNodeRenderer<U> renderer) {
         SingleSelectionModel<TreeNode<U>> selectionModel = new SingleSelectionModel<>();

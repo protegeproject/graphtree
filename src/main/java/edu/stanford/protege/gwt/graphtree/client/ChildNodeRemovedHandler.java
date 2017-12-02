@@ -13,7 +13,7 @@ import java.util.Optional;
  */
 public class ChildNodeRemovedHandler<U extends Serializable> {
 
-    private TreeNodeViewManager<U> viewManager;
+    private final TreeNodeViewManager<U> viewManager;
 
     public ChildNodeRemovedHandler(TreeNodeViewManager<U> viewManager) {
         this.viewManager = viewManager;

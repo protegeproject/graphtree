@@ -13,7 +13,7 @@ import java.util.Iterator;
  */
 public class RootNodeContainerImpl implements RootNodeContainer {
 
-    private FlowPanel delegate = new FlowPanel();
+    private final FlowPanel delegate = new FlowPanel();
 
     public void add(Widget w) {
         delegate.add(w);

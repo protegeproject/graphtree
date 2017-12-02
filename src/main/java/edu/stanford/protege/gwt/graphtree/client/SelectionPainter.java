@@ -21,9 +21,9 @@ public class SelectionPainter<U extends Serializable> {
 
     private SetSelectionModel<TreeNode<U>> selectionModel;
 
-    private TreeNodeViewMapper<U> treeNodeViewManager;
+    private final TreeNodeViewMapper<U> treeNodeViewManager;
 
-    private Set<TreeNode<U>> lastSelection = Sets.newHashSet();
+    private final Set<TreeNode<U>> lastSelection = Sets.newHashSet();
 
     private HandlerRegistration handlerRegistration;
 
