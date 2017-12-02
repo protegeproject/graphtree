@@ -15,17 +15,14 @@ import edu.stanford.protege.gwt.graphtree.shared.tree.*;
 import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static edu.stanford.protege.gwt.graphtree.client.TreeNodeViewState.EXPANDED;
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 /**
- * Author: Matthew Horridge<br>
- * Stanford University<br>
- * Bio-Medical Informatics Research Group<br>
- * Date: 21/01/2014
+ * Author: Matthew Horridge<br> Stanford University<br> Bio-Medical Informatics Research Group<br> Date: 21/01/2014
  */
 public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDropHandler<U>, HasGetNodes<U>, HasPendingChanges<U>, HasSetTreeNodeExpanded {
 
@@ -89,12 +86,13 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
 
     /**
      * Sets the TreeNodeModel used by this presenter.
+     *
      * @param model The model.  Not {@code null}.
      * @throws NullPointerException if {@code model} is {@code null}.
      */
     public void setModel(@Nonnull TreeNodeModel<U, K> model) {
         checkNotNull(model);
-        if(modelHandlerRegistration != null) {
+        if (modelHandlerRegistration != null) {
             modelHandlerRegistration.removeHandler();
         }
         viewManager.purge();
@@ -134,7 +132,7 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
     }
 
     public void setRootNodesExpanded() {
-        for(TreeNodeView<U> treeView : getRootViews()) {
+        for (TreeNodeView<U> treeView : getRootViews()) {
             treeView.setExpanded();
         }
     }
@@ -173,15 +171,15 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
     @Nonnull
     public Set<K> getSelectedKeys() {
         return selectionModel.getSelectedSet().stream()
-                .map(node -> model.getKeyProvider().getKey(node.getUserObject()))
-                .collect(toSet());
+                             .map(node -> model.getKeyProvider().getKey(node.getUserObject()))
+                             .collect(toSet());
     }
 
     @Nonnull
     public Optional<K> getFirstSelectedKey() {
         return selectionModel.getSelectedSet().stream()
-                .map(node -> model.getKeyProvider().getKey(node.getUserObject()))
-                .findFirst();
+                             .map(node -> model.getKeyProvider().getKey(node.getUserObject()))
+                             .findFirst();
     }
 
     public boolean isSelected(@Nonnull TreeNode<U> object) {
@@ -190,8 +188,8 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
 
     public boolean isSelected(@Nonnull K key) {
         return selectionModel.getSelectedSet().stream()
-                .map(node -> model.getKeyProvider().getKey(node.getUserObject()))
-                .findFirst().isPresent();
+                             .map(node -> model.getKeyProvider().getKey(node.getUserObject()))
+                             .findFirst().isPresent();
     }
 
     public void setSelected(@Nonnull TreeNode<U> object, boolean selected) {
@@ -206,7 +204,7 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
                 nodes.forEach(node -> {
                     Path<TreeNodeData<U>> pathToRoot = model.getPathToRoot(node.getId());
                     Path<K> curKeyPath = pathToRoot.transform(element -> model.getKeyProvider().getKey(element.getUserObject()));
-                    if(keyPath.equals(curKeyPath)) {
+                    if (keyPath.equals(curKeyPath)) {
                         pathToRoot.getLast().ifPresent(tn -> setSelected(tn.getTreeNode(), selected));
                     }
                 });
@@ -227,7 +225,7 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
                 nodes.forEach(node -> {
                     Path<TreeNodeData<U>> pathToRoot = model.getPathToRoot(node.getId());
                     Path<K> curKeyPath = pathToRoot.transform(element -> model.getKeyProvider().getKey(element.getUserObject()));
-                    if(keyPath.equals(curKeyPath)) {
+                    if (keyPath.equals(curKeyPath)) {
                         pathToRoot.forEach(tnd -> viewManager.getViewIfPresent(tnd.getId()).ifPresent(TreeNodeView::setExpanded));
                     }
                 });
@@ -248,6 +246,7 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
         }
         scrollSelectionIntoView();
     }
+
     public void pruneToNodes(@Nonnull Collection<TreeNodeId> treeNodes) {
         final Set<TreeNodeId> tailNodes = Sets.newHashSet(treeNodes);
         final Set<TreeNodeId> pathNodes = Sets.newHashSet();
@@ -273,12 +272,27 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
         }
     }
 
-    public void revealTreeNodesForUserObjectKey(@Nonnull final K userObjectKey,
-                                                @Nonnull final RevealMode revealMode) {
+    public void pruneToSelectedNodes() {
+        List<TreeNodeId> selNodeIds = selectionModel.getSelectedSet().stream()
+                                                    .map(TreeNode::getId)
+                                                    .collect(toList());
+        pruneToNodes(selNodeIds);
+    }
+
+    public void pruneToNodesContainingKey(@Nonnull K key, @Nonnull Runnable callback) {
+        model.getTreeNodesForUserObjectKey(key, nodes -> {
+            List<TreeNodeId> nodeIds = nodes.stream().map(TreeNodeData::getId).collect(toList());
+            pruneToNodes(nodeIds);
+            callback.run();
+        });
+    }
+
+    public void revealTreeNodesForKey(@Nonnull final K userObjectKey,
+                                      @Nonnull final RevealMode revealMode) {
         model.getTreeNodesForUserObjectKey(userObjectKey, nodes -> {
-            for(TreeNodeData<U> tn : nodes) {
+            for (TreeNodeData<U> tn : nodes) {
                 Path<TreeNodeData<U>> pathToRoot = model.getPathToRoot(tn.getId());
-                for(int i = 0; i < pathToRoot.size(); i++) {
+                for (int i = 0; i < pathToRoot.size(); i++) {
                     TreeNodeData<U> treeNodeData = pathToRoot.get(i);
                     if (i < pathToRoot.size() - 1) {
                         viewManager.getView(treeNodeData);
@@ -288,7 +302,7 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
                         setSelected(tn.getTreeNode(), true);
                     }
                 }
-                if(revealMode == RevealMode.REVEAL_FIRST) {
+                if (revealMode == RevealMode.REVEAL_FIRST) {
                     break;
                 }
             }

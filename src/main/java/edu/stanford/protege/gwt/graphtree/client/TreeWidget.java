@@ -130,15 +130,16 @@ public class TreeWidget<U extends Serializable, K> extends Composite implements 
     }
 
     public void pruneToSelectedNodes() {
-        List<TreeNodeId> selNodeIds = treePresenter.getSelectedNodes().stream()
-                                                   .map(TreeNode::getId)
-                                                   .collect(toList());
-        treePresenter.pruneToNodes(selNodeIds);
+        treePresenter.pruneToSelectedNodes();
     }
 
-    public void revealTreeNodesForUserObjectKey(@Nonnull K userObjectKey,
-                                                @Nonnull RevealMode revealMode) {
-        treePresenter.revealTreeNodesForUserObjectKey(userObjectKey, revealMode);
+    public void pruneToNodesContainingKey(@Nonnull K key, @Nonnull Runnable runnable) {
+        treePresenter.pruneToNodesContainingKey(key, runnable);
+    }
+
+    public void revealTreeNodesForKey(@Nonnull K userObjectKey,
+                                      @Nonnull RevealMode revealMode) {
+        treePresenter.revealTreeNodesForKey(userObjectKey, revealMode);
     }
 
 
