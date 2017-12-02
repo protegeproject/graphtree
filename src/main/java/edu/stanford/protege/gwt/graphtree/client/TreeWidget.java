@@ -11,11 +11,13 @@ import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNode;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeId;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeModel;
 
+import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -31,25 +33,27 @@ public class TreeWidget<U extends Serializable, K> extends Composite implements 
 
     private final TreeView treeView;
 
-    public TreeWidget(TreeView treeView, TreeNodeModel<U, K> model, TreeNodeRenderer<U> renderer) {
+    public TreeWidget(@Nonnull TreeView treeView,
+                      @Nonnull TreeNodeModel<U, K> model,
+                      @Nonnull TreeNodeRenderer<U> renderer) {
+        this.treeView = checkNotNull(treeView);
         SingleSelectionModel<TreeNode<U>> selectionModel = new SingleSelectionModel<>();
-        treePresenter = new TreePresenter<>(treeView, selectionModel, renderer);
-        treePresenter.setModel(model);
-        this.treeView = treeView;
+        treePresenter = new TreePresenter<>(treeView, selectionModel, checkNotNull(renderer));
+        treePresenter.setModel(checkNotNull(model));
         initWidget(treeView.asWidget());
     }
 
-    public TreeWidget(TreeNodeModel<U, K> model) {
+    public TreeWidget(@Nonnull TreeNodeModel<U, K> model) {
         this(model, new TreeNodeRendererImpl<>());
     }
 
-    public TreeWidget(TreeNodeModel<U, K> model, TreeNodeRenderer<U> renderer) {
+    public TreeWidget(@Nonnull TreeNodeModel<U, K> model,
+                      @Nonnull TreeNodeRenderer<U> renderer) {
         this(new TreeViewImpl(), model, renderer);
     }
 
     public void reload() {
         treePresenter.reload();
-
     }
 
     public void setModel(TreeNodeModel<U, K> model) {
