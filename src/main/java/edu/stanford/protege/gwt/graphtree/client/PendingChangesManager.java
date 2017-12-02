@@ -32,27 +32,10 @@ public class PendingChangesManager<U extends Serializable> implements TreeNodeMo
     @Override
     public void handleTreeNodeModelEvent(@Nonnull TreeNodeModelEvent event) {
         for(TreeNodeModelChange change : event.getChanges()) {
-            for(Iterator<PendingChangeHandler> it = pending.iterator(); it.hasNext();) {
-                PendingChangeHandler changeHandler = it.next();
-                if(changeHandler.handle(change)) {
-                    it.remove();
-                }
-            }
-//            handleChangedNodes(change.getTreeNodes());
+            pending.removeIf(changeHandler -> changeHandler.handle(change));
         }
     }
-
-//    private void handleChangedNodes(Set<TreeNode> nodes) {
-//        for(Iterator<PendingChangeHandler> it = pending.iterator(); it.hasNext(); ) {
-//            PendingChangeHandler handler = it.next();
-//            TreeNodeView view = handler.getView();
-//            if(nodes.contains(view.getNodeId())) {
-//                handler.end();
-//                it.remove();
-//            }
-//        }
-//    }
-
+    
     public enum FinalExpansionState {
         SET_EXPANDED,
         DO_NOTHING
