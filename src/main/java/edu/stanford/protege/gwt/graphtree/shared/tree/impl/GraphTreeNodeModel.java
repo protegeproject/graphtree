@@ -127,8 +127,8 @@ public class GraphTreeNodeModel<U extends Serializable, K> implements TreeNodeMo
     public Path<TreeNodeData<U>> getPathToRoot(@Nonnull TreeNodeId treeNodeId) {
         List<TreeNodeData<U>> result = new ArrayList<>();
         Optional<TreeNodeData<U>> treeNodeData = treeNodeIndex.getTreeNodeData(treeNodeId);
-        if (treeNodeData.isPresent()) {
-            result.add(treeNodeData.get());
+        treeNodeData.ifPresent(uTreeNodeData1 -> {
+            result.add(uTreeNodeData1);
             Optional<TreeNodeId> parentNode = treeNodeIndex.getParent(treeNodeId);
             while (parentNode.isPresent()) {
                 TreeNodeId theParentNodeId = parentNode.get();
@@ -136,7 +136,7 @@ public class GraphTreeNodeModel<U extends Serializable, K> implements TreeNodeMo
                 parentNodeData.ifPresent(uTreeNodeData -> result.add(0, uTreeNodeData));
                 parentNode = treeNodeIndex.getParent(theParentNodeId);
             }
-        }
+        });
         return new Path<>(result);
     }
 

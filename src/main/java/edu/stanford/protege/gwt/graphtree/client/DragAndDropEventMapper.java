@@ -30,36 +30,31 @@ public class DragAndDropEventMapper<U extends Serializable> implements HasTreeNo
 
     public void bind(TreeView view) {
         view.asWidget().addDomHandler(event -> {
-            Optional<TreeNodeViewEventTarget<U>> view1 = eventTargetManager.getEventTarget(event);
-            if (view1.isPresent()) {
-                dragAndDropHandler.handleDragStart(event, view1.get().getView());
-            }
+            Optional<TreeNodeViewEventTarget<U>> target = eventTargetManager.getEventTarget(event);
+            target.ifPresent(taretView -> dragAndDropHandler.handleDragStart(event, taretView.getView()));
         }, DragStartEvent.getType());
+
         view.asWidget().addDomHandler(event -> {
             Optional<TreeNodeViewEventTarget<U>> target = eventTargetManager.getEventTarget(event);
-            if (target.isPresent()) {
-                dragAndDropHandler.handleDragEnter(event, target.get().getView());
-            }
+            target.ifPresent(targetView -> dragAndDropHandler.handleDragEnter(event, targetView.getView()));
         }, DragEnterEvent.getType());
+
         view.asWidget().addDomHandler(event -> {
             Optional<TreeNodeViewEventTarget<U>> target = eventTargetManager.getEventTarget(event);
-            if (target.isPresent()) {
-                dragAndDropHandler.handleDragOver(event, target.get().getView());
-            }
+            target.ifPresent(targetView -> dragAndDropHandler.handleDragOver(event, targetView.getView()));
         }, DragOverEvent.getType());
+
         view.asWidget().addDomHandler(event -> {
             Optional<TreeNodeViewEventTarget<U>> target = eventTargetManager.getEventTarget(event);
-            if (target.isPresent()) {
-                dragAndDropHandler.handleDragLeave(event, target.get().getView());
-            }
+            target.ifPresent(targetView -> dragAndDropHandler.handleDragLeave(event, targetView.getView()));
         }, DragLeaveEvent.getType());
+
         view.asWidget().addDomHandler(event -> {
             event.preventDefault();
             Optional<TreeNodeViewEventTarget<U>> target = eventTargetManager.getEventTarget(event);
-            if (target.isPresent()) {
-                dragAndDropHandler.handleDrop(event, target.get().getView());
-            }
+            target.ifPresent(targetView -> dragAndDropHandler.handleDrop(event, targetView.getView()));
         }, DropEvent.getType());
+
         view.asWidget().addDomHandler(dragAndDropHandler::handleDragEnd, DragEndEvent.getType());
     }
 }

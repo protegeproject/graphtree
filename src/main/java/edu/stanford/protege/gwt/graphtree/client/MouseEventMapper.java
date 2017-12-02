@@ -55,10 +55,8 @@ public class MouseEventMapper<U extends Serializable> {
 
     private void handleDoubleClickEvent(DoubleClickEvent event) {
         Optional<TreeNodeViewEventTarget<U>> target = eventTargetFinder.getEventTarget(event);
-        if (target.isPresent()) {
-            toggleExpansionStateAction.invoke(TreeViewInputEvent.fromEvent(event),
-                    Collections.singleton(target.get().getView()));
-        }
+        target.ifPresent(uTreeNodeViewEventTarget -> toggleExpansionStateAction.invoke(TreeViewInputEvent.fromEvent(event),
+                                                                                       Collections.singleton(uTreeNodeViewEventTarget.getView())));
     }
 
 }
