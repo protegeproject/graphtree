@@ -29,6 +29,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class TreeNodeViewImpl<U extends Serializable> extends Composite implements TreeNodeView<U>{
 
+    private static final int MINIMUM_ANIMATION_TIME = 200;
+    private static final int MAXIMUM_ANIMATION_TIME = 500;
+
     static {
         TreeNodeViewResources.RESOURCES.style().ensureInjected();
     }
@@ -249,7 +252,7 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
         }
 //        childContainer.remove(child);
         AnimateRemove animation = new AnimateRemove(child.asWidget());
-        animation.run(200);
+        animation.run(MINIMUM_ANIMATION_TIME);
         if(previousSibling != null) {
             previousSibling.nextSibling = nextSibling;
         }
@@ -445,11 +448,11 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
     private int getAnimationDuration() {
         int childCount = getExpandedDescendantCount();
         int time = childCount * 100;
-        if (time < 200) {
-            return 200;
+        if (time < MINIMUM_ANIMATION_TIME) {
+            return MINIMUM_ANIMATION_TIME;
         }
-        else if (time > 500) {
-            return 500;
+        else if (time > MAXIMUM_ANIMATION_TIME) {
+            return MAXIMUM_ANIMATION_TIME;
         }
         else {
             return time;
