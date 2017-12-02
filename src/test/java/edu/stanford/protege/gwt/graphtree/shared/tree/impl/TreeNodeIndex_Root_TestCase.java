@@ -36,7 +36,7 @@ public class TreeNodeIndex_Root_TestCase<U extends Serializable> {
     private U userObjectA;
 
     @Mock
-    private TreeNodeId idA, parent, child;
+    private TreeNodeId idA;
 
     private final UserObjectKeyProvider<U, String> keyProvider = Object::toString;
 

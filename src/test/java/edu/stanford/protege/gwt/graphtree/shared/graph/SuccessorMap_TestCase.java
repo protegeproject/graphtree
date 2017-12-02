@@ -37,9 +37,6 @@ public class SuccessorMap_TestCase<T extends Serializable> {
         SuccessorMap.Builder<T> builder = SuccessorMap.<T>builder();
         builder.add(A, B);
         builder.add(B, C);
-        SuccessorMap<T> map = builder.build();
-//        assertThat(map.getSuccessors(A), hasItem(B));
-//        assertThat(map.getSuccessors(B), hasItem(C));
     }
 
 

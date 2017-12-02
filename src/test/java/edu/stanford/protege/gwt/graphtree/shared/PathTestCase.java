@@ -26,7 +26,7 @@ import static org.junit.Assert.assertNotNull;
 public class PathTestCase<U extends Serializable> {
 
     @Mock
-    U A, B, C, D;
+    U A, B, C;
     
     
     @Test
