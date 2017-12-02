@@ -49,7 +49,7 @@ public class TopologicalSorter<U extends Serializable> {
                 }
             }
         }
-        return Optional.<List<GraphNode<U>>>of(result);
+        return Optional.of(result);
     }
 
     private boolean visit(GraphNode<U> n, Set<GraphNode<U>> marked, Set<GraphNode<U>> tempMark, List<GraphNode<U>> result) {

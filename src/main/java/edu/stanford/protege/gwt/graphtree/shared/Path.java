@@ -39,7 +39,7 @@ public class Path<N> implements Iterable<N>, Serializable {
 
     @SafeVarargs
     public static <N> Path<N> asPath(N... elements) {
-        return new Path<>(Arrays.<N>asList(elements));
+        return new Path<>(Arrays.asList(elements));
     }
 
     @SuppressWarnings("unchecked")
@@ -103,7 +103,7 @@ public class Path<N> implements Iterable<N>, Serializable {
     }
 
     public Path<N> reverse() {
-        return new Path<>(Lists.<N>reverse(path));
+        return new Path<>(Lists.reverse(path));
     }
 
     @Override

@@ -33,7 +33,7 @@ public class SuccessorMap_TestCase<T extends Serializable> {
 
     @Test
     public void builderBuildsExpectedMap() {
-        SuccessorMap.Builder<T> builder = SuccessorMap.<T>builder();
+        SuccessorMap.Builder<T> builder = SuccessorMap.builder();
         builder.add(A, B);
         builder.add(B, C);
     }
@@ -41,7 +41,7 @@ public class SuccessorMap_TestCase<T extends Serializable> {
 
     @Test
     public void getSizeReturnsTheNumberOfPredecessorNodes() {
-        SuccessorMap.Builder<T> builder = SuccessorMap.<T>builder();
+        SuccessorMap.Builder<T> builder = SuccessorMap.builder();
         builder.add(A, B);
         builder.add(B, C);
         SuccessorMap<T> map = builder.build();
@@ -50,7 +50,7 @@ public class SuccessorMap_TestCase<T extends Serializable> {
 
     @Test
     public void isEmptyReturnsTrueWhenEmpty() {
-        SuccessorMap.Builder<T> builder = SuccessorMap.<T>builder();
+        SuccessorMap.Builder<T> builder = SuccessorMap.builder();
         SuccessorMap<T> map = builder.build();
         assertThat(map.isEmpty(), equalTo(true));
     }

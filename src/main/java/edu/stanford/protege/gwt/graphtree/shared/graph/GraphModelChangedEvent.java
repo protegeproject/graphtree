@@ -23,7 +23,7 @@ public final class GraphModelChangedEvent<U extends Serializable> extends GwtEve
     }
 
     public GraphModelChangedEvent(Iterable<GraphModelChange<U>> changes) {
-        this.changes = ImmutableList.<GraphModelChange<U>>copyOf(changes);
+        this.changes = ImmutableList.copyOf(changes);
     }
 
     @SuppressWarnings("unchecked")

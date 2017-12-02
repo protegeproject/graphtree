@@ -53,8 +53,8 @@ public class PathFinder_TestCase<U extends Serializable> {
         HasSuccessors<U> hasSuccessors = new HasSuccessorsImpl<>(successorMap);
         PathFinder<U> pathFinder = new PathFinder<>(hasSuccessors);
         Collection<Path<U>> result = pathFinder.getPaths(A, A);
-        Path<U> expectedPath = Path.<U>asPath(A);
-        assertEquals(Collections.<Path<U>>singleton(expectedPath), result);
+        Path<U> expectedPath = Path.asPath(A);
+        assertEquals(Collections.singleton(expectedPath), result);
     }
 
     @Test
@@ -66,8 +66,8 @@ public class PathFinder_TestCase<U extends Serializable> {
         HasSuccessors<U> hasSuccessors = new HasSuccessorsImpl<>(successorMap);
         PathFinder<U> pathFinder = new PathFinder<>(hasSuccessors);
         Collection<Path<U>> result = pathFinder.getPaths(A, C);
-        Path<U> expectedPath = Path.<U>asPath(A, B, C);
-        assertEquals(Collections.<Path<U>>singleton(expectedPath), result);
+        Path<U> expectedPath = Path.asPath(A, B, C);
+        assertEquals(Collections.singleton(expectedPath), result);
     }
 
     @Test
@@ -88,8 +88,8 @@ public class PathFinder_TestCase<U extends Serializable> {
         HasSuccessors<U> hasSuccessors = new HasSuccessorsImpl<>(successorMap);
         PathFinder<U> pathFinder = new PathFinder<>(hasSuccessors);
         Collection<Path<U>> result = pathFinder.getPaths(A, B);
-        Path<U> expectedPath = Path.<U>asPath(A, B);
-        assertEquals(Collections.<Path<U>>singleton(expectedPath), result);
+        Path<U> expectedPath = Path.asPath(A, B);
+        assertEquals(Collections.singleton(expectedPath), result);
     }
 
     @Test
@@ -101,7 +101,7 @@ public class PathFinder_TestCase<U extends Serializable> {
         PathFinder<U> pathFinder = new PathFinder<>(hasSuccessors);
         Collection<Path<U>> result = pathFinder.getPaths(A, C);
         Path<U> expectedPath = Path.asPath(A, B, C);
-        assertEquals(Collections.<Path<U>>singleton(expectedPath), result);
+        assertEquals(Collections.singleton(expectedPath), result);
     }
 
     @Test
@@ -114,7 +114,7 @@ public class PathFinder_TestCase<U extends Serializable> {
         PathFinder<U> pathFinder = new PathFinder<>(hasSuccessors);
         Collection<Path<U>> result = pathFinder.getPaths(A, C);
         Path<U> expectedPath = Path.asPath(A, B, C);
-        assertEquals(Collections.<Path<U>>singleton(expectedPath), result);
+        assertEquals(Collections.singleton(expectedPath), result);
     }
 
     @Test
@@ -128,8 +128,8 @@ public class PathFinder_TestCase<U extends Serializable> {
         PathFinder<U> pathFinder = new PathFinder<>(hasSuccessors);
         Collection<Path<U>> result = pathFinder.getPaths(A, D);
         Set<Path<U>> expectedPaths = new HashSet<>();
-        expectedPaths.add(Path.<U>asPath(A, B, D));
-        expectedPaths.add(Path.<U>asPath(A, C, D));
+        expectedPaths.add(Path.asPath(A, B, D));
+        expectedPaths.add(Path.asPath(A, C, D));
         assertEquals(expectedPaths, result);
     }
 

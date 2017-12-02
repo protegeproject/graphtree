@@ -143,7 +143,7 @@ public class SimpleGraphModel<U extends Serializable, K> implements GraphModel<U
     }
 
     public HandlerRegistration addGraphModelHandler(GraphModelChangedHandler<U> handler) {
-        return eventBus.addHandler(GraphModelChangedEvent.<U>getType(), handler);
+        return eventBus.addHandler(GraphModelChangedEvent.getType(), handler);
     }
 
     public void addEdge(U predecessor, U successor) {

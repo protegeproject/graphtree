@@ -20,7 +20,7 @@ public class SelectPreviousTreeNodesHandler<U extends Serializable> implements T
     private final TreeNodeViewTraverser<U> viewTraverser;
 
     public SelectPreviousTreeNodesHandler(SetSelectionModel<TreeNode<U>> selectionModel) {
-        this(selectionModel, TreeNodeViewTraverser.<U>newTreeNodeViewTraverser());
+        this(selectionModel, TreeNodeViewTraverser.newTreeNodeViewTraverser());
     }
 
     @Inject

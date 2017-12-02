@@ -35,7 +35,7 @@ public class PendingChangesManager<U extends Serializable> implements TreeNodeMo
             pending.removeIf(changeHandler -> changeHandler.handle(change));
         }
     }
-    
+
     public enum FinalExpansionState {
         SET_EXPANDED,
         DO_NOTHING

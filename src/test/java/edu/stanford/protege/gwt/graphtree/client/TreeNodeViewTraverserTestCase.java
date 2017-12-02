@@ -40,7 +40,7 @@ public class TreeNodeViewTraverserTestCase<U extends Serializable> {
     }
 
     private java.util.Optional<TreeNodeView<U>> getAbsent() {
-        return java.util.Optional.<TreeNodeView<U>>empty();
+        return java.util.Optional.empty();
     }
 
     @Test
