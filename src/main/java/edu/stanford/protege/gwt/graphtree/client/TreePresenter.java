@@ -138,7 +138,7 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
     }
 
     public void setDropHandler(@Nonnull TreeNodeDropHandler<U> dropHandler) {
-        dragAndDropManager.setDropHandler(dropHandler);
+        dragAndDropManager.setDropHandler(checkNotNull(dropHandler));
     }
 
     @Nonnull
@@ -148,12 +148,9 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
 
     @Nonnull
     public Path<TreeNodeId> getPathToRoot(@Nonnull TreeNodeId fromNode) {
-        java.util.Optional<TreeNodeView<U>> view = viewManager.getViewIfPresent(fromNode);
-        if (!view.isPresent()) {
-            return Path.emptyPath();
-        }
-        TreeNodeViewTraverser<U> traverser = TreeNodeViewTraverser.newTreeNodeViewTraverser();
-        return traverser.getTreeNodePathToRoot(view.get());
+        Optional<TreeNodeView<U>> view = viewManager.getViewIfPresent(fromNode);
+        return view.map(theView -> TreeNodeViewTraverser.<U>newTreeNodeViewTraverser().getTreeNodePathToRoot(theView))
+                   .orElse(Path.emptyPath());
     }
 
     @Override
@@ -179,7 +176,9 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
         selectionModel.setSelected(object, selected);
     }
 
-    public void setSelected(@Nonnull Path<K> keyPath, boolean selected, @Nonnull Runnable callback) {
+    public void setSelected(@Nonnull Path<K> keyPath,
+                            boolean selected,
+                            @Nonnull Runnable callback) {
         keyPath.getLast().ifPresent(lastKey -> {
             model.getTreeNodesForUserObjectKey(lastKey, nodes -> {
                 nodes.forEach(node -> {
@@ -192,6 +191,12 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
                 callback.run();
             });
         });
+    }
+
+    public void scrollSelectionIntoView() {
+        for (TreeNodeView<U> selectedView : treeNodeViewSelectionProvider.getSelection()) {
+            selectedView.scrollIntoView();
+        }
     }
 
     public void setExpanded(@Nonnull Path<K> keyPath) {
@@ -207,13 +212,6 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
             });
         });
     }
-
-    public void scrollSelectionIntoView() {
-        for (TreeNodeView<U> selectedView : treeNodeViewSelectionProvider.getSelection()) {
-            selectedView.scrollIntoView();
-        }
-    }
-
 
     public void clearPruning() {
         for (TreeNodeView<U> rootView : getRootViews()) {
