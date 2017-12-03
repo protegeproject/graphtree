@@ -36,29 +36,21 @@ public class PendingChangesManager<U extends Serializable> implements TreeNodeMo
         }
     }
 
-    public enum FinalExpansionState {
-        SET_EXPANDED,
-        DO_NOTHING
-    }
-
-    public enum FinalSelectionState {
-        SET_SELECTED,
-        DO_NOTHING
-    }
-
-    private void addPendingChangeHandler(PendingChangeHandler handler) {
+    private void addPendingChangeHandler(PendingChangeHandler<U> handler) {
         pending.add(handler);
         handler.begin();
     }
 
     @Override
-    public void setChildAdditionPending(TreeNodeView parentView) {
-        addPendingChangeHandler(new PendingChildAdditionHandler(parentView, hasSetTreeNodeExpanded, selectionModel));
+    public void setChildAdditionPending(TreeNodeView<U> parentView) {
+        addPendingChangeHandler(new PendingChildAdditionHandler<>(parentView,
+                                                                  hasSetTreeNodeExpanded,
+                                                                  selectionModel));
     }
 
     @Override
-    public void setRemovalPending(TreeNodeView removedView) {
-        addPendingChangeHandler(new PendingRemovalHandler(removedView));
+    public void setRemovalPending(TreeNodeView<U> removedView) {
+        addPendingChangeHandler(new PendingRemovalHandler<>(removedView));
     }
 
     @Override
@@ -93,23 +85,19 @@ public class PendingChangesManager<U extends Serializable> implements TreeNodeMo
 
         public abstract void end();
 
-        public abstract boolean handle(TreeNodeModelChange change);
+        public abstract boolean handle(TreeNodeModelChange<U> change);
     }
 
 
     private static class PendingChildAdditionHandler<U extends Serializable> extends PendingChangeHandler<U> {
 
-        private FinalExpansionState expansionState;
-
-        private FinalSelectionState selectionState;
-
         private final HasSetTreeNodeExpanded hasSetTreeNodeExpanded;
 
-        private final SetSelectionModel<TreeNodeId> selectionModel;
+        private final SetSelectionModel<TreeNode<U>> selectionModel;
 
         private PendingChildAdditionHandler(TreeNodeView<U> view,
                                             HasSetTreeNodeExpanded hasSetTreeNodeExpanded,
-                                            SetSelectionModel<TreeNodeId> selectionModel) {
+                                            SetSelectionModel<TreeNode<U>> selectionModel) {
             super(view);
             this.hasSetTreeNodeExpanded = hasSetTreeNodeExpanded;
             this.selectionModel = selectionModel;
@@ -126,12 +114,13 @@ public class PendingChangesManager<U extends Serializable> implements TreeNodeMo
         }
 
         @Override
-        public boolean handle(TreeNodeModelChange change) {
+        public boolean handle(TreeNodeModelChange<U> change) {
             if(change instanceof ChildNodeAdded && ((ChildNodeAdded) change).getParentNode().equals(getView().getNodeId())) {
                 end();
                 getView().setLoadingIndicatorDisplayed(false);
                 hasSetTreeNodeExpanded.setTreeNodeExpanded(getView().getNodeId());
-                selectionModel.setSelected(((ChildNodeAdded) change).getChildNode().getId(), true);
+                TreeNode<U> childNode = ((ChildNodeAdded<U>) change).getChildNode().getTreeNode();
+                selectionModel.setSelected(childNode, true);
                 return true;
             }
             else {
@@ -141,9 +130,9 @@ public class PendingChangesManager<U extends Serializable> implements TreeNodeMo
     }
 
 
-    private static class PendingRemovalHandler extends PendingChangeHandler {
+    private static class PendingRemovalHandler<U extends Serializable> extends PendingChangeHandler<U> {
 
-        private PendingRemovalHandler(TreeNodeView view) {
+        private PendingRemovalHandler(TreeNodeView<U> view) {
             super(view);
         }
 
