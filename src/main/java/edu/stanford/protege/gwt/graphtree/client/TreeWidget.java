@@ -28,7 +28,7 @@ import static java.util.stream.Collectors.toList;
  * Date: 21/01/2014
  */
 @SuppressWarnings("unused")
-public class TreeWidget<U extends Serializable, K> extends Composite implements HasAllMouseHandlers {
+public class TreeWidget<U extends Serializable, K> extends Composite implements HasAllMouseHandlers, HasContextMenuHandlers {
 
     private final TreePresenter<U, K> treePresenter;
 
@@ -65,8 +65,19 @@ public class TreeWidget<U extends Serializable, K> extends Composite implements 
         treePresenter.setRootNodesExpanded();
     }
 
+    /**
+     * Enables drag and drop.  The specified handler will receive drop callbacks.
+     * @param dropHandler The drop handler to handle drop callbacks.
+     */
     public void setDropHandler(@Nonnull TreeNodeDropHandler<U> dropHandler) {
         treePresenter.setDropHandler(dropHandler);
+    }
+
+    /**
+     * Disables drag and drop.
+     */
+    public void clearDropHandler() {
+        treePresenter.clearDropHandler();
     }
 
     @Nonnull
@@ -172,5 +183,10 @@ public class TreeWidget<U extends Serializable, K> extends Composite implements 
     @Override
     public com.google.gwt.event.shared.HandlerRegistration addMouseWheelHandler(MouseWheelHandler handler) {
         return treeView.addMouseWheelHandler(handler);
+    }
+
+    @Override
+    public com.google.gwt.event.shared.HandlerRegistration addContextMenuHandler(ContextMenuHandler contextMenuHandler) {
+        return treeView.addContextMenuHandler(contextMenuHandler);
     }
 }

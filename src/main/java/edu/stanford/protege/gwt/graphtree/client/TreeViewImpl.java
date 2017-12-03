@@ -75,6 +75,15 @@ public class TreeViewImpl extends Composite implements TreeView {
     }
 
     @Override
+    public HandlerRegistration addContextMenuHandler(ContextMenuHandler contextMenuHandler) {
+        return delegate.addDomHandler(event -> {
+            event.preventDefault();
+            event.stopPropagation();
+            contextMenuHandler.onContextMenu(event);
+        }, ContextMenuEvent.getType());
+    }
+
+    @Override
     public void add(Widget w) {
         delegate.add(w);
     }

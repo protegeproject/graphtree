@@ -62,10 +62,10 @@ public class TreeNodeViewDragAndDropHandler<U extends Serializable> implements H
         updateDropEffect(event, targetView);
     }
 
-    private void setupTransferData(DragStartEvent event, TreeNodeView targetView) {
+    private void setupTransferData(DragStartEvent event, TreeNodeView<U> targetView) {
         DataTransfer dataTransfer = event.getDataTransfer();
         GWT.log("TRANSFER DATA HAS NOT BEEN SET UP!");
-//        dataTransfer.setData(TEXT_TRANSFER_DATA_KEY, targetView.getShortForm());
+//        dataTransfer.setData(TEXT_TRANSFER_DATA_KEY, targetView.getNode());
     }
 
     private void setupDragImage(DragStartEvent event, TreeNodeView targetView) {
@@ -132,25 +132,27 @@ public class TreeNodeViewDragAndDropHandler<U extends Serializable> implements H
     }
 
     private void handleTreeNodeDrop(DropEvent event, final TreeNodeView<U> targetView) {
-        final Path<U> draggedPath = getDraggedNodePath();
-        final Path<U> dropPath = TreeNodeViewTraverser.<U>newTreeNodeViewTraverser().getUserObjectPathToRoot
-                (targetView);
-        hasPendingChanges.setChildAdditionPending(targetView);
-        hasPendingChanges.setRemovalPending(draggedNode.get());
-        treeNodeDropHandler.handleDrop(draggedPath,
-                dropPath,
-                getDropType(event),
-                new TreeNodeDropHandler.DropEndHandler() {
-                    public void handleDropComplete() {
-                        clearDraggedTreeNode();
-                    }
+        draggedNode.ifPresent(draggedNode -> {
+            final Path<U> draggedPath = getDraggedNodePath();
+            final Path<U> dropPath = TreeNodeViewTraverser.<U>newTreeNodeViewTraverser().getUserObjectPathToRoot
+                    (targetView);
+            hasPendingChanges.setChildAdditionPending(targetView);
+            hasPendingChanges.setRemovalPending(draggedNode);
+            treeNodeDropHandler.handleDrop(draggedPath,
+                                           dropPath,
+                                           getDropType(event),
+                                           new TreeNodeDropHandler.DropEndHandler() {
+                                               public void handleDropComplete() {
+                                                   clearDraggedTreeNode();
+                                               }
 
-                    public void handleDropCancelled() {
-                        hasPendingChanges.setPendingChangedCancelled(targetView);
-                        hasPendingChanges.setPendingChangedCancelled(draggedNode.get());
-                        clearDraggedTreeNode();
-                    }
-                });
+                                               public void handleDropCancelled() {
+                                                   hasPendingChanges.setPendingChangedCancelled(targetView);
+                                                   hasPendingChanges.setPendingChangedCancelled(draggedNode);
+                                                   clearDraggedTreeNode();
+                                               }
+                                           });
+        });
     }
 
     private Path<U> getDraggedNodePath() {

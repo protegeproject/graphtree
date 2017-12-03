@@ -72,8 +72,7 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
                                                                    new ToggleExpansionStateHandler<>(this, selectionModel, viewManager),
                                                                    eventTargetFinder);
         mouseEventMapper.bind(treeView);
-        dragAndDropManager = new DragAndDropEventMapper<>(eventTargetFinder, new TreeNodeViewDragAndDropHandler<>(this));
-        dragAndDropManager.bind(treeView);
+        dragAndDropManager = new DragAndDropEventMapper<>(treeView, eventTargetFinder, new TreeNodeViewDragAndDropHandler<>(this));
         SelectionPainter<U> selectionPainter = new SelectionPainter<>(viewManager);
         selectionPainter.bind(selectionModel);
         rootNodeAddedHandler = new RootNodeAddedHandler<>(viewManager, treeView);
@@ -139,6 +138,10 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
 
     public void setDropHandler(@Nonnull TreeNodeDropHandler<U> dropHandler) {
         dragAndDropManager.setDropHandler(checkNotNull(dropHandler));
+    }
+
+    public void clearDropHandler() {
+        dragAndDropManager.clearDropHandler();
     }
 
     @Nonnull
