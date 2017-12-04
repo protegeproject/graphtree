@@ -16,19 +16,16 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class NodeUserObjectChangedHandler<U extends Serializable> {
 
-    private final TreeNodeViewMapper<U> viewMapper;
-    private final TreeNodeRenderer<U> treeNodeRenderer;
+    private final TreeNodeViewManager<U> viewMapper;
 
-    public NodeUserObjectChangedHandler(@Nonnull TreeNodeViewMapper<U> viewMapper,
-                                        @Nonnull TreeNodeRenderer<U> treeNodeRenderer) {
+    public NodeUserObjectChangedHandler(@Nonnull TreeNodeViewManager<U> viewMapper) {
         this.viewMapper = checkNotNull(viewMapper);
-        this.treeNodeRenderer = checkNotNull(treeNodeRenderer);
     }
 
     public void handleNodeUserObjectChanged(NodeUserObjectChanged<U> nodeUserObjectChanged) {
         Optional<TreeNodeView<U>> view = viewMapper.getViewIfPresent(nodeUserObjectChanged.getTreeNodeId());
         view.ifPresent(v -> {
-            String rendering = treeNodeRenderer.getHtmlRendering(nodeUserObjectChanged.getUserObject());
+            String rendering = viewMapper.getRenderer().getHtmlRendering(nodeUserObjectChanged.getUserObject());
             v.setRendering(rendering);
             v.setUserObject(nodeUserObjectChanged.getUserObject());
         });

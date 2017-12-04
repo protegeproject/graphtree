@@ -4,6 +4,7 @@ import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
+import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import edu.stanford.protege.gwt.graphtree.shared.Path;
 import edu.stanford.protege.gwt.graphtree.shared.tree.RevealMode;
@@ -53,12 +54,28 @@ public class TreeWidget<U extends Serializable, K> extends Composite implements 
         this(new TreeViewImpl(), model, renderer);
     }
 
+    public TreeWidget(@Nonnull TreeNodeRenderer<U> renderer) {
+        this(new TreeViewImpl(), new NullTreeNodeModel<>(), renderer);
+    }
+
+    /**
+     * Creates a {@link TreeWidget} with the default view, model and renderer.
+     */
+    @Inject
+    public TreeWidget() {
+        this(new TreeViewImpl(), new NullTreeNodeModel<>(), new TreeNodeRendererImpl<>());
+    }
+
     public void reload() {
         treePresenter.reload();
     }
 
     public void setModel(@Nonnull TreeNodeModel<U, K> model) {
         treePresenter.setModel(model);
+    }
+
+    public void setRenderer(@Nonnull TreeNodeRenderer<U> renderer) {
+        treePresenter.setRenderer(renderer);
     }
 
     public void setRootNodesExpanded() {

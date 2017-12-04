@@ -7,9 +7,12 @@ import com.google.inject.Inject;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeData;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeId;
 
+import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Optional;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Author: Matthew Horridge<br>
@@ -25,11 +28,17 @@ public class TreeNodeViewManager<U extends Serializable> implements TreeNodeView
 
     private final Map<Element, TreeNodeView<U>> element2TreeNodeMap = Maps.newHashMap();
 
-    private final TreeNodeRenderer<U> renderer;
+    @Nonnull
+    private TreeNodeRenderer<U> renderer;
 
     @Inject
-    public TreeNodeViewManager(TreeNodeRenderer<U> renderer) {
+    public TreeNodeViewManager(@Nonnull TreeNodeRenderer<U> renderer) {
         this.renderer = renderer;
+    }
+
+    @Nonnull
+    public TreeNodeRenderer<U> getRenderer() {
+        return renderer;
     }
 
     public void purge() {
@@ -71,5 +80,14 @@ public class TreeNodeViewManager<U extends Serializable> implements TreeNodeView
             return;
         }
         element2TreeNodeMap.remove(view.asWidget().getElement());
+    }
+
+    /**
+     * Sets the renderer used to render node user objects and updates all current views.
+     * @param renderer The renderer.
+     */
+    public void setRenderer(@Nonnull TreeNodeRenderer<U> renderer) {
+        this.renderer = checkNotNull(renderer);
+        node2viewMap.values().forEach(view -> view.setRendering(renderer.getHtmlRendering(view.getUserObject())));
     }
 }

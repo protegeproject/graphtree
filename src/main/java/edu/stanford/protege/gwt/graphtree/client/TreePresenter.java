@@ -46,7 +46,7 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
 
     private final ChildNodeRemovedHandler<U> childNodeRemovedHandler;
 
-    private final NodeUserObjectChangedHandler<U> nodeUserObjectChangedHandler;
+    private NodeUserObjectChangedHandler<U> nodeUserObjectChangedHandler;
 
     private TreeNodeModel<U, K> model = new NullTreeNodeModel<>();
 
@@ -79,7 +79,7 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
         rootNodeRemovedHandler = new RootNodeRemovedHandler<>(viewManager, treeView);
         childNodeAddedHandler = new ChildNodeAddedHandler<>(viewManager);
         childNodeRemovedHandler = new ChildNodeRemovedHandler<>(viewManager);
-        nodeUserObjectChangedHandler = new NodeUserObjectChangedHandler<>(viewManager, treeNodeRenderer);
+        nodeUserObjectChangedHandler = new NodeUserObjectChangedHandler<>(viewManager);
     }
 
 
@@ -100,13 +100,17 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
         initialiseRootNodes();
     }
 
+    public void setRenderer(@Nonnull TreeNodeRenderer<U> renderer) {
+        viewManager.setRenderer(renderer);
+    }
+
     @Override
-    public void setChildAdditionPending(@Nonnull TreeNodeView parentView) {
+    public void setChildAdditionPending(@Nonnull TreeNodeView<U> parentView) {
         pendingChangeManager.setChildAdditionPending(parentView);
     }
 
     @Override
-    public void setRemovalPending(@Nonnull TreeNodeView removedView) {
+    public void setRemovalPending(@Nonnull TreeNodeView<U> removedView) {
         pendingChangeManager.setRemovalPending(removedView);
     }
 

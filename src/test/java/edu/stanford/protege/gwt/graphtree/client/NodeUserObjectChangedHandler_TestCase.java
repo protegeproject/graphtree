@@ -31,7 +31,7 @@ public class NodeUserObjectChangedHandler_TestCase<U extends Serializable> {
     private TreeNodeView<U> view;
 
     @Mock
-    private TreeNodeViewMapper<U> viewMapper;
+    private TreeNodeViewManager<U> viewMapper;
 
     @Mock
     private NodeUserObjectChanged<U> nodeUserObjectChanged;
@@ -50,7 +50,8 @@ public class NodeUserObjectChangedHandler_TestCase<U extends Serializable> {
         when(nodeUserObjectChanged.getUserObject()).thenReturn(userObject);
         when(viewMapper.getViewIfPresent(node)).thenReturn(Optional.of(view));
         when(renderer.getHtmlRendering(userObject)).thenReturn(NEW_RENDERING);
-        handler = new NodeUserObjectChangedHandler<>(viewMapper, renderer);
+        when(viewMapper.getRenderer()).thenReturn(renderer);
+        handler = new NodeUserObjectChangedHandler<>(viewMapper);
     }
 
     @Test
