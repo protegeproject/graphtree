@@ -30,9 +30,13 @@ public interface TreeNodeViewResources extends ClientBundle {
     @DataResource.MimeType("image/svg+xml")
     DataResource loading();
 
-    @Source("pruned.svg")
+    @Source("pruned.collapsed.svg")
     @DataResource.MimeType("image/svg+xml")
-    DataResource pruned();
+    DataResource prunedCollapsed();
+
+    @Source("pruned.expanded.svg")
+    @DataResource.MimeType("image/svg+xml")
+    DataResource prunedExpanded();
 
 
 }

@@ -426,7 +426,12 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
         }
         else {
             if(pruned) {
-                handleImageResourceUri = RESOURCES.pruned().getSafeUri().asString();
+                if(viewState == TreeNodeViewState.COLLAPSED) {
+                    handleImageResourceUri = RESOURCES.prunedCollapsed().getSafeUri().asString();
+                }
+                else {
+                    handleImageResourceUri = RESOURCES.prunedExpanded().getSafeUri().asString();
+                }
             }
             else {
                 if(viewState == TreeNodeViewState.COLLAPSED) {

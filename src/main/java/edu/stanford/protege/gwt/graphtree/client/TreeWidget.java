@@ -105,6 +105,11 @@ public class TreeWidget<U extends Serializable, K> extends Composite implements 
     }
 
     @Nonnull
+    public Collection<Path<K>> getSelectedKeyPaths() {
+        return treePresenter.getSelectedKeyPaths();
+    }
+
+    @Nonnull
     public Optional<K> getFirstSelectedKey() {
         return treePresenter.getFirstSelectedKey();
     }

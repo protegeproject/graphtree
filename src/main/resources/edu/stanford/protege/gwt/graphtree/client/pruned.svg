@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" height="12" width="12">
-    <ellipse cx="6" cy="6" rx="5" ry="5"
-             style="stroke:#8c8c8c;stroke-width:1.5;fill:none;" />
-    <line x1="1" y1="6" x2="11" y2="6" style="stroke:#8c8c8c;stroke-width:1" />
-    <line x1="6" y1="1" x2="6" y2="11" style="stroke:#8c8c8c;stroke-width:1" />
-</svg>

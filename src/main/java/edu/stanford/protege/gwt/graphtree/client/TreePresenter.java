@@ -120,9 +120,14 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
         pendingChangeManager.setPendingChangedCancelled(view);
     }
 
-
+    /**
+     * Reloads the tree and ensures that previously selected paths are selected
+     */
     public void reload() {
+        Collection<Path<K>> selectedKeyPaths = getSelectedKeyPaths();
         setModel(model);
+        clearSelection();
+        selectedKeyPaths.forEach(path -> setSelected(path, true, () -> {}));
     }
 
     public void getTreeNodesForUserObjectKey(@Nonnull K userObjectKey,
@@ -176,6 +181,14 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
         return selectionModel.getSelectedSet().stream()
                              .map(node -> model.getKeyProvider().getKey(node.getUserObject()))
                              .collect(toSet());
+    }
+
+    @Nonnull
+    public Collection<Path<K>> getSelectedKeyPaths() {
+        return selectionModel.getSelectedSet().stream()
+                .map(node -> model.getPathToRoot(node.getId()))
+                .map(path -> path.transform(element -> model.getKeyProvider().getKey(element.getUserObject())))
+                .collect(toList());
     }
 
     @Nonnull
