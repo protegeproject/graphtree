@@ -62,6 +62,8 @@ public interface TreeNodeView<U extends Serializable> extends IsWidget {
 
     Iterable<TreeNodeView<U>> getChildViews();
 
+    int getChildViewCount();
+
     void setChildViews(List<TreeNodeView<U>> childViews);
 
     Optional<TreeNodeView<U>> getFirstChildView();
@@ -70,7 +72,7 @@ public interface TreeNodeView<U extends Serializable> extends IsWidget {
 
     void addChildView(TreeNodeView<U> child);
 
-    void removeChildView(TreeNodeView<U> child);
+    void removeChildView(TreeNodeView<U> child, Runnable callback);
 
     boolean isExpanded();
 

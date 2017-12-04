@@ -1,5 +1,6 @@
 package edu.stanford.protege.gwt.graphtree.client;
 
+import com.google.gwt.core.client.GWT;
 import edu.stanford.protege.gwt.graphtree.shared.tree.ChildNodeRemoved;
 
 import java.io.Serializable;
@@ -21,16 +22,14 @@ public class ChildNodeRemovedHandler<U extends Serializable> {
 
     public void handleChildNodeRemoved(ChildNodeRemoved<U> childNodeRemoved) {
         Optional<TreeNodeView<U>> parentView = viewManager.getViewIfPresent(childNodeRemoved.getParentNode());
-        if (!parentView.isPresent()) {
-            return;
-        }
-        Optional<TreeNodeView<U>> childView = viewManager.getViewIfPresent(childNodeRemoved.getChildNode());
-        if (!childView.isPresent()) {
-            return;
-        }
-        TreeNodeView<U> parentTreeNodeView = parentView.get();
-        parentTreeNodeView.removeChildView(childView.get());
-        parentTreeNodeView.setLeaf(parentTreeNodeView.isEmpty());
-        viewManager.releaseView(childNodeRemoved.getChildNode());
+        parentView.ifPresent(theParentView -> {
+            Optional<TreeNodeView<U>> childView = viewManager.getViewIfPresent(childNodeRemoved.getChildNode());
+            childView.ifPresent(theChildView -> {
+                theParentView.removeChildView(theChildView, () -> {
+                    theParentView.setLeaf(theParentView.isEmpty());
+                    viewManager.releaseView(childNodeRemoved.getChildNode());
+                });
+            });
+        });
     }
 }

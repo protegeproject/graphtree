@@ -48,6 +48,11 @@ public class ChildNodeRemovedHandler_TestCase<U extends Serializable> {
         when(viewManager.getViewIfPresent(childNode)).thenReturn(Optional.of(childView));
         when(childNodeRemoved.getChildNode()).thenReturn(childNode);
         when(childNodeRemoved.getParentNode()).thenReturn(parentNode);
+        doAnswer(invocation -> {
+            Runnable runnable = (Runnable) invocation.getArguments()[1];
+            runnable.run();
+            return null;
+        }).when(parentView).removeChildView(any(), any());
         handler = new ChildNodeRemovedHandler<>(viewManager);
     }
 
@@ -55,7 +60,7 @@ public class ChildNodeRemovedHandler_TestCase<U extends Serializable> {
     @Test
     public void removeChildViewShouldBeCalledOnParent() {
         handler.handleChildNodeRemoved(childNodeRemoved);
-        verify(parentView, times(1)).removeChildView(childView);
+        verify(parentView, times(1)).removeChildView(eq(childView), any());
     }
 
     @Test

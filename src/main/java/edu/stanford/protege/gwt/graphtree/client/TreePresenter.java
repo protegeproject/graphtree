@@ -190,15 +190,22 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
     @Nonnull
     public Collection<Path<K>> getSelectedKeyPaths() {
         return selectionModel.getSelectedSet().stream()
-                .map(node -> model.getPathToRoot(node.getId()))
-                .map(path -> path.transform(element -> model.getKeyProvider().getKey(element.getUserObject())))
-                .collect(toList());
+                             .map(node -> model.getPathToRoot(node.getId()))
+                             .map(path -> path.transform(element -> model.getKeyProvider().getKey(element.getUserObject())))
+                             .collect(toList());
     }
 
     @Nonnull
     public Optional<K> getFirstSelectedKey() {
         return selectionModel.getSelectedSet().stream()
                              .map(node -> model.getKeyProvider().getKey(node.getUserObject()))
+                             .findFirst();
+    }
+
+    @Nonnull
+    public Optional<U> getFirstSelectedUserObject() {
+        return selectionModel.getSelectedSet().stream()
+                             .map(TreeNode::getUserObject)
                              .findFirst();
     }
 

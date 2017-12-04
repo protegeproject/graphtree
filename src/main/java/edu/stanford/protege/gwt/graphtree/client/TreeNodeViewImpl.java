@@ -79,8 +79,6 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
 
     private U userObject;
 
-    private boolean loaded = false;
-
     public TreeNodeViewImpl(@Nonnull TreeNodeId nodeId, U userObject) {
         HTMLPanel rootElement = ourUiBinder.createAndBindUi(this);
         initWidget(rootElement);
@@ -215,6 +213,11 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
         return childContainer == null || childContainer.getWidgetCount() == 0;
     }
 
+    public boolean isHandleVisible() {
+        String visibility = handleImage.getElement().getStyle().getVisibility();
+        return !visibility.equals(Style.Visibility.HIDDEN.getCssName());
+    }
+
     public void addChildView(TreeNodeView child) {
         // Avoid duplicates?
         childContainerHolder.ensureWidget();
@@ -232,7 +235,7 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
 
 
 
-    public void removeChildView(TreeNodeView child) {
+    public void removeChildView(TreeNodeView child, Runnable callback) {
         if(childContainer == null) {
             return;
         }
@@ -250,8 +253,7 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
             int nextChildIndex = childIndex + 1;
             nextSibling = ((TreeNodeViewImpl) childContainer.getWidget(nextChildIndex));
         }
-//        childContainer.remove(child);
-        AnimateRemove animation = new AnimateRemove(child.asWidget());
+        AnimateRemove animation = new AnimateRemove<>(child.asWidget(), callback);
         animation.run(MINIMUM_ANIMATION_TIME);
         if(previousSibling != null) {
             previousSibling.nextSibling = nextSibling;
@@ -272,6 +274,16 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
             }
         }
         return result;
+    }
+
+    @Override
+    public int getChildViewCount() {
+        if(childContainer == null) {
+            return 0;
+        }
+        else {
+            return childContainer.getWidgetCount();
+        }
     }
 
     public void setChildViews(List<TreeNodeView<U>> childViews) {
@@ -443,7 +455,9 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
             }
         }
         handleImage.setUrl(handleImageResourceUri);
-        handleImage.getElement().getStyle().setVisibility(shouldShowHandle() ? Style.Visibility.VISIBLE : Style.Visibility.HIDDEN);
+        boolean handleVisible = shouldShowHandle();
+        Style.Visibility visibility = handleVisible ? Style.Visibility.VISIBLE : Style.Visibility.HIDDEN;
+        handleImage.getElement().getStyle().setVisibility(visibility);
     }
 
     private boolean shouldShowHandle() {
@@ -540,14 +554,17 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
     }
 
 
-    private static class AnimateRemove extends Animation {
+    private static class AnimateRemove<U extends Serializable> extends Animation {
+
+        private final Runnable callback;
 
         private final Widget widget;
 
         private final int initialHeight;
 
-        private AnimateRemove(Widget widget) {
-            this.widget = widget;
+        private AnimateRemove(@Nonnull Widget widget, @Nonnull Runnable callback) {
+            this.callback = checkNotNull(callback);
+            this.widget = checkNotNull(widget);
             initialHeight = widget.getOffsetHeight();
         }
 
@@ -567,6 +584,7 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
             widget.removeFromParent();
             widget.setHeight("auto");
             widget.getElement().getStyle().setOpacity(1.0);
+            callback.run();
         }
     }
 

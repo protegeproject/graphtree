@@ -131,6 +131,11 @@ public class TreeWidget<U extends Serializable, K> extends Composite implements 
         return treePresenter.getFirstSelectedKey();
     }
 
+    @Nonnull
+    public Optional<U> getFirstSelectedUserObject() {
+        return treePresenter.getFirstSelectedUserObject();
+    }
+
     public boolean isSelected(@Nonnull TreeNode<U> object) {
         return treePresenter.isSelected(object);
     }

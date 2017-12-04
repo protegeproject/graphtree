@@ -1,5 +1,6 @@
 package edu.stanford.protege.gwt.graphtree.client;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.junit.client.GWTTestCase;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNode;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeId;
@@ -102,6 +103,15 @@ public class GwtTest_TreeNodeViewImpl extends GWTTestCase {
         finishTest();
     }
 
+    public void test_shouldHideHandleIfLeaf() {
+        GWT.log("**********************");
+        TreeNodeViewImpl parent = getTreeNodeView();
+        parent.setLeaf(true);
+        assertEquals(parent.isHandleVisible(), false);
+        GWT.log("~~~~~~~~~~~~~~~~~~~~~~");
+        finishTest();
+    }
+
     public void test_getFirstChildView_ShouldReturnFirstChild() {
         TreeNodeViewImpl parent = getTreeNodeView();
         TreeNodeViewImpl child = getTreeNodeView();
@@ -151,7 +161,7 @@ public class GwtTest_TreeNodeViewImpl extends GWTTestCase {
         TreeNodeViewImpl secondChildView = getTreeNodeView();
         parentView.addChildView(firstChildView);
         parentView.addChildView(secondChildView);
-        parentView.removeChildView(secondChildView);
+        parentView.removeChildView(secondChildView, () -> {});
         assertEquals(Optional.<TreeNodeView>empty(), firstChildView.getNextSibling());
         finishTest();
     }
@@ -172,7 +182,7 @@ public class GwtTest_TreeNodeViewImpl extends GWTTestCase {
         TreeNodeViewImpl secondChildView = getTreeNodeView();
         parentView.addChildView(firstChildView);
         parentView.addChildView(secondChildView);
-        parentView.removeChildView(firstChildView);
+        parentView.removeChildView(firstChildView, () -> {});
         assertEquals(Optional.<TreeNodeView>empty(), secondChildView.getPreviousSibling());
         finishTest();
     }
