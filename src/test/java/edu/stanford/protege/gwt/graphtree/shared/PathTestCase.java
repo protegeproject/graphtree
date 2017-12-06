@@ -142,5 +142,13 @@ public class PathTestCase<U extends Serializable> {
         assertThat(path.transform(t), equalTo(expected));
     }
 
+    @Test
+    public void pathByAppendingShouldReturnAppendedPath() {
+        Path<U> path = Path.asPath(A, B);
+        Path<U> appended = path.pathByAppending(C);
+        Path<U> expected = Path.asPath(A, B, C);
+        assertThat(appended, equalTo(expected));
+    }
+
 
 }

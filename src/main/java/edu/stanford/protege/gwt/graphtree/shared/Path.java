@@ -7,6 +7,8 @@ import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.*;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Author: Matthew Horridge<br>
  * Stanford University<br>
@@ -65,6 +67,13 @@ public class Path<N> implements Iterable<N>, Serializable {
 
     public boolean contains(N element) {
         return path.contains(element);
+    }
+
+    @Nonnull
+    public Path<N> pathByAppending(@Nonnull N element) {
+        List<N> p = new ArrayList<>(path);
+        p.add(checkNotNull(element));
+        return new Path<>(p);
     }
 
     public <T> Path<T> transform(Transform<N, T> transform) {
