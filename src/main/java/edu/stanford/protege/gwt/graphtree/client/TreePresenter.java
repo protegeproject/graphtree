@@ -203,6 +203,11 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
     }
 
     @Nonnull
+    public Optional<TreeNode<U>> getFirstSelectedNode() {
+        return getSelectedNodes().stream().findFirst();
+    }
+
+    @Nonnull
     public Optional<U> getFirstSelectedUserObject() {
         return selectionModel.getSelectedSet().stream()
                              .map(TreeNode::getUserObject)

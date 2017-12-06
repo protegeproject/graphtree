@@ -116,6 +116,10 @@ public class TreeWidget<U extends Serializable, K> extends Composite implements 
         return treePresenter.getSelectedNodes();
     }
 
+    @Nonnull Optional<TreeNode<U>> getFirstSelectedNode() {
+        return treePresenter.getFirstSelectedNode();
+    }
+
     @Nonnull
     public Set<K> getSelectedKeys() {
         return treePresenter.getSelectedKeys();
