@@ -405,14 +405,28 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
 
     private void animateClosed() {
         childContainerHolder.ensureWidget();
-        AnimateClose close = new AnimateClose(childContainer.getOffsetHeight(), childContainerHolder, childContainer);
-        close.run(getAnimationDuration());
+//        AnimateClose close = new AnimateClose(childContainer.getOffsetHeight(), childContainerHolder, childContainer);
+//        if (childContainer.getWidgetCount() < 2000) {
+//            close.run(getAnimationDuration());
+//        }
+//        else {
+//            close.onComplete();
+//        }
+        childContainer.setVisible(false);
     }
 
     private void animateOpen() {
         childContainerHolder.ensureWidget();
-        AnimateOpen ani = new AnimateOpen(childContainer.getOffsetHeight(), childContainerHolder, childContainer);
-        ani.run(getAnimationDuration());
+        childContainer.setVisible(true);
+//        int childCount = childContainer.getWidgetCount();
+//        GWT.log("[TreeNodeViewImpl] About to display children.  Child count: " + childCount);
+//        AnimateOpen ani = new AnimateOpen(childContainer.getOffsetHeight(), childContainerHolder, childContainer);
+//        if (childCount < 2000) {
+//            ani.run(getAnimationDuration());
+//        }
+//        else {
+//            ani.onComplete();
+//        }
     }
 
     private int getExpandedDescendantCount() {
@@ -527,6 +541,7 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
         @Override
         protected void onComplete() {
             holderWidget.setHeight("auto");
+            holderWidget.setVisible(true);
             childWidget.getElement().getStyle().setTop(0, Style.Unit.PX);
         }
     }
@@ -555,7 +570,7 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
 
         @Override
         protected void onComplete() {
-            childWidget.setVisible(false);
+            holderWidget.setVisible(false);
         }
     }
 

@@ -33,18 +33,20 @@
         }
 
         .childContainer {
+            display: flex;
+            flex-direction: column;
             overflow: hidden;
-            width: inherit;
-            height: auto;
-            position: relative;
-            top: 0;
-            left: 0;
+            /*width: inherit;*/ /*Animation*/
+            /*height: auto;*/ /*Animation*/
+            /*position: relative;*/ /*Animation*/
+            /*top: 0;*/ /*Animation*/
+            /*left: 0;*/ /*Animation*/
         }
 
         .childContainerHolder {
             overflow: hidden;
             width: inherit;
-            height: 0;
+            /*height: 0;*/  /*Animation*/
         }
     </ui:style>
     <g:HTMLPanel addStyleNames="{style.main}">
