@@ -22,6 +22,8 @@
 
         .handle {
             cursor: pointer;
+            flex-shrink: 0;
+            flex-grow: 0;
         }
 
         .rendering {
@@ -30,6 +32,8 @@
             -moz-user-select: text;
             -ms-user-select: text;
             user-select: text;
+            flex-shrink: 0;
+            flex-grow: 0;
         }
 
         .childContainer {
