@@ -159,6 +159,14 @@ public class TreeWidget<U extends Serializable, K> extends Composite implements 
         treePresenter.setSelected(keyPath, selected, callback);
     }
 
+    public void moveSelectionUp() {
+        treePresenter.moveSelectionUp();
+    }
+
+    public void moveSelectionDown() {
+        treePresenter.moveSelectionDown();
+    }
+
     public void setExpanded(@Nonnull Path<K> keyPath) {
         treePresenter.setExpanded(keyPath);
     }

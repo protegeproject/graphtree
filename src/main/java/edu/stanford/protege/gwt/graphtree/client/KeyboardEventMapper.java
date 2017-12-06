@@ -38,12 +38,10 @@ public class KeyboardEventMapper<U extends Serializable> {
         view.addKeyDownHandler(event -> {
             switch (event.getNativeKeyCode()) {
                 case KeyCodes.KEY_UP:
-                    event.preventDefault();
-                    selectPreviousTreeNodesHandler.invoke(TreeViewInputEvent.fromEvent(event), selectionProvider);
+                    moveSelectionUp(event);
                     break;
                 case KeyCodes.KEY_DOWN:
-                    event.preventDefault();
-                    selectNextNodesAction.invoke(TreeViewInputEvent.fromEvent(event), selectionProvider);
+                    moveSelectionDown(event);
                     break;
                 case KeyCodes.KEY_LEFT:
                     event.preventDefault();
@@ -56,4 +54,32 @@ public class KeyboardEventMapper<U extends Serializable> {
             }
         });
     }
+
+    public void moveSelectionUp() {
+        moveSelectionUp(TreeViewInputEvent.empty());
+    }
+
+    public void moveSelectionUp(TreeViewInputEvent<U> event) {
+        selectPreviousTreeNodesHandler.invoke(event, selectionProvider);
+    }
+
+    private void moveSelectionUp(KeyDownEvent event) {
+        event.preventDefault();
+        moveSelectionUp(TreeViewInputEvent.fromEvent(event));
+    }
+
+    public void moveSelectionDown() {
+        moveSelectionDown(TreeViewInputEvent.empty());
+    }
+
+    private void moveSelectionDown(KeyDownEvent event) {
+        event.preventDefault();
+        moveSelectionDown(TreeViewInputEvent.fromEvent(event));
+    }
+
+    public void moveSelectionDown(TreeViewInputEvent<U> event) {
+        selectNextNodesAction.invoke(event, selectionProvider);
+    }
+
+
 }

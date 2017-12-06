@@ -51,6 +51,7 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
     private TreeNodeModel<U, K> model = new NullTreeNodeModel<>();
 
     private HandlerRegistration modelHandlerRegistration;
+    private final KeyboardEventMapper keyboardEventMapper;
 
     @Inject
     public TreePresenter(@Nonnull TreeView treeView,
@@ -61,11 +62,11 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
         this.viewManager = new TreeNodeViewManager<>(checkNotNull(treeNodeRenderer));
         this.pendingChangeManager = new PendingChangesManager<>(this, selectionModel);
         treeNodeViewSelectionProvider = new TreeNodeViewSelectionProvider<>(selectionModel, viewManager);
-        KeyboardEventMapper keyboardEventMapper = new KeyboardEventMapper<>(treeNodeViewSelectionProvider,
-                                                                            new SetTreeNodeExpandedHandler<>(this, selectionModel, viewManager),
-                                                                            new SetTreeNodeCollapsedHandler<>(),
-                                                                            new SelectNextTreeNodesHandler<>(selectionModel),
-                                                                            new SelectPreviousTreeNodesHandler<>(selectionModel));
+        keyboardEventMapper = new KeyboardEventMapper<>(treeNodeViewSelectionProvider,
+                                                        new SetTreeNodeExpandedHandler<>(this, selectionModel, viewManager),
+                                                        new SetTreeNodeCollapsedHandler<>(),
+                                                        new SelectNextTreeNodesHandler<>(selectionModel),
+                                                        new SelectPreviousTreeNodesHandler<>(selectionModel));
         keyboardEventMapper.bind(treeView);
         TreeViewEventTargetFinder<U> eventTargetFinder = new TreeViewEventTargetFinder<>(viewManager);
         MouseEventMapper mouseEventMapper = new MouseEventMapper<>(new SetTreeNodeSelectedHandler<>(selectionModel),
@@ -226,6 +227,14 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
 
     public void setSelected(@Nonnull TreeNode<U> object, boolean selected) {
         selectionModel.setSelected(object, selected);
+    }
+
+    public void moveSelectionUp() {
+        keyboardEventMapper.moveSelectionUp();
+    }
+
+    public void moveSelectionDown() {
+        keyboardEventMapper.moveSelectionDown();
     }
 
     public void setSelected(@Nonnull Path<K> keyPath,
