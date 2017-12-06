@@ -26,9 +26,9 @@ public class TreeNodeViewTraverser<U extends Serializable> {
 
     public Optional<TreeNodeView<U>> getPrevious(TreeNodeView<U> treeNodeView) {
         Optional<TreeNodeView<U>> ancestor = getFirstVisibleAncestor(treeNodeView);
-        if(!ancestor.isPresent()) {
-            return Optional.empty();
-        }
+//        if(!ancestor.isPresent()) {
+//            return Optional.empty();
+//        }
         final Optional<TreeNodeView<U>> parentView = treeNodeView.getParentView();
         if (ancestor.equals(parentView)) {
             Optional<TreeNodeView<U>> previousSibling = treeNodeView.getPreviousSibling();

@@ -156,12 +156,10 @@ public class GraphTreeNodeModel<U extends Serializable, K> implements TreeNodeMo
     }
 
     private void handleGraphModelChanges(List<GraphModelChange<U>> changesList) {
-        GWT.log("[GraphTreeNodeModel] Handling graph model changes: " + changesList);
         List<GraphModelChange<U>> topologicallyOrderedChanges = new GraphModelChangeTidier<>(changesList)
                 .getTidiedChanges();
         final List<TreeNodeModelChange> resultingChanges = new ArrayList<>();
         for (GraphModelChange<U> change : topologicallyOrderedChanges) {
-            GWT.log("[GraphTreeNodeModel] Handling graph model changes.  Change: " + change);
             change.accept(new GraphModelChangeVisitor<U>() {
                 public void visit(AddRootNode<U> addRootNode) {
                     handleAddKeyNode(addRootNode, resultingChanges);

@@ -3,10 +3,12 @@ package edu.stanford.protege.gwt.graphtree.client;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import javax.annotation.Nonnull;
+import java.io.Serializable;
 import java.util.Iterator;
 
 /**
@@ -15,68 +17,86 @@ import java.util.Iterator;
  * Bio-Medical Informatics Research Group<br>
  * Date: 04/02/2014
  */
-public class TreeViewImpl extends Composite implements TreeView {
+public class TreeViewImpl<U extends Serializable> extends Composite implements TreeView<U> {
 
-    private final FocusPanel delegate;
+    private final FocusPanel focusPanel;
+
+    private final FlowPanel delegate;
 
     public TreeViewImpl() {
-        initWidget(delegate = new FocusPanel());
-        delegate.addStyleName(TreeNodeViewResources.RESOURCES.style().tree());
+        initWidget(focusPanel = new FocusPanel(delegate = new FlowPanel()));
+        delegate.setSize("100%", "100%");
+        focusPanel.addStyleName(TreeNodeViewResources.RESOURCES.style().tree());
+    }
+
+    @Override
+    public int getTreeNodeViewCount() {
+        return delegate.getWidgetCount();
+    }
+
+    @Override
+    public int getIndexOf(TreeNodeView<U> view) {
+        return delegate.getWidgetIndex(view);
+    }
+
+    @Override
+    public TreeNodeView<U> getTreeNodeViewAt(int index) {
+        return (TreeNodeView<U>) delegate.getWidget(index);
     }
 
     @Override
     public HandlerRegistration addDoubleClickHandler(DoubleClickHandler handler) {
-        return delegate.addDoubleClickHandler(handler);
+        return focusPanel.addDoubleClickHandler(handler);
     }
 
     @Override
     public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
-        return delegate.addKeyDownHandler(handler);
+        return focusPanel.addKeyDownHandler(handler);
     }
 
     @Override
     public HandlerRegistration addKeyPressHandler(KeyPressHandler handler) {
-        return delegate.addKeyPressHandler(handler);
+        return focusPanel.addKeyPressHandler(handler);
     }
 
     @Override
     public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
-        return delegate.addKeyUpHandler(handler);
+        return focusPanel.addKeyUpHandler(handler);
     }
 
     @Override
     public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
-        return delegate.addMouseDownHandler(handler);
+        return focusPanel.addMouseDownHandler(handler);
     }
 
     @Override
     public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
-        return delegate.addMouseMoveHandler(handler);
+        return focusPanel.addMouseMoveHandler(handler);
     }
 
     @Override
     public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
-        return delegate.addMouseOutHandler(handler);
+        return focusPanel.addMouseOutHandler(handler);
     }
 
     @Override
     public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
-        return delegate.addMouseOverHandler(handler);
+        return focusPanel.addMouseOverHandler(handler);
     }
 
     @Override
     public HandlerRegistration addMouseUpHandler(MouseUpHandler handler) {
-        return delegate.addMouseUpHandler(handler);
+        return focusPanel.addMouseUpHandler(handler);
     }
 
     @Override
     public HandlerRegistration addMouseWheelHandler(MouseWheelHandler handler) {
-        return delegate.addMouseWheelHandler(handler);
+        return focusPanel.addMouseWheelHandler(handler);
     }
 
     @Override
     public HandlerRegistration addContextMenuHandler(ContextMenuHandler contextMenuHandler) {
-        return delegate.addDomHandler(event -> {
+        return focusPanel.addDomHandler(event -> {
             event.preventDefault();
             event.stopPropagation();
             contextMenuHandler.onContextMenu(event);

@@ -60,6 +60,10 @@ public interface TreeNodeView<U extends Serializable> extends IsWidget {
 
     Optional<TreeNodeView<U>> getNextSibling();
 
+    void setPreviousSibling(TreeNodeView<U> previousSibling);
+
+    void setNextSibling(TreeNodeView<U> nextSibling);
+
     Iterable<TreeNodeView<U>> getChildViews();
 
     int getChildViewCount();

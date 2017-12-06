@@ -229,11 +229,17 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
         }
         ((TreeNodeViewImpl) child).previousSibling = previousSibling;
         ((TreeNodeViewImpl) child).nextSibling = null;
-
     }
 
+    @Override
+    public void setPreviousSibling(TreeNodeView<U> previousSibling) {
+        this.previousSibling = previousSibling;
+    }
 
-
+    @Override
+    public void setNextSibling(TreeNodeView<U> nextSibling) {
+        this.nextSibling = nextSibling;
+    }
 
     public void removeChildView(TreeNodeView child, Runnable callback) {
         if(childContainer == null) {

@@ -16,9 +16,9 @@ public class RootNodeRemovedHandler<U extends Serializable> {
 
     private final TreeNodeViewManager<U> viewManager;
 
-    private final HasWidgets rootNodeContainer;
+    private final TreeView<U> rootNodeContainer;
 
-    public RootNodeRemovedHandler(TreeNodeViewManager<U> viewManager, HasWidgets rootNodeContainer) {
+    public RootNodeRemovedHandler(TreeNodeViewManager<U> viewManager, TreeView<U> rootNodeContainer) {
         this.viewManager = viewManager;
         this.rootNodeContainer = rootNodeContainer;
     }
@@ -26,8 +26,36 @@ public class RootNodeRemovedHandler<U extends Serializable> {
     public void handleRootNodeRemoved(RootNodeRemoved<U> rootNodeRemoved) {
         Optional<TreeNodeView<U>> childView = viewManager.getViewIfPresent(rootNodeRemoved.getRootNode());
         childView.ifPresent(view -> {
-            viewManager.releaseView(view.getNodeId());
-            rootNodeContainer.remove(view.asWidget());
+            int viewIndex = rootNodeContainer.getIndexOf(view);
+            if(viewIndex != -1) {
+                int previousSiblingIndex = viewIndex - 1;
+                TreeNodeView<U> previousSibling = null;
+                if(previousSiblingIndex >= 0) {
+                    previousSibling = rootNodeContainer.getTreeNodeViewAt(previousSiblingIndex);
+                }
+                int nextSiblingIndex = viewIndex + 1;
+                TreeNodeView<U> nextSibling = null;
+                if(nextSiblingIndex < rootNodeContainer.getTreeNodeViewCount()) {
+                    nextSibling = rootNodeContainer.getTreeNodeViewAt(nextSiblingIndex);
+                }
+                viewManager.releaseView(view.getNodeId());
+                rootNodeContainer.remove(view.asWidget());
+                if(previousSibling != null) {
+                    if(nextSibling != null) {
+                        previousSibling.setNextSibling(nextSibling);
+                        nextSibling.setPreviousSibling(previousSibling);
+                    }
+                    else {
+                        previousSibling.setNextSibling(null);
+                    }
+                }
+                else {
+                    if(nextSibling != null) {
+                        nextSibling.setPreviousSibling(null);
+                    }
+                }
+            }
+
         });
     }
 }

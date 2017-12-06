@@ -345,10 +345,16 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
     private void initialiseRootNodes() {
         treeView.clear();
         model.getNodes(Optional.empty(), nodes -> {
+            TreeNodeView<U> previousSibling = null;
             for (TreeNodeData<U> node : nodes) {
-                TreeNodeView rootNodeView = viewManager.getView(node);
+                TreeNodeView<U> rootNodeView = viewManager.getView(node);
                 treeView.add(rootNodeView.asWidget());
                 setTreeNodeExpanded(node.getId());
+                if(previousSibling != null) {
+                    rootNodeView.setPreviousSibling(previousSibling);
+                    previousSibling.setNextSibling(rootNodeView);
+                }
+                previousSibling = rootNodeView;
             }
         });
     }
