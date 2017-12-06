@@ -54,7 +54,7 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
     private final KeyboardEventMapper keyboardEventMapper;
 
     @Inject
-    public TreePresenter(@Nonnull TreeView treeView,
+    public TreePresenter(@Nonnull TreeView<U> treeView,
                          @Nonnull SetSelectionModel<TreeNode<U>> selectionModel,
                          @Nonnull TreeNodeRenderer<U> treeNodeRenderer) {
         this.treeView = checkNotNull(treeView);
