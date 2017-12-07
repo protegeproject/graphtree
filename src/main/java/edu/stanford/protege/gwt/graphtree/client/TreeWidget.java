@@ -35,12 +35,12 @@ public class TreeWidget<U extends Serializable, K> extends Composite implements 
 
     private final TreeView treeView;
 
-    public TreeWidget(@Nonnull TreeView treeView,
+    public TreeWidget(@Nonnull TreeView<U> treeView,
                       @Nonnull TreeNodeModel<U, K> model,
                       @Nonnull TreeNodeRenderer<U> renderer) {
         this.treeView = checkNotNull(treeView);
         SingleSelectionModel<TreeNode<U>> selectionModel = new SingleSelectionModel<>();
-        treePresenter = new TreePresenter<>(treeView, selectionModel, checkNotNull(renderer));
+        treePresenter = new TreePresenter<>(treeView, selectionModel, checkNotNull(renderer), Platform.get());
         treePresenter.setModel(checkNotNull(model));
         initWidget(treeView.asWidget());
     }
@@ -51,11 +51,11 @@ public class TreeWidget<U extends Serializable, K> extends Composite implements 
 
     public TreeWidget(@Nonnull TreeNodeModel<U, K> model,
                       @Nonnull TreeNodeRenderer<U> renderer) {
-        this(new TreeViewImpl(), model, renderer);
+        this(new TreeViewImpl<>(), model, renderer);
     }
 
     public TreeWidget(@Nonnull TreeNodeRenderer<U> renderer) {
-        this(new TreeViewImpl(), new NullTreeNodeModel<>(), renderer);
+        this(new TreeViewImpl<>(), new NullTreeNodeModel<>(), renderer);
     }
 
     /**
@@ -63,7 +63,7 @@ public class TreeWidget<U extends Serializable, K> extends Composite implements 
      */
     @Inject
     public TreeWidget() {
-        this(new TreeViewImpl(), new NullTreeNodeModel<>(), new TreeNodeRendererImpl<>());
+        this(new TreeViewImpl<>(), new NullTreeNodeModel<>(), new TreeNodeRendererImpl<>());
     }
 
     public void reload() {

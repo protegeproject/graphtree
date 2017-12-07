@@ -56,7 +56,8 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
     @Inject
     public TreePresenter(@Nonnull TreeView<U> treeView,
                          @Nonnull SetSelectionModel<TreeNode<U>> selectionModel,
-                         @Nonnull TreeNodeRenderer<U> treeNodeRenderer) {
+                         @Nonnull TreeNodeRenderer<U> treeNodeRenderer,
+                         @Nonnull Platform platform) {
         this.treeView = checkNotNull(treeView);
         this.selectionModel = checkNotNull(selectionModel);
         this.viewManager = new TreeNodeViewManager<>(checkNotNull(treeNodeRenderer));
@@ -69,7 +70,7 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
                                                         new SelectPreviousTreeNodesHandler<>(selectionModel));
         keyboardEventMapper.bind(treeView);
         TreeViewEventTargetFinder<U> eventTargetFinder = new TreeViewEventTargetFinder<>(viewManager);
-        MouseEventMapper mouseEventMapper = new MouseEventMapper<>(new SetTreeNodeSelectedHandler<>(selectionModel),
+        MouseEventMapper mouseEventMapper = new MouseEventMapper<>(new SetTreeNodeSelectedHandler<>(selectionModel, platform),
                                                                    new ToggleExpansionStateHandler<>(this, selectionModel, viewManager),
                                                                    eventTargetFinder);
         mouseEventMapper.bind(treeView);

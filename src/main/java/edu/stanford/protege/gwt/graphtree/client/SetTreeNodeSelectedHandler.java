@@ -4,7 +4,10 @@ import com.google.gwt.view.client.SetSelectionModel;
 import com.google.inject.Inject;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNode;
 
+import javax.annotation.Nonnull;
 import java.io.Serializable;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Author: Matthew Horridge<br>
@@ -16,16 +19,19 @@ public class SetTreeNodeSelectedHandler<U extends Serializable> implements TreeN
 
     private final SetSelectionModel<TreeNode<U>> selectionModel;
 
+    private final Platform platform;
+
     @Inject
-    public SetTreeNodeSelectedHandler(SetSelectionModel<TreeNode<U>> selectionModel) {
-        this.selectionModel = selectionModel;
+    public SetTreeNodeSelectedHandler(@Nonnull SetSelectionModel<TreeNode<U>> selectionModel,
+                                      @Nonnull Platform platform) {
+        this.selectionModel = checkNotNull(selectionModel);
+        this.platform = checkNotNull(platform);
     }
 
     public void invoke(TreeViewInputEvent<U> event, Iterable<TreeNodeView<U>> views) {
         for (TreeNodeView<U> view : views) {
-            if(event.isAltDown()) {
-                // Toggle selection
-                selectionModel.setSelected(view.getNode(), !selectionModel.isSelected(view.getNode()));
+            if(isSelectionToggle(event)) {
+                toggleSelectionForView(view);
             }
             else {
                 // Single selection
@@ -33,5 +39,18 @@ public class SetTreeNodeSelectedHandler<U extends Serializable> implements TreeN
                 selectionModel.setSelected(view.getNode(), true);
             }
         }
+    }
+
+    private boolean isSelectionToggle(TreeViewInputEvent<U> event) {
+        if(platform.isMacOS()) {
+            return event.isMetaDown();
+        }
+        else {
+            return event.isCtrlDown();
+        }
+    }
+
+    private void toggleSelectionForView(TreeNodeView<U> view) {
+        selectionModel.setSelected(view.getNode(), !selectionModel.isSelected(view.getNode()));
     }
 }
