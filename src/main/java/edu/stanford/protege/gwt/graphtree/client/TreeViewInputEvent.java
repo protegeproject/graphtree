@@ -6,14 +6,11 @@ import com.google.gwt.event.dom.client.KeyEvent;
 import java.io.Serializable;
 
 /**
- * Author: Matthew Horridge<br>
- * Stanford University<br>
- * Bio-Medical Informatics Research Group<br>
- * Date: 30/01/2014
+ * Author: Matthew Horridge<br> Stanford University<br> Bio-Medical Informatics Research Group<br> Date: 30/01/2014
  */
 public class TreeViewInputEvent<U extends Serializable> {
 
-    public static final TreeViewInputEvent EMPTY_EVENT = new TreeViewInputEvent(false, false, false);
+    public static final TreeViewInputEvent EMPTY_EVENT = new TreeViewInputEvent(false, false, false, false);
 
     private final boolean altDown;
 
@@ -21,10 +18,13 @@ public class TreeViewInputEvent<U extends Serializable> {
 
     private final boolean shiftDown;
 
-    public TreeViewInputEvent(boolean altDown, boolean ctrlDown, boolean shiftDown) {
+    private final boolean metaDown;
+
+    public TreeViewInputEvent(boolean altDown, boolean ctrlDown, boolean shiftDown, boolean metaDown) {
         this.altDown = altDown;
         this.ctrlDown = ctrlDown;
         this.shiftDown = shiftDown;
+        this.metaDown = metaDown;
     }
 
     @SuppressWarnings("unchecked")
@@ -34,6 +34,24 @@ public class TreeViewInputEvent<U extends Serializable> {
 
     public static <U extends Serializable> Builder<U> builder() {
         return new Builder<>();
+    }
+
+    public static <U extends Serializable> TreeViewInputEvent<U> fromEvent(KeyEvent<?> event) {
+        return Builder.<U>builder()
+                .setAltDown(event.isAltKeyDown())
+                .setCtrlDown(event.isControlKeyDown())
+                .setShiftDown(event.isShiftKeyDown())
+                .setMetaDown(event.isMetaKeyDown())
+                .build();
+    }
+
+    public static <U extends Serializable> TreeViewInputEvent<U> fromEvent(HumanInputEvent<?> event) {
+        return Builder.<U>builder()
+                .setAltDown(event.isAltKeyDown())
+                .setCtrlDown(event.isControlKeyDown())
+                .setShiftDown(event.isShiftKeyDown())
+                .setMetaDown(event.isMetaKeyDown())
+                .build();
     }
 
     public boolean isAltDown() {
@@ -48,20 +66,8 @@ public class TreeViewInputEvent<U extends Serializable> {
         return shiftDown;
     }
 
-    public static <U extends Serializable> TreeViewInputEvent<U> fromEvent(KeyEvent<?> event) {
-        Builder<U> builder = builder();
-        builder.setAltDown(event.isAltKeyDown());
-        builder.setCtrlDown(event.isControlKeyDown());
-        builder.setShiftDown(event.isShiftKeyDown());
-        return builder.build();
-    }
-
-    public static <U extends Serializable> TreeViewInputEvent<U> fromEvent(HumanInputEvent<?> event) {
-        Builder<U> builder = builder();
-        builder.setAltDown(event.isAltKeyDown());
-        builder.setCtrlDown(event.isControlKeyDown());
-        builder.setShiftDown(event.isShiftKeyDown());
-        return builder.build();
+    public boolean isMetaDown() {
+        return metaDown;
     }
 
     public static class Builder<U extends Serializable> {
@@ -72,24 +78,34 @@ public class TreeViewInputEvent<U extends Serializable> {
 
         private boolean shiftDown;
 
-        public Builder setAltDown(boolean altDown) {
+        private boolean metaDown;
+
+        public static <U extends Serializable> Builder<U> builder() {
+            return new Builder<>();
+        }
+
+        public Builder<U> setAltDown(boolean altDown) {
             this.altDown = altDown;
             return this;
         }
 
-        public Builder setCtrlDown(boolean ctrlDown) {
+        public Builder<U> setCtrlDown(boolean ctrlDown) {
             this.ctrlDown = ctrlDown;
             return this;
         }
 
-        public Builder setShiftDown(boolean shiftDown) {
+        public Builder<U> setShiftDown(boolean shiftDown) {
             this.shiftDown = shiftDown;
             return this;
         }
 
+        public Builder<U> setMetaDown(boolean metaDown) {
+            this.metaDown = metaDown;
+            return this;
+        }
 
         public TreeViewInputEvent<U> build() {
-            return new TreeViewInputEvent<>(altDown, ctrlDown, shiftDown);
+            return new TreeViewInputEvent<>(altDown, ctrlDown, shiftDown, metaDown);
         }
     }
 }
