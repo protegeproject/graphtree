@@ -341,6 +341,7 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
                     }
                     else {
                         setSelected(tn.getTreeNode(), true);
+                        scrollSelectionIntoView();
                     }
                 }
                 if (revealMode == RevealMode.REVEAL_FIRST) {
