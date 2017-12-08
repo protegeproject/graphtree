@@ -2,6 +2,7 @@ package edu.stanford.protege.gwt.graphtree.client;
 
 import edu.stanford.protege.gwt.graphtree.shared.Path;
 
+import javax.annotation.Nonnull;
 import java.io.Serializable;
 
 /**
@@ -13,20 +14,20 @@ import java.io.Serializable;
 public class NoOpTreeNodeDropHandler<U extends Serializable> implements TreeNodeDropHandler<U> {
 
     @Override
-    public void handleDrop(Path<U> draggedNode, Path<U> dropTarget, DropType dropType, DropEndHandler handler) {
+    public void handleDrop(@Nonnull Path<U> draggedNode, @Nonnull Path<U> dropTarget, @Nonnull DropType dropType, @Nonnull DropEndHandler handler) {
     }
 
     @Override
-    public void handleTextDrop(String draggedText, Path<U> dropTarget, DropType dropType, DropEndHandler handler) {
+    public void handleTextDrop(@Nonnull String draggedText, @Nonnull Path<U> dropTarget, @Nonnull DropType dropType, @Nonnull DropEndHandler handler) {
     }
 
     @Override
-    public boolean isDropPossible(Path<U> draggedNode, Path<U> dropTargetPath, DropType dropType) {
+    public boolean isDropPossible(@Nonnull Path<U> draggedNode, @Nonnull Path<U> dropTargetPath, @Nonnull DropType dropType) {
         return false;
     }
 
     @Override
-    public boolean isTextDropPossible(Path<U> dropTargetPath, DropType dropType) {
+    public boolean isTextDropPossible(@Nonnull Path<U> dropTargetPath, @Nonnull DropType dropType) {
         return false;
     }
 }
