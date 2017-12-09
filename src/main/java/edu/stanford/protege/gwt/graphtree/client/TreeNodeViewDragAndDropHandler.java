@@ -7,10 +7,14 @@ import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
+import edu.stanford.protege.gwt.graphtree.shared.DropType;
 import edu.stanford.protege.gwt.graphtree.shared.Path;
 
+import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.Optional;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Author: Matthew Horridge<br>
@@ -51,8 +55,8 @@ public class TreeNodeViewDragAndDropHandler<U extends Serializable> implements H
         this.treeNodeDropHandler = new NoOpTreeNodeDropHandler<>();
     }
 
-    public void setDropHandler(TreeNodeDropHandler<U> handler) {
-        this.treeNodeDropHandler = handler;
+    public void setDropHandler(@Nonnull TreeNodeDropHandler<U> handler) {
+        this.treeNodeDropHandler = checkNotNull(handler);
     }
 
     public void handleDragStart(DragStartEvent event, TreeNodeView<U> targetView) {
@@ -137,7 +141,9 @@ public class TreeNodeViewDragAndDropHandler<U extends Serializable> implements H
             final Path<U> dropPath = TreeNodeViewTraverser.<U>newTreeNodeViewTraverser().getUserObjectPathToRoot
                     (targetView);
             hasPendingChanges.setChildAdditionPending(targetView);
-            hasPendingChanges.setRemovalPending(draggedNode);
+            if (getDnDConstant(event) == DropEffect.MOVE) {
+                hasPendingChanges.setRemovalPending(draggedNode);
+            }
             treeNodeDropHandler.handleDrop(draggedPath,
                                            dropPath,
                                            getDropType(event),
@@ -147,6 +153,7 @@ public class TreeNodeViewDragAndDropHandler<U extends Serializable> implements H
                                                }
 
                                                public void handleDropCancelled() {
+                                                   GWT.log("[TreeNodeViewDragAndDropHandler] handling drop cancelled");
                                                    hasPendingChanges.setPendingChangedCancelled(targetView);
                                                    hasPendingChanges.setPendingChangedCancelled(draggedNode);
                                                    clearDraggedTreeNode();
@@ -195,8 +202,8 @@ public class TreeNodeViewDragAndDropHandler<U extends Serializable> implements H
     }
 
     private static DropEffect getDnDConstant(HasNativeEvent event) {
-        TreeNodeDropHandler.DropType dropType = getDropType(event);
-        if (dropType == TreeNodeDropHandler.DropType.ADD) {
+        DropType dropType = getDropType(event);
+        if (dropType == DropType.ADD) {
             return DropEffect.ADD;
         }
         else {
@@ -204,12 +211,12 @@ public class TreeNodeViewDragAndDropHandler<U extends Serializable> implements H
         }
     }
 
-    private static TreeNodeDropHandler.DropType getDropType(HasNativeEvent event) {
+    private static DropType getDropType(HasNativeEvent event) {
         if (event.getNativeEvent().getAltKey()) {
-            return TreeNodeDropHandler.DropType.ADD;
+            return DropType.ADD;
         }
         else {
-            return TreeNodeDropHandler.DropType.MOVE;
+            return DropType.MOVE;
         }
     }
 

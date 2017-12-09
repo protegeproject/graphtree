@@ -1,5 +1,6 @@
 package edu.stanford.protege.gwt.graphtree.client;
 
+import edu.stanford.protege.gwt.graphtree.shared.DropType;
 import edu.stanford.protege.gwt.graphtree.shared.Path;
 
 import javax.annotation.Nonnull;
@@ -12,11 +13,6 @@ import java.io.Serializable;
  * Date: 28/01/2014
  */
 public interface TreeNodeDropHandler<U extends Serializable> {
-
-    enum  DropType {
-        MOVE,
-        ADD
-    }
 
     interface DropEndHandler {
 

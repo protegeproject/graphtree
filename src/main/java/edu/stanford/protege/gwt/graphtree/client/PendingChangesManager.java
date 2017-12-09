@@ -110,7 +110,7 @@ public class PendingChangesManager<U extends Serializable> implements TreeNodeMo
 
         @Override
         public void end() {
-
+            getView().setLoadingIndicatorDisplayed(false);
         }
 
         @Override
@@ -143,6 +143,7 @@ public class PendingChangesManager<U extends Serializable> implements TreeNodeMo
 
         @Override
         public void end() {
+            getView().asWidget().getElement().getStyle().setOpacity(1.0);
         }
 
         @Override

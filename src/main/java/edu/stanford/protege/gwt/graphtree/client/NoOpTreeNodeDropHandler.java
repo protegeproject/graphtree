@@ -1,5 +1,6 @@
 package edu.stanford.protege.gwt.graphtree.client;
 
+import edu.stanford.protege.gwt.graphtree.shared.DropType;
 import edu.stanford.protege.gwt.graphtree.shared.Path;
 
 import javax.annotation.Nonnull;
