@@ -28,12 +28,13 @@
 
         .rendering {
             margin-left: 0.3em;
-            -webkit-user-select: text;
-            -moz-user-select: text;
-            -ms-user-select: text;
-            user-select: text;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
             flex-shrink: 0;
             flex-grow: 0;
+            pointer-events: none;
         }
 
         .childContainer {
@@ -59,7 +60,7 @@
             <g:HTML ui:field="rendering" addStyleNames="{style.rendering}"/>
         </g:FlowPanel>
         <g:LazyPanel ui:field="childContainerHolder" addStyleNames="{style.childContainerHolder}">
-            <g:FlowPanel ui:field="childContainer" addStyleNames="{style.childContainer}"/>
+            <g:FlowPanel ui:field="childContainer" addStyleNames="{style.childContainer}" visible="false"/>
         </g:LazyPanel>
     </g:HTMLPanel>
 </ui:UiBinder>
