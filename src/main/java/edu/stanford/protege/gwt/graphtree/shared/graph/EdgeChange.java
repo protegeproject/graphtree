@@ -1,6 +1,7 @@
 package edu.stanford.protege.gwt.graphtree.shared.graph;
 
 import java.io.Serializable;
+import java.util.function.Consumer;
 
 /**
  * Author: Matthew Horridge<br>
@@ -30,5 +31,11 @@ public abstract class EdgeChange<U extends Serializable> extends GraphModelChang
 
     public GraphEdge<U> getEdge() {
         return edge;
+    }
+
+    @Override
+    void forEachGraphNode(Consumer<GraphNode<U>> nodeConsumer) {
+        nodeConsumer.accept(edge.getPredecessor());
+        nodeConsumer.accept(edge.getSuccessor());
     }
 }

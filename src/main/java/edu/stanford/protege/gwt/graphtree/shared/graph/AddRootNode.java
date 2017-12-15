@@ -1,6 +1,7 @@
 package edu.stanford.protege.gwt.graphtree.shared.graph;
 
 import java.io.Serializable;
+import java.util.function.Consumer;
 
 import static com.google.common.base.MoreObjects.toStringHelper;
 
@@ -28,6 +29,11 @@ public class AddRootNode<U extends Serializable> extends GraphModelChange<U> {
     @Override
     public void accept(GraphModelChangeVisitor<U> visitor) {
         visitor.visit(this);
+    }
+
+    @Override
+    void forEachGraphNode(Consumer<GraphNode<U>> nodeConsumer) {
+        nodeConsumer.accept(rootNode);
     }
 
     public RemoveRootNode<U> getReverseChange() {

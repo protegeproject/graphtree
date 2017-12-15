@@ -49,6 +49,10 @@ public class Path<N> implements Iterable<N>, Serializable {
         return (Path<N>) EMPTY_PATH;
     }
 
+    public boolean isEmpty() {
+        return path.isEmpty();
+    }
+
     public List<N> asList() {
         return new ArrayList<>(path);
     }

@@ -5,21 +5,27 @@ import com.google.gwt.animation.client.Animation;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.event.dom.client.DragStartEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.*;
+import edu.stanford.protege.gwt.graphtree.shared.tree.HasTextRendering;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNode;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeId;
 
 import javax.annotation.Nonnull;
+import java.beans.EventSetDescriptor;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static edu.stanford.protege.gwt.graphtree.client.TreeNodeViewState.COLLAPSED;
+import static edu.stanford.protege.gwt.graphtree.client.TreeNodeViewState.EXPANDED;
 
 /**
  * Author: Matthew Horridge<br>
@@ -61,7 +67,7 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
 
     private DataState dataState = DataState.UNLOADED;
 
-    private TreeNodeViewState viewState = TreeNodeViewState.COLLAPSED;
+    private TreeNodeViewState viewState = COLLAPSED;
 
     private boolean pruned = false;
 
@@ -83,7 +89,7 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
         HTMLPanel rootElement = ourUiBinder.createAndBindUi(this);
         initWidget(rootElement);
         updateHandleImage();
-        getElement().setDraggable(Element.DRAGGABLE_TRUE);
+        content.getElement().setDraggable(Element.DRAGGABLE_TRUE);
         this.nodeId = checkNotNull(nodeId);
         this.userObject = checkNotNull(userObject);
     }
@@ -153,19 +159,19 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
     }
 
     public boolean isExpanded() {
-        return viewState == TreeNodeViewState.EXPANDED;
+        return viewState == EXPANDED;
     }
 
     public boolean isCollapsed() {
-        return viewState == TreeNodeViewState.COLLAPSED;
+        return viewState == COLLAPSED;
     }
 
     public void setExpanded() {
-        setViewState(TreeNodeViewState.EXPANDED);
+        setViewState(EXPANDED);
     }
 
     public void setCollapsed() {
-        setViewState(TreeNodeViewState.COLLAPSED);
+        setViewState(COLLAPSED);
     }
 
     public TreeNodeViewState getViewState() {
@@ -185,11 +191,11 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
         viewState = state;
         updateHandleImage();
         childContainerHolder.ensureWidget();
-        childContainer.setVisible(true);
-        if (state == TreeNodeViewState.EXPANDED) {
+        childContainer.setVisible(state == EXPANDED);
+        if (state == EXPANDED) {
             animateOpen();
         }
-        else if(state == TreeNodeViewState.COLLAPSED) {
+        else if(state == COLLAPSED) {
             animateClosed();
         }
     }
@@ -441,7 +447,7 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
     }
 
     private int getExpandedDescendantCountRecursive() {
-        if (viewState == TreeNodeViewState.COLLAPSED) {
+        if (viewState == COLLAPSED) {
             return 0;
         }
         int count = childContainer.getWidgetCount();
@@ -458,7 +464,7 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
         }
         else {
             if(pruned) {
-                if(viewState == TreeNodeViewState.COLLAPSED) {
+                if(viewState == COLLAPSED) {
                     handleImageResourceUri = RESOURCES.prunedCollapsed().getSafeUri().asString();
                 }
                 else {
@@ -466,7 +472,7 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
                 }
             }
             else {
-                if(viewState == TreeNodeViewState.COLLAPSED) {
+                if(viewState == COLLAPSED) {
                     handleImageResourceUri = RESOURCES.collapsed().getSafeUri().asString();
                 }
                 else {

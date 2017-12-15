@@ -9,6 +9,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import edu.stanford.protege.gwt.graphtree.shared.DropType;
 import edu.stanford.protege.gwt.graphtree.shared.Path;
+import edu.stanford.protege.gwt.graphtree.shared.tree.HasTextRendering;
 
 import javax.annotation.Nonnull;
 import java.io.Serializable;
@@ -17,37 +18,15 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Author: Matthew Horridge<br>
- * Stanford University<br>
- * Bio-Medical Informatics Research Group<br>
- * Date: 28/01/2014
+ * Author: Matthew Horridge<br> Stanford University<br> Bio-Medical Informatics Research Group<br> Date: 28/01/2014
  */
 public class TreeNodeViewDragAndDropHandler<U extends Serializable> implements HasTreeNodeDropHandler<U> {
 
     private static final String TEXT_TRANSFER_DATA_KEY = "Text";
-
-    private enum DropEffect {
-        MOVE("move"),
-        ADD("add"),
-        LINK("link"),
-        NONE("none");
-
-        final String dropEffect;
-
-        DropEffect(String dropEffect) {
-            this.dropEffect = dropEffect;
-        }
-
-        public String getDropEffect() {
-            return dropEffect;
-        }
-    }
-
+    private final HasPendingChanges<U> hasPendingChanges;
     private Optional<TreeNodeView<U>> draggedNode = Optional.empty();
 
     private TreeNodeDropHandler<U> treeNodeDropHandler;
-
-    private final HasPendingChanges<U> hasPendingChanges;
 
     @Inject
     public TreeNodeViewDragAndDropHandler(HasPendingChanges<U> hasPendingChanges) {
@@ -55,21 +34,63 @@ public class TreeNodeViewDragAndDropHandler<U extends Serializable> implements H
         this.treeNodeDropHandler = new NoOpTreeNodeDropHandler<>();
     }
 
+    private static DropEffect getDnDConstant(HasNativeEvent event) {
+        DropType dropType = getDropType(event);
+        if (dropType == DropType.ADD) {
+            return DropEffect.ADD;
+        }
+        else {
+            return DropEffect.MOVE;
+        }
+    }
+
+    private static DropType getDropType(HasNativeEvent event) {
+        if (event.getNativeEvent().getAltKey()) {
+            return DropType.ADD;
+        }
+        else {
+            return DropType.MOVE;
+        }
+    }
+
+    private static void setDropEffect(NativeEvent e, DropEffect constant) {
+        setDropEffect(e, constant.name());
+    }
+
+    /**
+     * Sets the HTML 5 drop effect.  This can be used to update the cursor to indicate the kind of drop (e.g. a MOVE or
+     * a copy) or it can be used to cancel a drop (by setting to "NONE").  Unfortunately, the GWT API does not expose
+     * this functionality, hence the need for the JSNI method.
+     *
+     * @param e      The native event to set the effect on.
+     * @param effect The effect to set. See {@link DropEffect} for the different types of effect.
+     */
+    private static native void setDropEffect(NativeEvent e, String effect) /*-{
+        var dataTransfer = e.dataTransfer;
+        dataTransfer.dropEffect = effect
+    }-*/;
+
     public void setDropHandler(@Nonnull TreeNodeDropHandler<U> handler) {
         this.treeNodeDropHandler = checkNotNull(handler);
     }
 
     public void handleDragStart(DragStartEvent event, TreeNodeView<U> targetView) {
+        event.stopPropagation();
         draggedNode = Optional.of(targetView);
         setupDragImage(event, targetView);
         setupTransferData(event, targetView);
         updateDropEffect(event, targetView);
+
     }
 
     private void setupTransferData(DragStartEvent event, TreeNodeView<U> targetView) {
         DataTransfer dataTransfer = event.getDataTransfer();
-        GWT.log("TRANSFER DATA HAS NOT BEEN SET UP!");
-//        dataTransfer.setData(TEXT_TRANSFER_DATA_KEY, targetView.getNode());
+        U userObject = targetView.getUserObject();
+        String text = "";
+        if (userObject instanceof HasTextRendering) {
+            text = ((HasTextRendering) userObject).getText();
+        }
+        dataTransfer.setData(TEXT_TRANSFER_DATA_KEY, text);
     }
 
     private void setupDragImage(DragStartEvent event, TreeNodeView targetView) {
@@ -82,8 +103,8 @@ public class TreeNodeViewDragAndDropHandler<U extends Serializable> implements H
         final int elementY = widget.getAbsoluteTop();
         DataTransfer dataTransfer = event.getDataTransfer();
         dataTransfer.setDragImage(targetView.getDragWidget().asWidget().getElement(),
-                clientX - elementX,
-                clientY - elementY);
+                                  clientX - elementX,
+                                  clientY - elementY);
     }
 
     public void handleDragEnter(DragEnterEvent event, TreeNodeView<U> targetView) {
@@ -95,6 +116,7 @@ public class TreeNodeViewDragAndDropHandler<U extends Serializable> implements H
     }
 
     public void handleDragLeave(DragLeaveEvent event, TreeNodeView<U> targetView) {
+        GWT.log("[TreeNodeViewDragAndDropHandler] handle drag leave");
         updateDropEffect(event, targetView);
         targetView.setDragOver(false);
     }
@@ -106,6 +128,12 @@ public class TreeNodeViewDragAndDropHandler<U extends Serializable> implements H
         }
         else {
             handleTextDrop(event, targetView);
+        }
+    }
+
+    public void handleDrop(DropEvent event) {
+        if (draggedNode.isPresent()) {
+            handleTreeDrop(event);
         }
     }
 
@@ -121,18 +149,18 @@ public class TreeNodeViewDragAndDropHandler<U extends Serializable> implements H
         final Path<U> dropPath = TreeNodeViewTraverser.<U>newTreeNodeViewTraverser().getUserObjectPathToRoot
                 (targetView);
         treeNodeDropHandler.handleTextDrop(text,
-                dropPath,
-                getDropType(event),
-                new TreeNodeDropHandler.DropEndHandler() {
-                    @Override
-                    public void handleDropComplete() {
-                    }
+                                           dropPath,
+                                           getDropType(event),
+                                           new TreeNodeDropHandler.DropEndHandler() {
+                                               @Override
+                                               public void handleDropComplete() {
+                                               }
 
-                    @Override
-                    public void handleDropCancelled() {
-                        hasPendingChanges.setPendingChangedCancelled(targetView);
-                    }
-                });
+                                               @Override
+                                               public void handleDropCancelled() {
+                                                   hasPendingChanges.setPendingChangedCancelled(targetView);
+                                               }
+                                           });
     }
 
     private void handleTreeNodeDrop(DropEvent event, final TreeNodeView<U> targetView) {
@@ -162,11 +190,35 @@ public class TreeNodeViewDragAndDropHandler<U extends Serializable> implements H
         });
     }
 
+    private void handleTreeDrop(DropEvent event) {
+        draggedNode.ifPresent(draggedNode -> {
+            final Path<U> draggedPath = getDraggedNodePath();
+            final Path<U> emptyPath = Path.emptyPath();
+            if (getDnDConstant(event) == DropEffect.MOVE) {
+                hasPendingChanges.setRemovalPending(draggedNode);
+            }
+            treeNodeDropHandler.handleDrop(draggedPath, emptyPath, getDropType(event), new TreeNodeDropHandler.DropEndHandler() {
+                @Override
+                public void handleDropComplete() {
+                    hasPendingChanges.setPendingChangedCancelled(draggedNode);
+                    clearDraggedTreeNode();
+                }
+
+                @Override
+                public void handleDropCancelled() {
+                    hasPendingChanges.setPendingChangedCancelled(draggedNode);
+                    clearDraggedTreeNode();
+                }
+            });
+        });
+    }
+
     private Path<U> getDraggedNodePath() {
         return TreeNodeViewTraverser.<U>newTreeNodeViewTraverser().getUserObjectPathToRoot(draggedNode.get());
     }
 
     public void handleDragEnd(DragEndEvent event) {
+        event.stopPropagation();
     }
 
     private void clearDraggedTreeNode() {
@@ -174,16 +226,17 @@ public class TreeNodeViewDragAndDropHandler<U extends Serializable> implements H
     }
 
     private void updateDropEffect(DragDropEventBase<?> event, TreeNodeView<U> targetView) {
+        draggedNode.ifPresent(view -> view.setDragOver(false));
         Path<U> pathToRoot = TreeNodeViewTraverser.<U>newTreeNodeViewTraverser().getUserObjectPathToRoot(targetView);
         if (isTreeNodeDrag(targetView) && treeNodeDropHandler.isDropPossible(getDraggedNodePath(),
-                pathToRoot,
-                getDropType(event))) {
+                                                                             pathToRoot,
+                                                                             getDropType(event))) {
             DropEffect effect = getDnDConstant(event);
             setDropEffect(event.getNativeEvent(), effect);
             targetView.setDragOver(true);
         }
         else if (isTextDrag(event) && treeNodeDropHandler.isTextDropPossible(pathToRoot,
-                getDropType(event))) {
+                                                                             getDropType(event))) {
             setDropEffect(event.getNativeEvent(), getDnDConstant(event));
             targetView.setDragOver(true);
         }
@@ -201,40 +254,20 @@ public class TreeNodeViewDragAndDropHandler<U extends Serializable> implements H
         return event.getData(TEXT_TRANSFER_DATA_KEY) != null;
     }
 
-    private static DropEffect getDnDConstant(HasNativeEvent event) {
-        DropType dropType = getDropType(event);
-        if (dropType == DropType.ADD) {
-            return DropEffect.ADD;
+    private enum DropEffect {
+        MOVE("move"),
+        ADD("add"),
+        LINK("link"),
+        NONE("none");
+
+        final String dropEffect;
+
+        DropEffect(String dropEffect) {
+            this.dropEffect = dropEffect;
         }
-        else {
-            return DropEffect.MOVE;
+
+        public String getDropEffect() {
+            return dropEffect;
         }
     }
-
-    private static DropType getDropType(HasNativeEvent event) {
-        if (event.getNativeEvent().getAltKey()) {
-            return DropType.ADD;
-        }
-        else {
-            return DropType.MOVE;
-        }
-    }
-
-    private static void setDropEffect(NativeEvent e, DropEffect constant) {
-        setDropEffect(e, constant.name());
-    }
-
-    /**
-     * Sets the HTML 5 drop effect.  This can be used to update the cursor to indicate the kind of drop (e.g. a MOVE
-     * or a copy) or it can be used to cancel a drop (by setting to "NONE").  Unfortunately, the GWT API does not expose
-     * this functionality, hence the need for the JSNI method.
-     *
-     * @param e      The native event to set the effect on.
-     * @param effect The effect to set. See {@link DropEffect}
-     *               for the different types of effect.
-     */
-    private static native void setDropEffect(NativeEvent e, String effect) /*-{
-        var dataTransfer = e.dataTransfer;
-        dataTransfer.dropEffect = effect
-    }-*/;
 }

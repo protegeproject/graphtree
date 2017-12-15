@@ -21,6 +21,13 @@ public interface TreeNodeDropHandler<U extends Serializable> {
         void handleDropCancelled();
     }
 
+    /**
+     * Handle the drop of the dragged node on the specified path.
+     * @param draggedNode The path to the dragged node.
+     * @param dropTarget The path to the target node (the parent node).  This may be an empty path.
+     * @param dropType The type of drop.
+     * @param handler A handler to handle the drop complete.
+     */
     void handleDrop(@Nonnull Path<U> draggedNode,
                     @Nonnull Path<U> dropTarget,
                     @Nonnull DropType dropType,

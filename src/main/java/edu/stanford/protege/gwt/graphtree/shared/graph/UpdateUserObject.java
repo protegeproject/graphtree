@@ -4,6 +4,7 @@ import com.google.common.base.MoreObjects;
 
 import javax.annotation.Nonnull;
 import java.io.Serializable;
+import java.util.function.Consumer;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -32,6 +33,11 @@ public class UpdateUserObject<U extends Serializable> extends GraphModelChange<U
     @Override
     public void accept(GraphModelChangeVisitor<U> visitor) {
         visitor.visit(this);
+    }
+
+    @Override
+    void forEachGraphNode(Consumer<GraphNode<U>> nodeConsumer) {
+
     }
 
     @Override

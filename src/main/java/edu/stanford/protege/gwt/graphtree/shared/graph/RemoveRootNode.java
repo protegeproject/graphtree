@@ -3,6 +3,7 @@ package edu.stanford.protege.gwt.graphtree.shared.graph;
 import com.google.common.base.MoreObjects;
 
 import java.io.Serializable;
+import java.util.function.Consumer;
 
 /**
  * Author: Matthew Horridge<br>
@@ -32,6 +33,11 @@ public class RemoveRootNode<U extends Serializable> extends GraphModelChange<U> 
     @Override
     public void accept(GraphModelChangeVisitor<U> visitor) {
         visitor.visit(this);
+    }
+
+    @Override
+    void forEachGraphNode(Consumer<GraphNode<U>> nodeConsumer) {
+        nodeConsumer.accept(rootNode);
     }
 
     @Override
