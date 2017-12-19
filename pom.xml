@@ -8,6 +8,12 @@
     <artifactId>graphtree</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+    
     <properties>
         <gwtVersion>2.8.2</gwtVersion>
         <gwt.test.mode>htmlunit</gwt.test.mode>
