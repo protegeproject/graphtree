@@ -1,6 +1,7 @@
 package edu.stanford.protege.gwt.graphtree.client;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
+
 import edu.stanford.protege.gwt.graphtree.shared.tree.ChildNodeAdded;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeId;
 

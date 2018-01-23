@@ -1,10 +1,10 @@
 package edu.stanford.protege.gwt.graphtree.client;
 
 import com.google.gwt.view.client.SetSelectionModel;
-import com.google.inject.Inject;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNode;
 
 import javax.annotation.Nonnull;
+import javax.inject.Inject;
 import java.io.Serializable;
 
 import static com.google.common.base.Preconditions.checkNotNull;

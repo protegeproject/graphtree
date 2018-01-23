@@ -4,7 +4,6 @@ import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
-import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import edu.stanford.protege.gwt.graphtree.shared.Path;
 import edu.stanford.protege.gwt.graphtree.shared.tree.RevealMode;
@@ -13,6 +12,7 @@ import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeId;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeModel;
 
 import javax.annotation.Nonnull;
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;

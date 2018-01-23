@@ -2,7 +2,6 @@ package edu.stanford.protege.gwt.graphtree.client;
 
 import com.google.common.collect.Lists;
 import com.google.gwt.view.client.SetSelectionModel;
-import com.google.inject.Inject;
 import edu.stanford.protege.gwt.graphtree.shared.tree.*;
 
 import java.io.Serializable;
@@ -24,7 +23,6 @@ public class SetTreeNodeExpandedHandler<U extends Serializable> implements TreeN
 
     private final SetSelectionModel<TreeNode<U>> selectionModel;
 
-    @Inject
     public SetTreeNodeExpandedHandler(HasGetNodes<U> hasGetNodes, SetSelectionModel<TreeNode<U>> selectionModel, TreeNodeViewManager<U> viewMapper) {
         this.hasGetNodes = hasGetNodes;
         this.viewManager = viewMapper;

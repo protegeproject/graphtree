@@ -1,6 +1,6 @@
 package edu.stanford.protege.gwt.graphtree.client;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 
 import java.io.Serializable;
 

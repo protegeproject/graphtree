@@ -1,7 +1,8 @@
 package edu.stanford.protege.gwt.graphtree.client;
 
 import com.google.gwt.view.client.SetSelectionModel;
-import com.google.inject.Inject;
+import javax.inject.Inject;
+
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNode;
 
 import java.io.Serializable;

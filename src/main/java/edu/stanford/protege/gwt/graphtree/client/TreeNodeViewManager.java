@@ -3,11 +3,11 @@ package edu.stanford.protege.gwt.graphtree.client;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Maps;
 import com.google.gwt.dom.client.Element;
-import com.google.inject.Inject;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeData;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeId;
 
 import javax.annotation.Nonnull;
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Optional;
