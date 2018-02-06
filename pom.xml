@@ -17,6 +17,7 @@
     <properties>
         <gwtVersion>2.8.2</gwtVersion>
         <gwt.test.mode>htmlunit</gwt.test.mode>
+        <guava.version>20.0</guava.version>
     </properties>
 
     <dependencies>
@@ -34,7 +35,7 @@
         </dependency>
         <dependency>
             <groupId>junit</groupId>
-            <artifactId>junit-dep</artifactId>
+            <artifactId>junit</artifactId>
             <version>4.11</version>
             <scope>test</scope>
         </dependency>
@@ -53,12 +54,12 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>18.0</version>
+            <version>${guava.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava-gwt</artifactId>
-            <version>18.0</version>
+            <version>${guava.version}</version>
         </dependency>
         <dependency>
             <groupId>javax.inject</groupId>
