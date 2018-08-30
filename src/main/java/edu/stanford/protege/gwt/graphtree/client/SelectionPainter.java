@@ -3,13 +3,13 @@ package edu.stanford.protege.gwt.graphtree.client;
 import com.google.common.collect.Sets;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.view.client.SetSelectionModel;
-import javax.inject.Inject;
-
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNode;
+import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeId;
 
+import javax.inject.Inject;
 import java.io.Serializable;
-import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
 /**
  * Author: Matthew Horridge<br>
@@ -19,11 +19,11 @@ import java.util.Set;
  */
 public class SelectionPainter<U extends Serializable> {
 
-    private SetSelectionModel<TreeNode<U>> selectionModel;
-
     private final TreeNodeViewMapper<U> treeNodeViewManager;
 
-    private final Set<TreeNode<U>> lastSelection = Sets.newHashSet();
+    private final Set<TreeNodeId> lastSelection = Sets.newHashSet();
+
+    private SetSelectionModel<TreeNode<U>> selectionModel;
 
     private HandlerRegistration handlerRegistration;
 
@@ -33,27 +33,29 @@ public class SelectionPainter<U extends Serializable> {
     }
 
     private void repaintSelection() {
-        if(selectionModel == null) {
+        if (selectionModel == null) {
             return;
         }
-        repaintTreeNodes(lastSelection, false);
-        repaintTreeNodes(selectionModel.getSelectedSet(), true);
+        repaintTreeNodes(lastSelection.stream(), false);
+        repaintTreeNodes(selectionModel.getSelectedSet().stream().map(TreeNode::getId), true);
     }
 
-    private void repaintTreeNodes(Set<TreeNode<U>> nodes, boolean selected) {
-        for (TreeNode<U> node : nodes) {
-            Optional<TreeNodeView<U>> view = treeNodeViewManager.getViewIfPresent(node.getId());
-            view.ifPresent(theView -> theView.setSelected(selected));
-        }
+    private void repaintTreeNodes(Stream<TreeNodeId> nodeIds, boolean selected) {
+        nodeIds.map(treeNodeViewManager::getViewIfPresent)
+               .forEach(view -> view.ifPresent(
+                       theView -> theView.setSelected(selected)
+               ));
     }
 
     private void handleSelectionChange() {
-        if(selectionModel == null) {
+        if (selectionModel == null) {
             return;
         }
         repaintSelection();
         lastSelection.clear();
-        lastSelection.addAll(selectionModel.getSelectedSet());
+        selectionModel.getSelectedSet().stream()
+                      .map(TreeNode::getId)
+                      .forEach(lastSelection::add);
     }
 
     public void bind(SetSelectionModel<TreeNode<U>> selectionModel) {
