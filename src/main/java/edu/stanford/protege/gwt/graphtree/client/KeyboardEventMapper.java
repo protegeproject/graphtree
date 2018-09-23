@@ -2,7 +2,10 @@ package edu.stanford.protege.gwt.graphtree.client;
 
 import com.google.gwt.event.dom.client.*;
 
+import javax.annotation.Nonnull;
 import java.io.Serializable;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Author: Matthew Horridge<br>
@@ -22,16 +25,16 @@ public class KeyboardEventMapper<U extends Serializable> {
 
     private final TreeNodeViewSelectionProvider<U> selectionProvider;
 
-    public KeyboardEventMapper(TreeNodeViewSelectionProvider<U> selectionProvider,
-                               SetTreeNodeExpandedHandler<U> setNodeExpandedAction,
-                               SetTreeNodeCollapsedHandler<U> setNodeCollapsedAction,
-                               SelectNextTreeNodesHandler<U> selectNextNodesAction,
-                               SelectPreviousTreeNodesHandler<U> selectPreviousTreeNodesHandler) {
-        this.selectionProvider = selectionProvider;
-        this.setNodeExpandedAction = setNodeExpandedAction;
-        this.setNodeCollapsedAction = setNodeCollapsedAction;
-        this.selectNextNodesAction = selectNextNodesAction;
-        this.selectPreviousTreeNodesHandler = selectPreviousTreeNodesHandler;
+    public KeyboardEventMapper(@Nonnull TreeNodeViewSelectionProvider<U> selectionProvider,
+                               @Nonnull SetTreeNodeExpandedHandler<U> setNodeExpandedAction,
+                               @Nonnull SetTreeNodeCollapsedHandler<U> setNodeCollapsedAction,
+                               @Nonnull SelectNextTreeNodesHandler<U> selectNextNodesAction,
+                               @Nonnull SelectPreviousTreeNodesHandler<U> selectPreviousTreeNodesHandler) {
+        this.selectionProvider = checkNotNull(selectionProvider);
+        this.setNodeExpandedAction = checkNotNull(setNodeExpandedAction);
+        this.setNodeCollapsedAction = checkNotNull(setNodeCollapsedAction);
+        this.selectNextNodesAction = checkNotNull(selectNextNodesAction);
+        this.selectPreviousTreeNodesHandler = checkNotNull(selectPreviousTreeNodesHandler);
     }
 
     public void bind(TreeView view) {
