@@ -8,6 +8,8 @@ import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.*;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Author: Matthew Horridge<br>
  * Stanford University<br>
@@ -20,9 +22,10 @@ public class TreeNodeViewSelectionProvider<U extends Serializable> implements It
 
     private final TreeNodeViewMapper<U> viewMapper;
 
-    public TreeNodeViewSelectionProvider(SetSelectionModel<TreeNode<U>> selectionModel, TreeNodeViewMapper<U> viewMapper) {
-        this.selectionModel = selectionModel;
-        this.viewMapper = viewMapper;
+    public TreeNodeViewSelectionProvider(@Nonnull SetSelectionModel<TreeNode<U>> selectionModel,
+                                         @Nonnull TreeNodeViewMapper<U> viewMapper) {
+        this.selectionModel = checkNotNull(selectionModel);
+        this.viewMapper = checkNotNull(viewMapper);
     }
 
     @Override
