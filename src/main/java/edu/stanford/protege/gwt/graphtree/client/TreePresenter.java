@@ -70,7 +70,7 @@ public class TreePresenter<U extends Serializable, K> implements HasTreeNodeDrop
                                                         new SelectPreviousTreeNodesHandler<>(selectionModel));
         keyboardEventMapper.bind(treeView);
         TreeViewEventTargetFinder<U> eventTargetFinder = new TreeViewEventTargetFinder<>(viewManager);
-        MouseEventMapper mouseEventMapper = new MouseEventMapper<>(new SetTreeNodeSelectedHandler<>(selectionModel, platform),
+        MouseEventMapper mouseEventMapper = new MouseEventMapper<>(new SetTreeNodeSelectedHandler<>(selectionModel, viewManager, platform),
                                                                    new ToggleExpansionStateHandler<>(this, selectionModel, viewManager),
                                                                    eventTargetFinder);
         mouseEventMapper.bind(treeView);

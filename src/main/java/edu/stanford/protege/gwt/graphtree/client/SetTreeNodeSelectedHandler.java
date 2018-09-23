@@ -6,6 +6,9 @@ import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNode;
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -21,11 +24,15 @@ public class SetTreeNodeSelectedHandler<U extends Serializable> implements TreeN
 
     private final Platform platform;
 
+    private final TreeNodeViewManager<U> viewManager;
+
     @Inject
     public SetTreeNodeSelectedHandler(@Nonnull SetSelectionModel<TreeNode<U>> selectionModel,
+                                      @Nonnull TreeNodeViewManager<U> viewManager,
                                       @Nonnull Platform platform) {
         this.selectionModel = checkNotNull(selectionModel);
         this.platform = checkNotNull(platform);
+        this.viewManager = checkNotNull(viewManager);
     }
 
     public void invoke(TreeViewInputEvent<U> event, Iterable<TreeNodeView<U>> views) {
@@ -33,12 +40,32 @@ public class SetTreeNodeSelectedHandler<U extends Serializable> implements TreeN
             if(isSelectionToggle(event)) {
                 toggleSelectionForView(view);
             }
-            else {
+            else if(isSelectionExtend(event)) {
+                // Extend the selection.  This means that everything between the first
+                // selected item and this view becomes selected
+                Optional<TreeNodeView<U>> firstView = getFirstSelectedView();
+                firstView.ifPresent(v -> {
+                    TreeNodeViewTraverser<U> traverser = TreeNodeViewTraverser.newTreeNodeViewTraverser();
+                    List<TreeNodeView<U>> viewList = traverser.getVisibleViewsBetween(v, view);
+                    selectionModel.clear();
+                    viewList.forEach(vin -> {
+                        selectionModel.setSelected(vin.getNode(), true);
+                    });
+                });
+            }
+            else if(!isContextMenuClick(event)) {
                 // Single selection
                 selectionModel.clear();
                 selectionModel.setSelected(view.getNode(), true);
             }
         }
+    }
+
+    private Optional<TreeNodeView<U>> getFirstSelectedView() {
+        return selectionModel.getSelectedSet()
+                .stream()
+                .findFirst()
+                .flatMap(tn -> viewManager.getViewIfPresent(tn.getId()));
     }
 
     private boolean isSelectionToggle(TreeViewInputEvent<U> event) {
@@ -48,6 +75,14 @@ public class SetTreeNodeSelectedHandler<U extends Serializable> implements TreeN
         else {
             return event.isCtrlDown();
         }
+    }
+
+    private boolean isSelectionExtend(TreeViewInputEvent<U> event) {
+       return event.isShiftDown();
+    }
+
+    private boolean isContextMenuClick(TreeViewInputEvent<U> event) {
+        return platform.isMacOS() && event.isCtrlDown();
     }
 
     private void toggleSelectionForView(TreeNodeView<U> view) {
