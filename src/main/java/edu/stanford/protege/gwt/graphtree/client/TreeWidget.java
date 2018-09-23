@@ -3,6 +3,8 @@ package edu.stanford.protege.gwt.graphtree.client;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.view.client.SelectionChangeEvent;
+import com.google.gwt.view.client.SelectionModel;
+import com.google.gwt.view.client.SetSelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import edu.stanford.protege.gwt.graphtree.shared.Path;
@@ -37,12 +39,18 @@ public class TreeWidget<U extends Serializable, K> extends Composite implements 
 
     public TreeWidget(@Nonnull TreeView<U> treeView,
                       @Nonnull TreeNodeModel<U, K> model,
-                      @Nonnull TreeNodeRenderer<U> renderer) {
+                      @Nonnull TreeNodeRenderer<U> renderer,
+                      @Nonnull SetSelectionModel<TreeNode<U>> selectionModel) {
         this.treeView = checkNotNull(treeView);
-        SingleSelectionModel<TreeNode<U>> selectionModel = new SingleSelectionModel<>();
-        treePresenter = new TreePresenter<>(treeView, selectionModel, checkNotNull(renderer), Platform.get());
+        treePresenter = new TreePresenter<U, K>(treeView, selectionModel, checkNotNull(renderer), Platform.get());
         treePresenter.setModel(checkNotNull(model));
         initWidget(treeView.asWidget());
+    }
+
+    public TreeWidget(@Nonnull TreeView<U> treeView,
+                      @Nonnull TreeNodeModel<U, K> model,
+                      @Nonnull TreeNodeRenderer<U> renderer) {
+        this(treeView, model, renderer, new SingleSelectionModel<>());
     }
 
     public TreeWidget(@Nonnull TreeNodeModel<U, K> model) {
@@ -51,11 +59,15 @@ public class TreeWidget<U extends Serializable, K> extends Composite implements 
 
     public TreeWidget(@Nonnull TreeNodeModel<U, K> model,
                       @Nonnull TreeNodeRenderer<U> renderer) {
-        this(new TreeViewImpl<>(), model, renderer);
+        this(new TreeViewImpl<>(), model, renderer, new SingleSelectionModel<>());
     }
 
     public TreeWidget(@Nonnull TreeNodeRenderer<U> renderer) {
-        this(new TreeViewImpl<>(), new NullTreeNodeModel<>(), renderer);
+        this(new TreeViewImpl<>(), new NullTreeNodeModel<>(), renderer, new SingleSelectionModel<>());
+    }
+
+    public TreeWidget(@Nonnull SetSelectionModel<TreeNode<U>> selectionModel) {
+        this(new TreeViewImpl<>(), new NullTreeNodeModel<>(), new TreeNodeRendererImpl<>(), selectionModel);
     }
 
     /**
@@ -63,7 +75,7 @@ public class TreeWidget<U extends Serializable, K> extends Composite implements 
      */
     @Inject
     public TreeWidget() {
-        this(new TreeViewImpl<>(), new NullTreeNodeModel<>(), new TreeNodeRendererImpl<>());
+        this(new TreeViewImpl<>(), new NullTreeNodeModel<>(), new TreeNodeRendererImpl<>(), new SingleSelectionModel<>());
     }
 
     public void reload() {
