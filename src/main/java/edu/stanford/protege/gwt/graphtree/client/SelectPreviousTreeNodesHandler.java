@@ -34,8 +34,10 @@ public class SelectPreviousTreeNodesHandler<U extends Serializable> implements T
         for (TreeNodeView<U> view : views) {
             Optional<TreeNodeView<U>> previous = viewTraverser.getPrevious(view);
             previous.ifPresent(v -> {
+                if (!event.isShiftDown()) {
+                    selectionModel.clear();
+                }
                 selectionModel.setSelected(v.getNode(), true);
-                selectionModel.setSelected(view.getNode(), false);
                 v.scrollIntoView();
             });
         }
