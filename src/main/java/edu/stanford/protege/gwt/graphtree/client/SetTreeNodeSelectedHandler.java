@@ -50,7 +50,7 @@ public class SetTreeNodeSelectedHandler<U extends Serializable> implements TreeN
                     selectionModel.setSelected(viewList.stream().map(TreeNodeView::getNodeId));
                 });
             }
-            else if(!isContextMenuClick(event)) {
+            else if(!isContextMenuClick(event, view)) {
                 // Single selection
                 selectionModel.setSelected(view.getNode().getId());
             }
@@ -80,8 +80,9 @@ public class SetTreeNodeSelectedHandler<U extends Serializable> implements TreeN
        return event.isShiftDown();
     }
 
-    private boolean isContextMenuClick(TreeViewInputEvent<U> event) {
-        return platform.isMacOS() && event.isCtrlDown() || !event.isLeftButton();
+    private boolean isContextMenuClick(TreeViewInputEvent<U> event, TreeNodeView<U> view) {
+        return selectionModel.isSelected(view.getNodeId())
+                && (platform.isMacOS() && event.isCtrlDown() || !event.isLeftButton());
     }
 
     private void toggleSelectionForView(TreeNodeView<U> view) {

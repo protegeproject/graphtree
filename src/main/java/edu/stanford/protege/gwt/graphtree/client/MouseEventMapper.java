@@ -38,7 +38,13 @@ public class MouseEventMapper<U extends Serializable> {
 
 
     private void handleMouseDownEvent(MouseDownEvent event) {
-
+        Optional<TreeNodeViewEventTarget<U>> target = eventTargetFinder.getEventTarget(event);
+        target.ifPresent(t -> {
+            if (!target.get().isViewHandleTarget()) {
+                setTreeNodeSelectedHandler.invoke(TreeViewInputEvent.fromEvent(event),
+                                                  Collections.singleton(target.get().getView()));
+            }
+        });
     }
 
     private void handleMouseUpEvent(MouseUpEvent event) {
@@ -46,10 +52,6 @@ public class MouseEventMapper<U extends Serializable> {
         target.ifPresent(t -> {
             if (target.get().isViewHandleTarget()) {
                 toggleExpansionStateAction.invoke(TreeViewInputEvent.fromEvent(event),
-                                                  Collections.singleton(target.get().getView()));
-            }
-            else {
-                setTreeNodeSelectedHandler.invoke(TreeViewInputEvent.fromEvent(event),
                                                   Collections.singleton(target.get().getView()));
             }
         });
