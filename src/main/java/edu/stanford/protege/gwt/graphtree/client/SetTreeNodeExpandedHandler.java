@@ -21,9 +21,9 @@ public class SetTreeNodeExpandedHandler<U extends Serializable> implements TreeN
 
     private final TreeNodeViewManager<U> viewManager;
 
-    private final SetSelectionModel<TreeNode<U>> selectionModel;
+    private final SelectionModel selectionModel;
 
-    public SetTreeNodeExpandedHandler(HasGetNodes<U> hasGetNodes, SetSelectionModel<TreeNode<U>> selectionModel, TreeNodeViewManager<U> viewMapper) {
+    public SetTreeNodeExpandedHandler(HasGetNodes<U> hasGetNodes, SelectionModel selectionModel, TreeNodeViewManager<U> viewMapper) {
         this.hasGetNodes = hasGetNodes;
         this.viewManager = viewMapper;
         this.selectionModel = selectionModel;
@@ -51,9 +51,9 @@ public class SetTreeNodeExpandedHandler<U extends Serializable> implements TreeN
 
         private final TreeNodeView<U> parentView;
 
-        private final SetSelectionModel<TreeNode<U>> selectionModel;
+        private final SelectionModel selectionModel;
 
-        protected LoadChildNodeViewsCallback(TreeNodeView<U> parentView, SetSelectionModel<TreeNode<U>> selectionModel, TreeNodeViewManager<U> viewManager) {
+        protected LoadChildNodeViewsCallback(TreeNodeView<U> parentView, SelectionModel selectionModel, TreeNodeViewManager<U> viewManager) {
             this.parentView = parentView;
             this.viewManager = viewManager;
             this.selectionModel = selectionModel;
@@ -79,7 +79,7 @@ public class SetTreeNodeExpandedHandler<U extends Serializable> implements TreeN
         private TreeNodeView<U> createAndSetupChildView(TreeNodeView<U> parentView, TreeNodeData<U> childNode) {
             final TreeNodeView<U> childView = viewManager.getView(childNode);
             childView.setDepth(parentView.getDepth() + 1);
-            childView.setSelected(selectionModel.isSelected(childNode.getTreeNode()));
+            childView.setSelected(selectionModel.isSelected(childNode.getTreeNode().getId()));
             return childView;
         }
     }

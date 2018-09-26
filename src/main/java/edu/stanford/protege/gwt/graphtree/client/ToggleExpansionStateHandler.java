@@ -21,7 +21,7 @@ public class ToggleExpansionStateHandler<U extends Serializable> implements Tree
 
     private final SetTreeNodeCollapsedHandler<U> setTreeNodeCollapsedAction;
 
-    public ToggleExpansionStateHandler(HasGetNodes<U> hasGetNodes, SetSelectionModel<TreeNode<U>> selectionModel, TreeNodeViewManager<U> viewManager) {
+    public ToggleExpansionStateHandler(HasGetNodes<U> hasGetNodes, SelectionModel selectionModel, TreeNodeViewManager<U> viewManager) {
         this(new SetTreeNodeExpandedHandler<>(hasGetNodes, selectionModel, viewManager), new SetTreeNodeCollapsedHandler<>());
     }
 

@@ -20,14 +20,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class SetTreeNodeSelectedHandler<U extends Serializable> implements TreeNodeViewActionHandler<U> {
 
-    private final SetSelectionModel<TreeNode<U>> selectionModel;
+    private final SelectionModel selectionModel;
 
     private final Platform platform;
 
     private final TreeNodeViewManager<U> viewManager;
 
     @Inject
-    public SetTreeNodeSelectedHandler(@Nonnull SetSelectionModel<TreeNode<U>> selectionModel,
+    public SetTreeNodeSelectedHandler(@Nonnull SelectionModel selectionModel,
                                       @Nonnull TreeNodeViewManager<U> viewManager,
                                       @Nonnull Platform platform) {
         this.selectionModel = checkNotNull(selectionModel);
@@ -47,28 +47,27 @@ public class SetTreeNodeSelectedHandler<U extends Serializable> implements TreeN
                 firstView.ifPresent(v -> {
                     TreeNodeViewTraverser<U> traverser = TreeNodeViewTraverser.newTreeNodeViewTraverser();
                     List<TreeNodeView<U>> viewList = traverser.getVisibleViewsBetween(v, view);
-                    selectionModel.clear();
-                    viewList.forEach(vin -> {
-                        selectionModel.setSelected(vin.getNode(), true);
-                    });
+                    selectionModel.setSelected(viewList.stream().map(TreeNodeView::getNodeId));
                 });
             }
             else if(!isContextMenuClick(event)) {
                 // Single selection
-                selectionModel.clear();
-                selectionModel.setSelected(view.getNode(), true);
+                selectionModel.setSelected(view.getNode().getId());
             }
         }
     }
 
     private Optional<TreeNodeView<U>> getFirstSelectedView() {
-        return selectionModel.getSelectedSet()
+        return selectionModel.getSelection()
                 .stream()
                 .findFirst()
-                .flatMap(tn -> viewManager.getViewIfPresent(tn.getId()));
+                .flatMap(viewManager::getViewIfPresent);
     }
 
     private boolean isSelectionToggle(TreeViewInputEvent<U> event) {
+        if(!event.isLeftButton()) {
+            return false;
+        }
         if(platform.isMacOS()) {
             return event.isMetaDown();
         }
@@ -82,10 +81,10 @@ public class SetTreeNodeSelectedHandler<U extends Serializable> implements TreeN
     }
 
     private boolean isContextMenuClick(TreeViewInputEvent<U> event) {
-        return platform.isMacOS() && event.isCtrlDown();
+        return platform.isMacOS() && event.isCtrlDown() || !event.isLeftButton();
     }
 
     private void toggleSelectionForView(TreeNodeView<U> view) {
-        selectionModel.setSelected(view.getNode(), !selectionModel.isSelected(view.getNode()));
+        selectionModel.toggleSelection(view.getNode().getId());
     }
 }

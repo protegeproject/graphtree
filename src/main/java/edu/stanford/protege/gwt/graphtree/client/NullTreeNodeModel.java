@@ -55,6 +55,11 @@ public class NullTreeNodeModel<U extends Serializable, K> implements TreeNodeMod
     }
 
     @Override
+    public Optional<TreeNode<U>> getTreeNode(@Nonnull TreeNodeId nodeId) {
+        return Optional.empty();
+    }
+
+    @Override
     public void dispose() {
 
     }

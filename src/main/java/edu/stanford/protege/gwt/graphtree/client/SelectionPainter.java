@@ -23,7 +23,7 @@ public class SelectionPainter<U extends Serializable> {
 
     private final Set<TreeNodeId> lastSelection = Sets.newHashSet();
 
-    private SetSelectionModel<TreeNode<U>> selectionModel;
+    private SelectionModel selectionModel;
 
     private HandlerRegistration handlerRegistration;
 
@@ -37,7 +37,7 @@ public class SelectionPainter<U extends Serializable> {
             return;
         }
         repaintTreeNodes(lastSelection.stream(), false);
-        repaintTreeNodes(selectionModel.getSelectedSet().stream().map(TreeNode::getId), true);
+        repaintTreeNodes(selectionModel.getSelection().stream(), true);
     }
 
     private void repaintTreeNodes(Stream<TreeNodeId> nodeIds, boolean selected) {
@@ -53,12 +53,10 @@ public class SelectionPainter<U extends Serializable> {
         }
         repaintSelection();
         lastSelection.clear();
-        selectionModel.getSelectedSet().stream()
-                      .map(TreeNode::getId)
-                      .forEach(lastSelection::add);
+        lastSelection.addAll(selectionModel.getSelection());
     }
 
-    public void bind(SetSelectionModel<TreeNode<U>> selectionModel) {
+    public void bind(SelectionModel selectionModel) {
         this.selectionModel = selectionModel;
         handlerRegistration = selectionModel.addSelectionChangeHandler(event -> handleSelectionChange());
     }

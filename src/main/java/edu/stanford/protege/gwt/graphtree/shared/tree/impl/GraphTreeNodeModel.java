@@ -141,6 +141,11 @@ public class GraphTreeNodeModel<U extends Serializable, K> implements TreeNodeMo
     }
 
     @Override
+    public Optional<TreeNode<U>> getTreeNode(@Nonnull TreeNodeId nodeId) {
+        return treeNodeIndex.getTreeNodeData(nodeId).map(TreeNodeData::getTreeNode);
+    }
+
+    @Override
     public void getTreeNodesForUserObjectKey(@Nonnull final K userObjectKey, @Nonnull final GetTreeNodesCallback<U> callback) {
         // We need to make sure that the nodes in the graph that have the specified user object as their user object
         // have corresponding tree nodes.

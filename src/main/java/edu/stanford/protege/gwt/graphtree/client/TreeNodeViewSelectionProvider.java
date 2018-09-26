@@ -3,6 +3,7 @@ package edu.stanford.protege.gwt.graphtree.client;
 import com.google.common.collect.Lists;
 import com.google.gwt.view.client.SetSelectionModel;
 import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNode;
+import edu.stanford.protege.gwt.graphtree.shared.tree.TreeNodeId;
 
 import javax.annotation.Nonnull;
 import java.io.Serializable;
@@ -18,11 +19,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class TreeNodeViewSelectionProvider<U extends Serializable> implements Iterable<TreeNodeView<U>> {
 
-    private final SetSelectionModel<TreeNode<U>> selectionModel;
+    private final SelectionModel selectionModel;
 
     private final TreeNodeViewMapper<U> viewMapper;
 
-    public TreeNodeViewSelectionProvider(@Nonnull SetSelectionModel<TreeNode<U>> selectionModel,
+    public TreeNodeViewSelectionProvider(@Nonnull SelectionModel selectionModel,
                                          @Nonnull TreeNodeViewMapper<U> viewMapper) {
         this.selectionModel = checkNotNull(selectionModel);
         this.viewMapper = checkNotNull(viewMapper);
@@ -35,13 +36,13 @@ public class TreeNodeViewSelectionProvider<U extends Serializable> implements It
     }
 
     public Iterable<TreeNodeView<U>> getSelection() {
-        Set<TreeNode<U>> selectedSet = selectionModel.getSelectedSet();
+        Set<TreeNodeId> selectedSet = selectionModel.getSelection();
         if(selectedSet.isEmpty()) {
             return Collections.emptyList();
         }
         List<TreeNodeView<U>> result = Lists.newArrayList();
-        for(TreeNode<U> selectedNode : selectedSet) {
-            Optional<TreeNodeView<U>> view = viewMapper.getViewIfPresent(selectedNode.getId());
+        for(TreeNodeId selectedNodeId : selectedSet) {
+            Optional<TreeNodeView<U>> view = viewMapper.getViewIfPresent(selectedNodeId);
             view.ifPresent(result::add);
         }
         return result;

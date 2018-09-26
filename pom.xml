@@ -17,7 +17,7 @@
     <properties>
         <gwtVersion>2.8.2</gwtVersion>
         <gwt.test.mode>htmlunit</gwt.test.mode>
-        <guava.version>20.0</guava.version>
+        <guava.version>22.0</guava.version>
     </properties>
 
     <distributionManagement>

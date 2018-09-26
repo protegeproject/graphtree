@@ -6,6 +6,7 @@ import edu.stanford.protege.gwt.graphtree.shared.UserObjectKeyProvider;
 
 import javax.annotation.Nonnull;
 import java.io.Serializable;
+import java.util.Optional;
 
 /**
  * Author: Matthew Horridge<br>
@@ -28,6 +29,8 @@ public interface TreeNodeModel<U extends Serializable, K> extends HasGetNodes<U>
 
     @Nonnull
     Path<TreeNodeData<U>> getPathToRoot(@Nonnull TreeNodeId treeNodeId);
+
+    Optional<TreeNode<U>> getTreeNode(@Nonnull TreeNodeId nodeId);
 
     /**
      * Disposes of this TreeNodeModel, cleaning up any listeners that the tree node model might have

@@ -16,16 +16,16 @@ import java.util.Optional;
  */
 public class SelectPreviousTreeNodesHandler<U extends Serializable> implements TreeNodeViewActionHandler<U> {
 
-    private final SetSelectionModel<TreeNode<U>> selectionModel;
+    private final SelectionModel selectionModel;
 
     private final TreeNodeViewTraverser<U> viewTraverser;
 
-    public SelectPreviousTreeNodesHandler(SetSelectionModel<TreeNode<U>> selectionModel) {
+    public SelectPreviousTreeNodesHandler(SelectionModel selectionModel) {
         this(selectionModel, TreeNodeViewTraverser.newTreeNodeViewTraverser());
     }
 
     @Inject
-    public SelectPreviousTreeNodesHandler(SetSelectionModel<TreeNode<U>> selectionModel, TreeNodeViewTraverser<U> viewTraverser) {
+    public SelectPreviousTreeNodesHandler(SelectionModel selectionModel, TreeNodeViewTraverser<U> viewTraverser) {
         this.selectionModel = selectionModel;
         this.viewTraverser = viewTraverser;
     }
@@ -35,9 +35,11 @@ public class SelectPreviousTreeNodesHandler<U extends Serializable> implements T
             Optional<TreeNodeView<U>> previous = viewTraverser.getPrevious(view);
             previous.ifPresent(v -> {
                 if (!event.isShiftDown()) {
-                    selectionModel.clear();
+                    selectionModel.setSelected(v.getNodeId());
                 }
-                selectionModel.setSelected(v.getNode(), true);
+                else {
+                    selectionModel.extendSelection(v.getNodeId());
+                }
                 v.scrollIntoView();
             });
         }

@@ -19,12 +19,12 @@ public class PendingChangesManager<U extends Serializable> implements TreeNodeMo
 
     private final Set<PendingChangeHandler> pending = new HashSet<>();
 
-    private final SetSelectionModel<TreeNode<U>> selectionModel;
+    private final SelectionModel selectionModel;
 
     private final HasSetTreeNodeExpanded hasSetTreeNodeExpanded;
 
     public PendingChangesManager(HasSetTreeNodeExpanded hasSetTreeNodeExpanded,
-                                 SetSelectionModel<TreeNode<U>> selectionModel) {
+                                 SelectionModel selectionModel) {
         this.hasSetTreeNodeExpanded = hasSetTreeNodeExpanded;
         this.selectionModel = selectionModel;
     }
@@ -93,11 +93,11 @@ public class PendingChangesManager<U extends Serializable> implements TreeNodeMo
 
         private final HasSetTreeNodeExpanded hasSetTreeNodeExpanded;
 
-        private final SetSelectionModel<TreeNode<U>> selectionModel;
+        private final SelectionModel selectionModel;
 
         private PendingChildAdditionHandler(TreeNodeView<U> view,
                                             HasSetTreeNodeExpanded hasSetTreeNodeExpanded,
-                                            SetSelectionModel<TreeNode<U>> selectionModel) {
+                                            SelectionModel selectionModel) {
             super(view);
             this.hasSetTreeNodeExpanded = hasSetTreeNodeExpanded;
             this.selectionModel = selectionModel;
@@ -120,7 +120,7 @@ public class PendingChangesManager<U extends Serializable> implements TreeNodeMo
                 getView().setLoadingIndicatorDisplayed(false);
                 hasSetTreeNodeExpanded.setTreeNodeExpanded(getView().getNodeId());
                 TreeNode<U> childNode = ((ChildNodeAdded<U>) change).getChildNode().getTreeNode();
-                selectionModel.setSelected(childNode, true);
+                selectionModel.setSelected(childNode.getId());
                 return true;
             }
             else {

@@ -229,8 +229,9 @@ public class TreeNodeViewImpl<U extends Serializable> extends Composite implemen
         childContainerHolder.ensureWidget();
         childContainer.add(child);
         TreeNodeViewImpl previousSibling = null;
-        if(childContainer.getWidgetCount() != 0) {
-            previousSibling = (TreeNodeViewImpl) childContainer.getWidget(0);
+        int widgetCount = childContainer.getWidgetCount();
+        if(widgetCount > 1) {
+            previousSibling = (TreeNodeViewImpl) childContainer.getWidget(widgetCount - 2);
             previousSibling.nextSibling = child;
         }
         ((TreeNodeViewImpl) child).previousSibling = previousSibling;

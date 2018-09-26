@@ -14,15 +14,15 @@ import java.util.Optional;
  */
 public class SelectNextTreeNodesHandler<U extends Serializable> implements TreeNodeViewActionHandler<U> {
 
-    private final SetSelectionModel<TreeNode<U>> selectionModel;
+    private final SelectionModel selectionModel;
 
     private final TreeNodeViewTraverser<U> viewTraverser;
 
-    public SelectNextTreeNodesHandler(SetSelectionModel<TreeNode<U>> selectionModel) {
+    public SelectNextTreeNodesHandler(SelectionModel selectionModel) {
         this(selectionModel, new TreeNodeViewTraverser<>());
     }
 
-    public SelectNextTreeNodesHandler(SetSelectionModel<TreeNode<U>> selectionModel, TreeNodeViewTraverser<U> viewTraverser) {
+    public SelectNextTreeNodesHandler(SelectionModel selectionModel, TreeNodeViewTraverser<U> viewTraverser) {
         this.selectionModel = selectionModel;
         this.viewTraverser = viewTraverser;
     }
@@ -32,9 +32,11 @@ public class SelectNextTreeNodesHandler<U extends Serializable> implements TreeN
             Optional<TreeNodeView<U>> next = viewTraverser.getNext(view);
             next.ifPresent(nextView -> {
                 if (!event.isShiftDown()) {
-                    selectionModel.clear();
+                    selectionModel.setSelected(nextView.getNodeId());
                 }
-                selectionModel.setSelected(nextView.getNode(), true);
+                else {
+                    selectionModel.extendSelection(nextView.getNode().getId());
+                }
                 nextView.scrollIntoView();
             });
         }
