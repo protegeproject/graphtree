@@ -7,12 +7,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.google.common.collect.ImmutableList;
 import edu.stanford.protege.gwt.graphtree.shared.graph.GraphModelChange;
 import edu.stanford.protege.gwt.graphtree.shared.graph.GraphModelChangedEvent;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 import static org.hamcrest.Matchers.is;
@@ -41,6 +43,12 @@ public class Json_Serialization_Tests {
     @Test
     public void shouldSerializePath() {
         roundTrip(new Path<>(Arrays.asList("A", "B", "C")), Path.class);
+    }
+
+    @Test
+    public <U extends Serializable> void shouldSerializeGraphModelChangedEvent() {
+        ImmutableList<GraphModelChange<U>> changes = ImmutableList.of();
+        roundTrip(new GraphModelChangedEvent<U>(changes), GraphModelChangedEvent.class);
     }
 
     private <C> void roundTrip(C object, Class<? super  C> cls) {

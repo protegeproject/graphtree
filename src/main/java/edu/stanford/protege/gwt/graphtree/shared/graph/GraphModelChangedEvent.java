@@ -1,11 +1,15 @@
 package edu.stanford.protege.gwt.graphtree.shared.graph;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.ImmutableList;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HasHandlers;
 
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.Objects;
 
 /**
  * Author: Matthew Horridge<br>
@@ -22,7 +26,8 @@ public final class GraphModelChangedEvent<U extends Serializable> extends GwtEve
     private GraphModelChangedEvent() {
     }
 
-    public GraphModelChangedEvent(Iterable<GraphModelChange<U>> changes) {
+    @JsonCreator
+    public GraphModelChangedEvent(@JsonProperty("changes") Iterable<GraphModelChange<U>> changes) {
         this.changes = ImmutableList.copyOf(changes);
     }
 
@@ -44,6 +49,7 @@ public final class GraphModelChangedEvent<U extends Serializable> extends GwtEve
         return changes;
     }
 
+    @JsonIgnore
     @Override
     @SuppressWarnings("unchecked")
     public Type<GraphModelChangedHandler<U>> getAssociatedType() {
@@ -53,5 +59,28 @@ public final class GraphModelChangedEvent<U extends Serializable> extends GwtEve
     @Override
     protected void dispatch(GraphModelChangedHandler<U> handler) {
         handler.handleGraphModelChanged(this);
+    }
+
+    @JsonIgnore
+    @Override
+    public Object getSource() {
+        return super.getSource();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof GraphModelChangedEvent)) {
+            return false;
+        }
+        GraphModelChangedEvent<?> that = (GraphModelChangedEvent<?>) o;
+        return changes.equals(that.changes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(changes);
     }
 }
