@@ -1,5 +1,9 @@
 package edu.stanford.protege.gwt.graphtree.shared.graph;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 import java.util.function.Consumer;
 
@@ -18,7 +22,8 @@ public class AddRootNode<U extends Serializable> extends GraphModelChange<U> {
     private AddRootNode() {
     }
 
-    public AddRootNode(GraphNode<U> rootNode) {
+    @JsonCreator
+    public AddRootNode(@JsonProperty("node") GraphNode<U> rootNode) {
         this.rootNode = rootNode;
     }
 
@@ -36,6 +41,7 @@ public class AddRootNode<U extends Serializable> extends GraphModelChange<U> {
         nodeConsumer.accept(rootNode);
     }
 
+    @JsonIgnore
     public RemoveRootNode<U> getReverseChange() {
         return new RemoveRootNode<>(rootNode);
     }

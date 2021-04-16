@@ -1,5 +1,8 @@
 package edu.stanford.protege.gwt.graphtree.shared.graph;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 import java.io.Serializable;
@@ -11,6 +14,13 @@ import java.util.function.Consumer;
  * Bio-Medical Informatics Research Group<br>
  * Date: 21/01/2014
  */
+@JsonSubTypes({
+        @Type(EdgeChange.class),
+        @Type(AddRootNode.class),
+        @Type(UpdateUserObject.class),
+        @Type(RemoveRootNode.class)
+})
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 public abstract class GraphModelChange<U extends Serializable> implements Serializable, IsSerializable {
 
     public GraphModelChange() {

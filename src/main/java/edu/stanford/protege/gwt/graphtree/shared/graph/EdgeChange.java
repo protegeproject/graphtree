@@ -1,5 +1,9 @@
 package edu.stanford.protege.gwt.graphtree.shared.graph;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+
 import java.io.Serializable;
 import java.util.function.Consumer;
 
@@ -9,6 +13,10 @@ import java.util.function.Consumer;
  * Bio-Medical Informatics Research Group<br>
  * Date: 23/01/2014
  */
+@JsonSubTypes({
+        @Type(AddEdge.class),
+        @Type(RemoveEdge.class)
+})
 public abstract class EdgeChange<U extends Serializable> extends GraphModelChange<U> {
 
     private GraphEdge<U> edge;
@@ -21,10 +29,12 @@ public abstract class EdgeChange<U extends Serializable> extends GraphModelChang
         this.edge = edge;
     }
 
+    @JsonIgnore
     public GraphNode<U> getPredecessor() {
         return edge.getPredecessor();
     }
 
+    @JsonIgnore
     public GraphNode<U> getSuccessor() {
         return edge.getSuccessor();
     }

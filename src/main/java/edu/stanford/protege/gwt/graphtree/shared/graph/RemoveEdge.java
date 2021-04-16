@@ -1,5 +1,6 @@
 package edu.stanford.protege.gwt.graphtree.shared.graph;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.MoreObjects;
 
 import java.io.Serializable;
@@ -19,6 +20,7 @@ public class RemoveEdge<U extends Serializable> extends EdgeChange<U> {
         super(edge);
     }
 
+    @JsonIgnore
     public AddEdge<U> getReverseChange() {
         return new AddEdge<>(getEdge());
     }

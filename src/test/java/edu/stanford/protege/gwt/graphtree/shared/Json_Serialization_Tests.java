@@ -8,8 +8,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.google.common.collect.ImmutableList;
-import edu.stanford.protege.gwt.graphtree.shared.graph.GraphModelChange;
-import edu.stanford.protege.gwt.graphtree.shared.graph.GraphModelChangedEvent;
+import edu.stanford.protege.gwt.graphtree.shared.graph.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,7 +50,42 @@ public class Json_Serialization_Tests {
         roundTrip(new GraphModelChangedEvent<U>(changes), GraphModelChangedEvent.class);
     }
 
-    private <C> void roundTrip(C object, Class<? super  C> cls) {
+    @Test
+    public void shouldSerializeGraphNode() {
+        roundTrip(new GraphNode<>("A"), GraphNode.class);
+    }
+
+    @Test
+    public void shouldSerializeGraphEdge() {
+        roundTrip(new GraphEdge<>(new GraphNode<>("A"), new GraphNode<>("B")), GraphEdge.class);
+    }
+
+    @Test
+    public void shouldSerializeAddEdge() {
+        roundTrip(new AddEdge<>(new GraphEdge<>(new GraphNode<>("A"), new GraphNode<>("B"))), GraphModelChange.class);
+    }
+
+    @Test
+    public void shouldSerializeRemovedEdge() {
+        roundTrip(new RemoveEdge<>(new GraphEdge<>(new GraphNode<>("A"), new GraphNode<>("B"))),
+                  GraphModelChange.class);
+    }
+
+    @Test
+    public void shouldSerializeAddRootNode() {
+        roundTrip(new AddRootNode<>(new GraphNode<>("A")), GraphModelChange.class);
+    }
+    @Test
+    public void shouldSerializeRemoveRootNode() {
+        roundTrip(new RemoveRootNode<>(new GraphNode<>("A")), GraphModelChange.class);
+    }
+
+    @Test
+    public void shouldSerializeUpdateUserObject() {
+        roundTrip(new UpdateUserObject<>("A"), GraphModelChange.class);
+    }
+
+    private <C> void roundTrip(C object, Class<? super C> cls) {
         try {
             String s = mapper.writeValueAsString(object);
             System.out.println(s);
